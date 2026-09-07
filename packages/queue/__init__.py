@@ -1,0 +1,5 @@
+"""Background queue configuration."""
+
+from packages.queue.celery import celery_app
+
+__all__ = ["celery_app"]
