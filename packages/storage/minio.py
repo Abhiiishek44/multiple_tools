@@ -1,11 +1,15 @@
 import logging
 import tempfile
+from collections.abc import Iterator
+from datetime import datetime
 from pathlib import Path, PurePosixPath
 from typing import BinaryIO
 
 import boto3
 from botocore.client import BaseClient
 from botocore.exceptions import ClientError
+
+from packages.storage.base import StoredObject
 
 
 logger = logging.getLogger(__name__)
@@ -84,8 +88,23 @@ class MinioStorage:
 
     def delete(self, key: str) -> None:
         key = _validate_key(key)
-        self.client.delete_object(Bucket=self.bucket, Key=key)
+        try:
+            self.client.delete_object(Bucket=self.bucket, Key=key)
+        except ClientError as error:
+            code = str(error.response.get("Error", {}).get("Code", ""))
+            if code not in {"404", "NoSuchKey", "NotFound"}:
+                raise
         logger.debug("Deleted artifact key=%s", key)
+
+    def iter_objects(self, prefix: str) -> Iterator[StoredObject]:
+        prefix = _validate_key(prefix)
+        paginator = self.client.get_paginator("list_objects_v2")
+        for page in paginator.paginate(Bucket=self.bucket, Prefix=prefix):
+            for item in page.get("Contents", []):
+                key = item.get("Key")
+                last_modified = item.get("LastModified")
+                if isinstance(key, str) and isinstance(last_modified, datetime):
+                    yield StoredObject(key=key, last_modified=last_modified)
 
     def _ensure_bucket(self) -> None:
         try:

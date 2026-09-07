@@ -56,10 +56,11 @@ def submit_job(
         raise ValidationError(f"Plugin '{tool_name}' expects media type: {expected}")
 
     job_id = uuid4().hex
-    artifact_key = f"jobs/{job_id}/input{suffix}"
+    settings = get_settings()
+    artifact_key = f"{settings.minio_temp_prefix}{job_id}/input{suffix}"
     storage = get_storage()
     try:
-        storage.save_stream(artifact_key, stream, get_settings().max_upload_bytes)
+        storage.save_stream(artifact_key, stream, settings.max_upload_bytes)
     except ValueError as error:
         raise ValidationError(str(error)) from error
     job: Job | None = None
