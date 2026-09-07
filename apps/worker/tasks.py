@@ -1,10 +1,12 @@
 import logging
 import tempfile
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from celery import shared_task
 
 from packages.core import job_repository
+from packages.core.config import get_settings
 from plugins.base import ToolContext
 from plugins.registry import get_plugin
 from packages.storage import get_storage
@@ -29,7 +31,10 @@ def execute_tool(job_id: str) -> dict[str, str]:
         plugin = get_plugin(job.tool_name)
         logger.info("Executing job id=%s tool=%s", job.id, job.tool_name)
         storage = get_storage()
-        output_key = f"jobs/{job.id}/output{plugin.manifest.output_suffix}"
+        output_key = (
+            f"{get_settings().minio_temp_prefix}{job.id}/output"
+            f"{plugin.manifest.output_suffix}"
+        )
         with tempfile.TemporaryDirectory(prefix=f"tool-{job.id}-") as directory:
             temporary = Path(directory)
             source = temporary / f"input{Path(job.input_filename).suffix.lower()}"
@@ -65,3 +70,57 @@ def execute_tool(job_id: str) -> dict[str, str]:
         job_repository.mark_failed(job.id, str(error))
         logger.exception("Failed job id=%s tool=%s", job.id, job.tool_name)
         raise
+
+
+@shared_task(name="storage.cleanup_temporary")
+def cleanup_temporary_objects() -> dict[str, int]:
+    settings = get_settings()
+    storage = get_storage()
+    prefix = settings.minio_temp_prefix
+    cutoff = datetime.now(UTC) - timedelta(
+        minutes=settings.minio_temp_retention_minutes
+    )
+    counts = {"scanned": 0, "deleted": 0, "skipped": 0, "failed": 0}
+
+    try:
+        for stored_object in storage.iter_objects(prefix):
+            counts["scanned"] += 1
+            if not stored_object.key.startswith(prefix):
+                counts["skipped"] += 1
+                logger.warning(
+                    "Skipped object outside temporary prefix key=%s prefix=%s",
+                    stored_object.key,
+                    prefix,
+                )
+                continue
+
+            last_modified = stored_object.last_modified
+            if last_modified.tzinfo is None:
+                last_modified = last_modified.replace(tzinfo=UTC)
+            if last_modified > cutoff:
+                counts["skipped"] += 1
+                continue
+
+            try:
+                storage.delete(stored_object.key)
+                counts["deleted"] += 1
+            except Exception:
+                counts["failed"] += 1
+                logger.exception(
+                    "Failed to delete temporary object key=%s", stored_object.key
+                )
+                continue
+    except Exception:
+        counts["failed"] += 1
+        logger.exception("Failed to scan temporary objects prefix=%s", prefix)
+
+    logger.info(
+        "Temporary MinIO cleanup complete prefix=%s scanned=%d deleted=%d "
+        "skipped=%d failed=%d",
+        prefix,
+        counts["scanned"],
+        counts["deleted"],
+        counts["skipped"],
+        counts["failed"],
+    )
+    return counts

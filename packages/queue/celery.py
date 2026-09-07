@@ -21,6 +21,12 @@ def create_celery_app() -> Celery:
         accept_content=["json"],
         timezone="UTC",
         enable_utc=True,
+        beat_schedule={
+            "cleanup-temporary-minio-objects": {
+                "task": "storage.cleanup_temporary",
+                "schedule": settings.minio_cleanup_interval_minutes * 60,
+            }
+        },
     )
     app.loader.import_default_modules()
     return app

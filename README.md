@@ -64,6 +64,7 @@ Start the API and a generic worker:
 ```bash
 uvicorn apps.api.main:app --reload
 celery --app=apps.worker.celery_app:celery_app worker --loglevel=INFO
+celery --app=apps.worker.celery_app:celery_app beat --loglevel=INFO
 ```
 
 Start the frontend in another terminal:
@@ -207,6 +208,14 @@ MinIO, configured with `MINIO_ENDPOINT=localhost:9000` and the other
 The MinIO adapter uses boto3 internally to communicate with MinIO.
 This is an implementation detail: API routes, workers, and plugins depend only
 on `ArtifactStorage`, not on MinIO or boto3.
+
+Job inputs and outputs are temporary objects under `MINIO_TEMP_PREFIX`.
+Celery Beat sends `storage.cleanup_temporary` every
+`MINIO_CLEANUP_INTERVAL_MINUTES` (30 by default). The worker uses each MinIO
+object's `last_modified` timestamp and deletes objects at least
+`MINIO_TEMP_RETENTION_MINUTES` old (30 by default). Cleanup never scans outside
+the configured temporary prefix and never changes or deletes PostgreSQL job
+records.
 
 ## Tests
 

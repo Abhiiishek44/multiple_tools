@@ -17,6 +17,9 @@ class Settings:
     minio_region: str
     minio_secure: bool
     minio_auto_create_bucket: bool
+    minio_temp_prefix: str
+    minio_temp_retention_minutes: int
+    minio_cleanup_interval_minutes: int
     google_client_id: str | None
     jwt_secret: str | None
     jwt_expiration_minutes: int
@@ -48,6 +51,15 @@ class Settings:
             minio_region=os.getenv("MINIO_REGION", "us-east-1"),
             minio_secure=_boolean("MINIO_SECURE", False),
             minio_auto_create_bucket=_boolean("MINIO_AUTO_CREATE_BUCKET", True),
+            minio_temp_prefix=_object_prefix(
+                "MINIO_TEMP_PREFIX", os.getenv("MINIO_TEMP_PREFIX", "jobs/")
+            ),
+            minio_temp_retention_minutes=_positive_integer(
+                "MINIO_TEMP_RETENTION_MINUTES", "30"
+            ),
+            minio_cleanup_interval_minutes=_positive_integer(
+                "MINIO_CLEANUP_INTERVAL_MINUTES", "30"
+            ),
             google_client_id=os.getenv("GOOGLE_CLIENT_ID") or None,
             jwt_secret=os.getenv("JWT_SECRET") or None,
             jwt_expiration_minutes=int(os.getenv("JWT_EXPIRATION_MINUTES", "60")),
@@ -83,3 +95,17 @@ def _boolean(name: str, default: bool) -> bool:
     if normalized in {"0", "false", "no", "off"}:
         return False
     raise ValueError(f"{name} must be true or false")
+
+
+def _positive_integer(name: str, default: str) -> int:
+    value = int(os.getenv(name, default))
+    if value <= 0:
+        raise ValueError(f"{name} must be greater than zero")
+    return value
+
+
+def _object_prefix(name: str, value: str) -> str:
+    normalized = value.strip().strip("/")
+    if not normalized or any(part in {".", ".."} for part in normalized.split("/")):
+        raise ValueError(f"{name} must be a non-empty safe object prefix")
+    return f"{normalized}/"

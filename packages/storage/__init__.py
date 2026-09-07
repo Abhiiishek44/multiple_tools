@@ -3,7 +3,7 @@
 from functools import lru_cache
 
 from packages.core.config import get_settings
-from packages.storage.base import ArtifactStorage
+from packages.storage.base import ArtifactStorage, StoredObject
 from packages.storage.minio import MinioStorage
 
 
@@ -23,4 +23,4 @@ def get_storage() -> ArtifactStorage:
     )
 
 
-__all__ = ["ArtifactStorage", "get_storage"]
+__all__ = ["ArtifactStorage", "StoredObject", "get_storage"]

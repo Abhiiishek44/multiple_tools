@@ -1,5 +1,14 @@
+from collections.abc import Iterator
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import BinaryIO, Protocol
+
+
+@dataclass(frozen=True, slots=True)
+class StoredObject:
+    key: str
+    last_modified: datetime
 
 
 class ArtifactStorage(Protocol):
@@ -14,3 +23,5 @@ class ArtifactStorage(Protocol):
     def exists(self, key: str) -> bool: ...
 
     def delete(self, key: str) -> None: ...
+
+    def iter_objects(self, prefix: str) -> Iterator[StoredObject]: ...

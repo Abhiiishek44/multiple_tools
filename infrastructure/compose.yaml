@@ -16,6 +16,7 @@ services:
       - ./migrations/002_simplify_job_states.sql:/docker-entrypoint-initdb.d/21-simplify-job-states.sql:ro
       - ./migrations/003_add_job_options.sql:/docker-entrypoint-initdb.d/22-add-job-options.sql:ro
       - ./migrations/004_add_google_auth.sql:/docker-entrypoint-initdb.d/23-add-google-auth.sql:ro
+      - ./migrations/005_add_job_request_metadata.sql:/docker-entrypoint-initdb.d/24-add-job-request-metadata.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
