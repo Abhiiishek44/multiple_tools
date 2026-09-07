@@ -12,3 +12,11 @@ class ConflictError(ApplicationError):
 
 class ValidationError(ApplicationError):
     pass
+
+
+class AuthenticationError(ApplicationError):
+    pass
+
+
+class AuthenticationUnavailableError(ApplicationError):
+    pass

@@ -12,6 +12,7 @@ dependencies = [
     "boto3==1.43.89",
     "celery[redis]==5.5.3",
     "fastapi==0.116.1",
+    "google-auth[requests]==2.57.1",
     "markdown==3.10.3",
     "openpyxl==3.1.5",
     "pdf2docx==0.5.13",
@@ -24,6 +25,7 @@ dependencies = [
     "python-docx==1.2.0",
     "python-pptx==1.0.2",
     "pytesseract==0.3.13",
+    "pyjwt==2.13.0",
     "uvicorn[standard]==0.35.0",
 ]
 

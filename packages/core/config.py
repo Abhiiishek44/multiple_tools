@@ -17,6 +17,15 @@ class Settings:
     minio_region: str
     minio_secure: bool
     minio_auto_create_bucket: bool
+    google_client_id: str | None
+    jwt_secret: str | None
+    jwt_expiration_minutes: int
+    jwt_issuer: str
+    jwt_audience: str
+    frontend_url: str
+    auth_cookie_name: str
+    auth_cookie_secure: bool
+    cors_origins: tuple[str, ...]
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -39,6 +48,23 @@ class Settings:
             minio_region=os.getenv("MINIO_REGION", "us-east-1"),
             minio_secure=_boolean("MINIO_SECURE", False),
             minio_auto_create_bucket=_boolean("MINIO_AUTO_CREATE_BUCKET", True),
+            google_client_id=os.getenv("GOOGLE_CLIENT_ID") or None,
+            jwt_secret=os.getenv("JWT_SECRET") or None,
+            jwt_expiration_minutes=int(os.getenv("JWT_EXPIRATION_MINUTES", "60")),
+            jwt_issuer=os.getenv("JWT_ISSUER", "multiple-tools-api"),
+            jwt_audience=os.getenv("JWT_AUDIENCE", "multiple-tools-web"),
+            frontend_url=os.getenv("FRONTEND_URL", "http://localhost:5173"),
+            auth_cookie_name=os.getenv(
+                "AUTH_COOKIE_NAME", "multiple_tools_access_token"
+            ),
+            auth_cookie_secure=_boolean("AUTH_COOKIE_SECURE", False),
+            cors_origins=tuple(
+                origin.strip()
+                for origin in os.getenv(
+                    "CORS_ORIGINS", "http://localhost:5173"
+                ).split(",")
+                if origin.strip()
+            ),
         )
 
 

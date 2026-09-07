@@ -16,6 +16,9 @@ def create_job(
     input_filename: str,
     input_media_type: str | None,
     options: dict[str, object],
+    user_id: str,
+    client_ip: str | None,
+    user_agent: str | None,
     idempotency_key: str | None,
 ) -> Job:
     with database_connection() as connection:
@@ -23,9 +26,10 @@ def create_job(
             """
             INSERT INTO tool_jobs (
                 id, tool_name, tool_version, input_artifact_key,
-                input_filename, input_media_type, options, idempotency_key
+                input_filename, input_media_type, options, user_id,
+                client_ip, user_agent, idempotency_key
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING *
             """,
             (
@@ -36,6 +40,9 @@ def create_job(
                 input_filename,
                 input_media_type,
                 Jsonb(options),
+                user_id,
+                client_ip,
+                user_agent,
                 idempotency_key,
             ),
         ).fetchone()
@@ -50,10 +57,23 @@ def get_job(job_id: str) -> Job | None:
     return _to_job(row) if row else None
 
 
-def get_job_by_idempotency_key(key: str) -> Job | None:
+def get_job_for_user(job_id: str, user_id: str) -> Job | None:
     with database_connection() as connection:
         row = connection.execute(
-            "SELECT * FROM tool_jobs WHERE idempotency_key = %s", (key,)
+            "SELECT * FROM tool_jobs WHERE id = %s AND user_id = %s",
+            (job_id, user_id),
+        ).fetchone()
+    return _to_job(row) if row else None
+
+
+def get_job_by_idempotency_key(user_id: str, key: str) -> Job | None:
+    with database_connection() as connection:
+        row = connection.execute(
+            """
+            SELECT * FROM tool_jobs
+            WHERE user_id = %s AND idempotency_key = %s
+            """,
+            (user_id, key),
         ).fetchone()
     return _to_job(row) if row else None
 
@@ -123,4 +143,6 @@ def _update_and_return(query: str, parameters: tuple[Any, ...]) -> Job | None:
 def _to_job(row: Mapping[str, Any]) -> Job:
     values = {field: row[field] for field in Job.__dataclass_fields__}
     values["id"] = str(values["id"])
+    if values["client_ip"] is not None:
+        values["client_ip"] = str(values["client_ip"])
     return Job(**values)

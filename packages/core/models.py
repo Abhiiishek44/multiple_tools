@@ -3,6 +3,17 @@ from datetime import datetime
 
 
 @dataclass(frozen=True, slots=True)
+class User:
+    id: str
+    google_sub: str
+    email: str
+    name: str
+    picture_url: str | None
+    created_at: datetime
+    updated_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
 class Job:
     id: str
     tool_name: str
@@ -21,3 +32,6 @@ class Job:
     started_at: datetime | None
     completed_at: datetime | None
     options: dict[str, object] = field(default_factory=dict)
+    user_id: str | None = None
+    client_ip: str | None = None
+    user_agent: str | None = None

@@ -22,12 +22,17 @@ def submit_job(
     filename: str | None,
     media_type: str | None,
     stream: BinaryIO,
+    user_id: str,
+    client_ip: str | None = None,
+    user_agent: str | None = None,
     options_json: str | None = None,
     idempotency_key: str | None = None,
 ) -> Job:
     options = _parse_options(options_json)
     if idempotency_key:
-        existing = job_repository.get_job_by_idempotency_key(idempotency_key)
+        existing = job_repository.get_job_by_idempotency_key(
+            user_id, idempotency_key
+        )
         if existing:
             if existing.tool_name != tool_name:
                 raise ConflictError("Idempotency key belongs to a different tool")
@@ -67,6 +72,9 @@ def submit_job(
             input_filename=Path(filename or f"input{suffix}").name,
             input_media_type=normalized_media_type,
             options=options,
+            user_id=user_id,
+            client_ip=client_ip,
+            user_agent=user_agent[:2000] if user_agent else None,
             idempotency_key=idempotency_key,
         )
         celery_app.send_task("tools.execute", args=[job.id], task_id=job.id)
@@ -96,15 +104,15 @@ def _parse_options(raw: str | None) -> dict[str, object]:
     return value
 
 
-def find_job(job_id: str) -> Job:
-    job = job_repository.get_job(job_id)
+def find_job(job_id: str, user_id: str) -> Job:
+    job = job_repository.get_job_for_user(job_id, user_id)
     if job is None:
         raise NotFoundError(f"Job not found: {job_id}")
     return job
 
 
-def output_reader(job_id: str) -> tuple[BinaryIO, str, str]:
-    job = find_job(job_id)
+def output_reader(job_id: str, user_id: str) -> tuple[BinaryIO, str, str]:
+    job = find_job(job_id, user_id)
     if job.status != "SUCCESS" or not job.output_artifact_key:
         raise ConflictError("Job output is not available")
     storage = get_storage()

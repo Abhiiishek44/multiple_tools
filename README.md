@@ -53,6 +53,10 @@ docker compose -f infrastructure/compose.yaml exec -T postgres \
   psql -U app -d app < infrastructure/migrations/001_create_tool_jobs.sql
 docker compose -f infrastructure/compose.yaml exec -T postgres \
   psql -U app -d app < infrastructure/migrations/003_add_job_options.sql
+docker compose -f infrastructure/compose.yaml exec -T postgres \
+  psql -U app -d app < infrastructure/migrations/004_add_google_auth.sql
+docker compose -f infrastructure/compose.yaml exec -T postgres \
+  psql -U app -d app < infrastructure/migrations/005_add_job_request_metadata.sql
 ```
 
 Start the API and a generic worker:
@@ -60,6 +64,14 @@ Start the API and a generic worker:
 ```bash
 uvicorn apps.api.main:app --reload
 celery --app=apps.worker.celery_app:celery_app worker --loglevel=INFO
+```
+
+Start the frontend in another terminal:
+
+```bash
+cd apps/frontend
+npm install
+npm run dev
 ```
 
 The worker uses Celery's default queue and can execute every registered plugin.
@@ -106,19 +118,51 @@ webp-to-avif
 
 ## API workflow
 
+### Google authentication
+
+Create a Google OAuth 2.0 Web client and configure its public client ID for the
+API in the root `.env`:
+
+```bash
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+VITE_API_BASE_URL=http://localhost:8000
+JWT_SECRET=replace-with-output-from-openssl
+JWT_AUDIENCE=multiple-tools-web
+FRONTEND_URL=http://localhost:5173
+AUTH_COOKIE_SECURE=false
+CORS_ORIGINS=http://localhost:5173
+```
+
+Generate the backend-only JWT secret with:
+
+```bash
+openssl rand -hex 32
+```
+
+The frontend does not include Google authentication. API clients can submit a
+Google ID token to `POST /v1/auth/google`; the endpoint verifies it and returns
+the application's bearer token.
+
+Use the returned bearer token for API-client job requests:
+
 ```bash
 curl http://localhost:8000/v1/tools
 
 curl -X POST \
+  -H "Authorization: Bearer APP_ACCESS_TOKEN" \
   -H "Idempotency-Key: example-001" \
   -F "file=@document.pdf" \
   http://localhost:8000/v1/tools/pdf-to-word/jobs
 
-curl http://localhost:8000/v1/jobs/JOB_ID
-curl -OJ http://localhost:8000/v1/jobs/JOB_ID/output
+curl -H "Authorization: Bearer APP_ACCESS_TOKEN" \
+  http://localhost:8000/v1/jobs/JOB_ID
+curl -OJ -H "Authorization: Bearer APP_ACCESS_TOKEN" \
+  http://localhost:8000/v1/jobs/JOB_ID/output
 ```
 
 Job states are `QUEUED`, `RUNNING`, `SUCCESS`, and `FAILED`.
+Every new job is owned by its authenticated user. Status and output endpoints
+return `404` when the job does not belong to the caller.
 
 Tools that require settings receive them through the optional multipart
 `options` JSON field. Redis still receives only the job ID:
