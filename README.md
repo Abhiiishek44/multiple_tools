@@ -22,8 +22,12 @@ packages/
   queue/               Shared Celery configuration
   storage/             Provider-agnostic object storage interface and MinIO adapter
 plugins/
-  pdf_documents/       PDF and document conversion plugins
-  */                    Pure image and OCR plugins
+  pdf_documents_tools/ PDF and document conversion plugins
+  image_converter_tools/
+    common_raster_conversions/ JPEG, PNG, WEBP, BMP, and TIFF tools
+    heic_heif_conversions/     HEIC and HEIF tools
+    avif_conversions/          AVIF tools
+  image_to_text/       OCR plugin
 infrastructure/         PostgreSQL, Redis, MinIO, and migrations
 ```
 
@@ -87,6 +91,15 @@ excel-to-csv        csv-to-pdf          markdown-to-pdf
 markdown-to-word    word-to-html        html-to-word
 pdf-to-html         tiff-to-pdf         bmp-to-pdf
 webp-to-pdf
+
+jpg-to-webp        webp-to-jpg        png-to-webp
+webp-to-png        bmp-to-jpg         bmp-to-png
+jpg-to-bmp         png-to-bmp         tiff-to-jpg
+tiff-to-png        jpg-to-tiff        png-to-tiff
+heic-to-png        heic-to-webp       jpg-to-heic
+png-to-heic        avif-to-jpg        avif-to-png
+avif-to-webp       jpg-to-avif        png-to-avif
+webp-to-avif
 ```
 
 `pdf-to-jpg` and `pdf-to-png` return a ZIP containing one image per PDF page.
@@ -130,10 +143,11 @@ curl -X POST \
 ## Adding a plugin
 
 Create a tool directory with only `manifest.py` and `handler.py`. PDF and
-document tools belong under `plugins/pdf_documents/`; pure image/OCR tools can
-live directly under `plugins/`. The registry discovers nested plugins
-automatically. Shared plugin contracts and discovery live in `plugins/base.py`
-and `plugins/registry.py`.
+document tools belong under `plugins/pdf_documents_tools/`; image conversion
+tools belong in the matching category under `plugins/image_converter_tools/`.
+OCR remains in `plugins/image_to_text/`. The registry discovers nested plugins automatically.
+Shared plugin contracts and discovery live in `plugins/base.py` and
+`plugins/registry.py`.
 
 All plugins use the same Celery queue. Adding a plugin does not require API,
 queue, or worker-task changes: add its package and ensure the worker has the
