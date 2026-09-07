@@ -1,7 +1,6 @@
 import os
 from dataclasses import dataclass
 from functools import lru_cache
-from pathlib import Path
 
 
 @dataclass(frozen=True, slots=True)
@@ -10,11 +9,14 @@ class Settings:
     celery_broker_url: str
     celery_result_backend: str
     storage_backend: str
-    local_storage_path: Path
     max_upload_bytes: int
-    s3_bucket: str | None
-    s3_endpoint_url: str | None
-    s3_region: str | None
+    minio_bucket: str
+    minio_endpoint: str
+    minio_access_key: str
+    minio_secret_key: str
+    minio_region: str
+    minio_secure: bool
+    minio_auto_create_bucket: bool
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -28,15 +30,30 @@ class Settings:
             celery_result_backend=os.getenv(
                 "CELERY_RESULT_BACKEND", "redis://localhost:6380/1"
             ),
-            storage_backend=os.getenv("STORAGE_BACKEND", "local").lower(),
-            local_storage_path=Path(os.getenv("LOCAL_STORAGE_PATH", "storage")),
+            storage_backend=os.getenv("STORAGE_BACKEND", "minio").lower(),
             max_upload_bytes=int(os.getenv("MAX_UPLOAD_BYTES", str(50 * 1024 * 1024))),
-            s3_bucket=os.getenv("S3_BUCKET"),
-            s3_endpoint_url=os.getenv("S3_ENDPOINT_URL"),
-            s3_region=os.getenv("S3_REGION"),
+            minio_bucket=os.getenv("MINIO_BUCKET", "multiple-tools"),
+            minio_endpoint=os.getenv("MINIO_ENDPOINT", "localhost:9000"),
+            minio_access_key=os.getenv("MINIO_ACCESS_KEY", "minioadmin"),
+            minio_secret_key=os.getenv("MINIO_SECRET_KEY", "minioadmin"),
+            minio_region=os.getenv("MINIO_REGION", "us-east-1"),
+            minio_secure=_boolean("MINIO_SECURE", False),
+            minio_auto_create_bucket=_boolean("MINIO_AUTO_CREATE_BUCKET", True),
         )
 
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
     return Settings.from_environment()
+
+
+def _boolean(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    normalized = value.strip().lower()
+    if normalized in {"1", "true", "yes", "on"}:
+        return True
+    if normalized in {"0", "false", "no", "off"}:
+        return False
+    raise ValueError(f"{name} must be true or false")

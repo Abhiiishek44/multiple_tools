@@ -708,6 +708,7 @@ name = "multiple-tools"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "boto3" },
     { name = "celery", extra = ["redis"] },
     { name = "fastapi" },
     { name = "openpyxl" },
@@ -723,14 +724,9 @@ dependencies = [
     { name = "uvicorn", extra = ["standard"] },
 ]
 
-[package.optional-dependencies]
-s3 = [
-    { name = "boto3" },
-]
-
 [package.metadata]
 requires-dist = [
-    { name = "boto3", marker = "extra == 's3'", specifier = ">=1.35,<2" },
+    { name = "boto3", specifier = "==1.43.89" },
     { name = "celery", extras = ["redis"], specifier = "==5.5.3" },
     { name = "fastapi", specifier = "==0.116.1" },
     { name = "openpyxl", specifier = "==3.1.5" },
@@ -745,7 +741,6 @@ requires-dist = [
     { name = "python-pptx", specifier = "==1.0.2" },
     { name = "uvicorn", extras = ["standard"], specifier = "==0.35.0" },
 ]
-provides-extras = ["s3"]
 
 [[package]]
 name = "numpy"

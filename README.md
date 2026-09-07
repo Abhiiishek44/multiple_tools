@@ -1,7 +1,7 @@
 # Multiple Tools
 
 An extensible asynchronous tool platform built with FastAPI, Celery, Redis,
-PostgreSQL, and pluggable artifact storage.
+PostgreSQL, and MinIO object storage.
 
 ## Architecture
 
@@ -19,11 +19,10 @@ apps/
   worker/              Generic Celery task
 packages/
   core/                Configuration, database, job repository, errors
-  plugin_sdk/          Plugin contract, manifest, context, and discovery
   queue/               Shared Celery configuration
-  storage/             Local and S3 artifact adapters
+  storage/             Provider-agnostic object storage interface and MinIO adapter
 plugins/                Independently discoverable tool implementations
-infrastructure/         Compose stack, PostgreSQL setup, and migrations
+infrastructure/         PostgreSQL, Redis, MinIO, and migrations
 ```
 
 ## Local setup
@@ -31,8 +30,15 @@ infrastructure/         Compose stack, PostgreSQL setup, and migrations
 ```bash
 cp .env.example .env
 docker compose -f infrastructure/compose.yaml up -d
-python -m pip install -e .
+uv sync
+set -a
+source .env
+set +a
 ```
+
+MinIO's object-storage API is available at `http://localhost:9000`; its browser console is
+available at `http://localhost:9003`. The application creates the configured
+bucket on first use in local development.
 
 Apply migrations to an existing database volume:
 
@@ -100,9 +106,16 @@ All plugins use the same Celery queue. Adding a plugin does not require API,
 queue, or worker-task changes: add its package and ensure the worker has the
 external programs that plugin needs.
 
-Every API and worker instance must use the same storage backend. Local storage
-is for single-host development. For distributed deployments, install `.[s3]`
-and configure `STORAGE_BACKEND=s3`.
+## Object storage
+
+API and worker processes use the same `ArtifactStorage` interface and exchange
+only object keys such as `jobs/{job_id}/input.pdf`. The current provider is
+MinIO, configured with `MINIO_ENDPOINT=localhost:9000` and the other
+`MINIO_*` variables in `.env`.
+
+The MinIO adapter uses boto3 internally to communicate with MinIO.
+This is an implementation detail: API routes, workers, and plugins depend only
+on `ArtifactStorage`, not on MinIO or boto3.
 
 ## Tests
 

@@ -5,5 +5,5 @@
 build/
 dist/
 *.egg-info/
-storage/
+/storage/
 .venv/

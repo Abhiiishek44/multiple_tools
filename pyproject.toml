@@ -9,6 +9,7 @@ description = "Extensible asynchronous tool execution platform"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "boto3==1.43.89",
     "celery[redis]==5.5.3",
     "fastapi==0.116.1",
     "openpyxl==3.1.5",
@@ -23,9 +24,6 @@ dependencies = [
     "pytesseract==0.3.13",
     "uvicorn[standard]==0.35.0",
 ]
-
-[project.optional-dependencies]
-s3 = ["boto3>=1.35,<2"]
 
 [tool.setuptools.packages.find]
 include = ["apps*", "packages*", "plugins*"]
