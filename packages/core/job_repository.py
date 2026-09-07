@@ -1,6 +1,8 @@
 from collections.abc import Mapping
 from typing import Any
 
+from psycopg.types.json import Jsonb
+
 from packages.core.database import database_connection
 from packages.core.models import Job
 
@@ -13,6 +15,7 @@ def create_job(
     input_artifact_key: str,
     input_filename: str,
     input_media_type: str | None,
+    options: dict[str, object],
     idempotency_key: str | None,
 ) -> Job:
     with database_connection() as connection:
@@ -20,9 +23,9 @@ def create_job(
             """
             INSERT INTO tool_jobs (
                 id, tool_name, tool_version, input_artifact_key,
-                input_filename, input_media_type, idempotency_key
+                input_filename, input_media_type, options, idempotency_key
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING *
             """,
             (
@@ -32,6 +35,7 @@ def create_job(
                 input_artifact_key,
                 input_filename,
                 input_media_type,
+                Jsonb(options),
                 idempotency_key,
             ),
         ).fetchone()
@@ -90,7 +94,7 @@ def mark_succeeded(
         UPDATE tool_jobs
         SET status = 'SUCCESS', progress = 100,
             output_artifact_key = %s, output_filename = %s, output_media_type = %s,
-            completed_at = NOW(), error = NULL
+            completed_at = NOW(), error = NULL, options = '{}'::jsonb
         WHERE id = %s AND status = 'RUNNING'
         RETURNING *
         """,
@@ -102,12 +106,13 @@ def mark_failed(job_id: str, error: str) -> Job | None:
     return _update_and_return(
         """
         UPDATE tool_jobs
-        SET status = 'FAILED', error = %s, completed_at = NOW()
+        SET status = 'FAILED', error = %s, completed_at = NOW(), options = '{}'::jsonb
         WHERE id = %s AND status IN ('QUEUED', 'RUNNING')
         RETURNING *
         """,
         (error[:4000], job_id),
     )
+
 
 def _update_and_return(query: str, parameters: tuple[Any, ...]) -> Job | None:
     with database_connection() as connection:

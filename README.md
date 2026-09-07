@@ -21,7 +21,9 @@ packages/
   core/                Configuration, database, job repository, errors
   queue/               Shared Celery configuration
   storage/             Provider-agnostic object storage interface and MinIO adapter
-plugins/                Independently discoverable tool implementations
+plugins/
+  pdf_documents/       PDF and document conversion plugins
+  */                    Pure image and OCR plugins
 infrastructure/         PostgreSQL, Redis, MinIO, and migrations
 ```
 
@@ -45,6 +47,8 @@ Apply migrations to an existing database volume:
 ```bash
 docker compose -f infrastructure/compose.yaml exec -T postgres \
   psql -U app -d app < infrastructure/migrations/001_create_tool_jobs.sql
+docker compose -f infrastructure/compose.yaml exec -T postgres \
+  psql -U app -d app < infrastructure/migrations/003_add_job_options.sql
 ```
 
 Start the API and a generic worker:
@@ -76,6 +80,13 @@ heic-to-jpg         image-to-text
 compress-pdf        pdf-to-excel
 excel-to-pdf        pdf-to-powerpoint
 powerpoint-to-pdf
+rotate-pdf          protect-pdf         unlock-pdf
+html-to-pdf         pdf-to-text         text-to-pdf
+word-to-text        text-to-word        csv-to-excel
+excel-to-csv        csv-to-pdf          markdown-to-pdf
+markdown-to-word    word-to-html        html-to-word
+pdf-to-html         tiff-to-pdf         bmp-to-pdf
+webp-to-pdf
 ```
 
 `pdf-to-jpg` and `pdf-to-png` return a ZIP containing one image per PDF page.
@@ -96,11 +107,33 @@ curl -OJ http://localhost:8000/v1/jobs/JOB_ID/output
 
 Job states are `QUEUED`, `RUNNING`, `SUCCESS`, and `FAILED`.
 
+Tools that require settings receive them through the optional multipart
+`options` JSON field. Redis still receives only the job ID:
+
+```bash
+curl -X POST \
+  -H "Idempotency-Key: rotate-example-001" \
+  -F 'options={"angle":90}' \
+  -F "file=@document.pdf;type=application/pdf" \
+  http://localhost:8000/v1/tools/rotate-pdf/jobs
+
+curl -X POST \
+  -H "Idempotency-Key: protect-example-001" \
+  -F 'options={"password":"change-me"}' \
+  -F "file=@document.pdf;type=application/pdf" \
+  http://localhost:8000/v1/tools/protect-pdf/jobs
+```
+
+`rotate-pdf` defaults to 90 degrees. `protect-pdf` and `unlock-pdf` require a
+`password`; `protect-pdf` also accepts an optional `owner_password`.
+
 ## Adding a plugin
 
-Create `plugins/my_tool/` with only `manifest.py` and `handler.py`. The registry
-discovers the manifest and handler automatically. Shared plugin contracts and
-discovery live in `plugins/base.py` and `plugins/registry.py`.
+Create a tool directory with only `manifest.py` and `handler.py`. PDF and
+document tools belong under `plugins/pdf_documents/`; pure image/OCR tools can
+live directly under `plugins/`. The registry discovers nested plugins
+automatically. Shared plugin contracts and discovery live in `plugins/base.py`
+and `plugins/registry.py`.
 
 All plugins use the same Celery queue. Adding a plugin does not require API,
 queue, or worker-task changes: add its package and ensure the worker has the

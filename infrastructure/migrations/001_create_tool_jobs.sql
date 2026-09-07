@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS tool_jobs (
     input_artifact_key text NOT NULL,
     input_filename text NOT NULL,
     input_media_type text,
+    options jsonb NOT NULL DEFAULT '{}'::jsonb,
     output_artifact_key text,
     output_filename text,
     output_media_type text,

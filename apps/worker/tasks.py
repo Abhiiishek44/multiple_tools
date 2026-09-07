@@ -38,6 +38,7 @@ def execute_tool(job_id: str) -> dict[str, str]:
             context = ToolContext(
                 job_id=job.id,
                 report_progress=lambda value: job_repository.update_progress(job.id, value),
+                options=job.options,
             )
             output = plugin.execute(context, source, destination)
             if not output.is_file() or output.stat().st_size == 0:

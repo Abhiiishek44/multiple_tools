@@ -1,6 +1,6 @@
 import re
-from collections.abc import Callable
-from dataclasses import dataclass
+from collections.abc import Callable, Mapping
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
@@ -32,6 +32,7 @@ class PluginManifest:
 class ToolContext:
     job_id: str
     report_progress: Callable[[int], None]
+    options: Mapping[str, object] = field(default_factory=dict)
 
 
 PluginHandler = Callable[[ToolContext, Path, Path], Path]

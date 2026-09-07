@@ -16,10 +16,14 @@ def plugin_registry() -> Mapping[str, Plugin]:
     discovered: dict[str, Plugin] = {}
     plugins_directory = Path(__file__).parent
 
-    for directory in sorted(plugins_directory.iterdir()):
-        if not directory.is_dir() or directory.name.startswith("_"):
+    for manifest_path in sorted(plugins_directory.rglob("manifest.py")):
+        directory = manifest_path.parent
+        relative_directory = directory.relative_to(plugins_directory)
+        if any(part.startswith("_") for part in relative_directory.parts):
             continue
-        module = f"plugins.{directory.name}"
+        if not (directory / "handler.py").is_file():
+            raise ValueError(f"Plugin manifest has no handler: {relative_directory}")
+        module = ".".join(("plugins", *relative_directory.parts))
         manifest: PluginManifest = import_module(f"{module}.manifest").MANIFEST
         handler = import_module(f"{module}.handler").convert
         manifest.validate()

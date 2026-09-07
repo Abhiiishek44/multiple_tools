@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, File, Header, HTTPException, UploadFile, status
+from fastapi import APIRouter, File, Form, Header, HTTPException, UploadFile, status
 
 from apps.api.schemas.jobs import JobResponse
 from apps.api.schemas.tools import ToolResponse
@@ -16,10 +16,15 @@ def list_tools() -> list[ToolResponse]:
     return [ToolResponse.model_validate(tool) for tool in available_tools()]
 
 
-@router.post("/{tool_name}/jobs", response_model=JobResponse, status_code=status.HTTP_202_ACCEPTED)
+@router.post(
+    "/{tool_name}/jobs",
+    response_model=JobResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+)
 def create_job(
     tool_name: str,
     file: Annotated[UploadFile, File()],
+    options: Annotated[str | None, Form()] = None,
     idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
 ) -> JobResponse:
     try:
@@ -28,6 +33,7 @@ def create_job(
             filename=file.filename,
             media_type=file.content_type,
             stream=file.file,
+            options_json=options,
             idempotency_key=idempotency_key,
         )
     except ValidationError as error:

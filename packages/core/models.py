@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 
@@ -20,3 +20,4 @@ class Job:
     created_at: datetime
     started_at: datetime | None
     completed_at: datetime | None
+    options: dict[str, object] = field(default_factory=dict)

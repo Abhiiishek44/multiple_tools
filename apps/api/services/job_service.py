@@ -1,3 +1,4 @@
+import json
 import logging
 from pathlib import Path
 from typing import BinaryIO
@@ -16,9 +17,15 @@ logger = logging.getLogger(__name__)
 
 
 def submit_job(
-    *, tool_name: str, filename: str | None, media_type: str | None,
-    stream: BinaryIO, idempotency_key: str | None = None,
+    *,
+    tool_name: str,
+    filename: str | None,
+    media_type: str | None,
+    stream: BinaryIO,
+    options_json: str | None = None,
+    idempotency_key: str | None = None,
 ) -> Job:
+    options = _parse_options(options_json)
     if idempotency_key:
         existing = job_repository.get_job_by_idempotency_key(idempotency_key)
         if existing:
@@ -59,19 +66,34 @@ def submit_job(
             input_artifact_key=artifact_key,
             input_filename=Path(filename or f"input{suffix}").name,
             input_media_type=normalized_media_type,
+            options=options,
             idempotency_key=idempotency_key,
         )
-        celery_app.send_task(
-            "tools.execute", args=[job.id], task_id=job.id,
-        )
+        celery_app.send_task("tools.execute", args=[job.id], task_id=job.id)
         logger.info("Queued job id=%s tool=%s", job.id, job.tool_name)
         return job
     except Exception as error:
         if job is not None:
             job_repository.mark_failed(job.id, f"Queue dispatch failed: {error}")
         storage.delete(artifact_key)
-        logger.exception("Failed to create or dispatch job id=%s tool=%s", job_id, tool_name)
+        logger.exception(
+            "Failed to create or dispatch job id=%s tool=%s", job_id, tool_name
+        )
         raise
+
+
+def _parse_options(raw: str | None) -> dict[str, object]:
+    if raw is None or not raw.strip():
+        return {}
+    if len(raw) > 10_000:
+        raise ValidationError("Job options are too large")
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise ValidationError("Options must be valid JSON") from error
+    if not isinstance(value, dict) or not all(isinstance(key, str) for key in value):
+        raise ValidationError("Options must be a JSON object")
+    return value
 
 
 def find_job(job_id: str) -> Job:
