@@ -49,8 +49,30 @@ celery --app=apps.worker.celery_app:celery_app worker --loglevel=INFO
 ```
 
 The worker uses Celery's default queue and can execute every registered plugin.
-LibreOffice and its `soffice` executable must be installed on any worker that
-will run the Word-to-PDF plugin.
+Install the two worker system dependencies on Debian or Ubuntu:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libreoffice tesseract-ocr
+```
+
+LibreOffice handles Word, Excel, and PowerPoint to PDF. Tesseract handles OCR.
+All other conversions use the Python dependencies installed by the project.
+
+## Available tools
+
+```text
+pdf-to-word         word-to-pdf
+jpg-to-pdf          pdf-to-jpg
+png-to-pdf          pdf-to-png
+jpg-to-png          png-to-jpg
+heic-to-jpg         image-to-text
+compress-pdf        pdf-to-excel
+excel-to-pdf        pdf-to-powerpoint
+powerpoint-to-pdf
+```
+
+`pdf-to-jpg` and `pdf-to-png` return a ZIP containing one image per PDF page.
 
 ## API workflow
 
@@ -64,10 +86,9 @@ curl -X POST \
 
 curl http://localhost:8000/v1/jobs/JOB_ID
 curl -OJ http://localhost:8000/v1/jobs/JOB_ID/output
-curl -X POST http://localhost:8000/v1/jobs/JOB_ID/cancel
 ```
 
-Job states are `PENDING`, `RUNNING`, `SUCCEEDED`, `FAILED`, and `CANCELLED`.
+Job states are `QUEUED`, `RUNNING`, `SUCCESS`, and `FAILED`.
 
 ## Adding a plugin
 

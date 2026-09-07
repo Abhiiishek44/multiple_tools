@@ -20,9 +20,6 @@ def execute_tool(job_id: str) -> dict[str, str]:
     if job is None:
         logger.error("Cannot execute missing job id=%s", job_id)
         raise ValueError(f"Job not found: {job_id}")
-    if job.status == "CANCELLED":
-        logger.info("Skipping cancelled job id=%s", job.id)
-        return {"job_id": job.id, "status": job.status}
     if job_repository.mark_running(job.id) is None:
         logger.info("Skipping unclaimable job id=%s status=%s", job.id, job.status)
         return {"job_id": job.id, "status": job.status}
@@ -55,8 +52,10 @@ def execute_tool(job_id: str) -> dict[str, str]:
         )
         if updated is None:
             storage.delete(output_key)
-            logger.info("Discarded output for cancelled job id=%s", job.id)
-            return {"job_id": job.id, "status": "CANCELLED"}
+            current = job_repository.get_job(job.id)
+            status = current.status if current else "FAILED"
+            logger.warning("Discarded output after job status changed id=%s status=%s", job.id, status)
+            return {"job_id": job.id, "status": status}
         logger.info("Completed job id=%s tool=%s", job.id, job.tool_name)
         return {"job_id": job.id, "status": updated.status}
     except Exception as error:

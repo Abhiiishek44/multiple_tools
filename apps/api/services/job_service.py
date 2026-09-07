@@ -38,6 +38,10 @@ def submit_job(
     if suffix not in plugin.manifest.input_suffixes:
         expected = ", ".join(sorted(plugin.manifest.input_suffixes))
         raise ValidationError(f"Plugin '{tool_name}' expects one of: {expected}")
+    normalized_media_type = (media_type or "").partition(";")[0].strip().lower()
+    if normalized_media_type not in plugin.manifest.input_media_types:
+        expected = ", ".join(sorted(plugin.manifest.input_media_types))
+        raise ValidationError(f"Plugin '{tool_name}' expects media type: {expected}")
 
     job_id = uuid4().hex
     artifact_key = f"jobs/{job_id}/input{suffix}"
@@ -54,7 +58,7 @@ def submit_job(
             tool_version=plugin.manifest.version,
             input_artifact_key=artifact_key,
             input_filename=Path(filename or f"input{suffix}").name,
-            input_media_type=media_type,
+            input_media_type=normalized_media_type,
             idempotency_key=idempotency_key,
         )
         celery_app.send_task(
@@ -77,21 +81,9 @@ def find_job(job_id: str) -> Job:
     return job
 
 
-def cancel(job_id: str) -> Job:
-    existing = find_job(job_id)
-    if existing.status not in {"PENDING", "RUNNING"}:
-        raise ConflictError(f"Cannot cancel a job in status {existing.status}")
-    job = job_repository.cancel_job(job_id)
-    if job is None:
-        raise ConflictError("Job status changed before cancellation")
-    celery_app.control.revoke(job_id, terminate=False)
-    logger.info("Cancelled job id=%s tool=%s", job.id, job.tool_name)
-    return job
-
-
 def output_reader(job_id: str) -> tuple[BinaryIO, str, str]:
     job = find_job(job_id)
-    if job.status != "SUCCEEDED" or not job.output_artifact_key:
+    if job.status != "SUCCESS" or not job.output_artifact_key:
         raise ConflictError("Job output is not available")
     storage = get_storage()
     if not storage.exists(job.output_artifact_key):

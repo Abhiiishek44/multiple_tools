@@ -29,7 +29,7 @@ class JobResponse(BaseModel):
             progress=job.progress,
             input_filename=job.input_filename,
             output_filename=job.output_filename,
-            output_url=f"/v1/jobs/{job.id}/output" if job.status == "SUCCEEDED" else None,
+            output_url=f"/v1/jobs/{job.id}/output" if job.status == "SUCCESS" else None,
             error=job.error,
             created_at=job.created_at,
             started_at=job.started_at,

@@ -7,7 +7,7 @@ from fastapi.responses import StreamingResponse
 from starlette.background import BackgroundTask
 
 from apps.api.schemas.jobs import JobResponse
-from apps.api.services.job_service import cancel, find_job, output_reader
+from apps.api.services.job_service import find_job, output_reader
 from packages.core.exceptions import ConflictError, NotFoundError
 
 router = APIRouter(prefix="/v1/jobs", tags=["jobs"])
@@ -19,16 +19,6 @@ def get_job(job_id: str) -> JobResponse:
         return JobResponse.from_job(find_job(job_id))
     except NotFoundError as error:
         raise HTTPException(status_code=404, detail=str(error)) from error
-
-
-@router.post("/{job_id}/cancel", response_model=JobResponse)
-def cancel_job(job_id: str) -> JobResponse:
-    try:
-        return JobResponse.from_job(cancel(job_id))
-    except NotFoundError as error:
-        raise HTTPException(status_code=404, detail=str(error)) from error
-    except ConflictError as error:
-        raise HTTPException(status_code=409, detail=str(error)) from error
 
 
 @router.get("/{job_id}/output", response_class=StreamingResponse)

@@ -13,6 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/10-enable-vector.sql:ro
       - ./migrations/001_create_tool_jobs.sql:/docker-entrypoint-initdb.d/20-create-tool-jobs.sql:ro
+      - ./migrations/002_simplify_job_states.sql:/docker-entrypoint-initdb.d/21-simplify-job-states.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s

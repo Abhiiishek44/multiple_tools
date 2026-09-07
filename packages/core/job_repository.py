@@ -59,7 +59,7 @@ def mark_running(job_id: str) -> Job | None:
         """
         UPDATE tool_jobs
         SET status = 'RUNNING', progress = GREATEST(progress, 1), started_at = NOW()
-        WHERE id = %s AND status = 'PENDING'
+        WHERE id = %s AND status = 'QUEUED'
         RETURNING *
         """,
         (job_id,),
@@ -88,7 +88,7 @@ def mark_succeeded(
     return _update_and_return(
         """
         UPDATE tool_jobs
-        SET status = 'SUCCEEDED', progress = 100,
+        SET status = 'SUCCESS', progress = 100,
             output_artifact_key = %s, output_filename = %s, output_media_type = %s,
             completed_at = NOW(), error = NULL
         WHERE id = %s AND status = 'RUNNING'
@@ -103,24 +103,11 @@ def mark_failed(job_id: str, error: str) -> Job | None:
         """
         UPDATE tool_jobs
         SET status = 'FAILED', error = %s, completed_at = NOW()
-        WHERE id = %s AND status IN ('PENDING', 'RUNNING')
+        WHERE id = %s AND status IN ('QUEUED', 'RUNNING')
         RETURNING *
         """,
         (error[:4000], job_id),
     )
-
-
-def cancel_job(job_id: str) -> Job | None:
-    return _update_and_return(
-        """
-        UPDATE tool_jobs
-        SET status = 'CANCELLED', completed_at = NOW()
-        WHERE id = %s AND status IN ('PENDING', 'RUNNING')
-        RETURNING *
-        """,
-        (job_id,),
-    )
-
 
 def _update_and_return(query: str, parameters: tuple[Any, ...]) -> Job | None:
     with database_connection() as connection:

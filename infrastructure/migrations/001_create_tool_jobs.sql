@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS tool_jobs (
     id uuid PRIMARY KEY,
     tool_name text NOT NULL,
     tool_version text NOT NULL,
-    status text NOT NULL DEFAULT 'PENDING'
-        CHECK (status IN ('PENDING', 'RUNNING', 'SUCCEEDED', 'FAILED', 'CANCELLED')),
+    status text NOT NULL DEFAULT 'QUEUED'
+        CHECK (status IN ('QUEUED', 'RUNNING', 'SUCCESS', 'FAILED')),
     progress smallint NOT NULL DEFAULT 0 CHECK (progress BETWEEN 0 AND 100),
     input_artifact_key text NOT NULL,
     input_filename text NOT NULL,
