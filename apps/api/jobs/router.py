@@ -9,8 +9,8 @@ from starlette.background import BackgroundTask
 from apps.api.dependencies import current_user_dependency
 from apps.api.jobs.schema import JobResponse
 from apps.api.services.job_service import find_job, output_reader
-from packages.core.exceptions import ConflictError, NotFoundError
-from packages.core.models import User
+from packages.auth.models import User
+from packages.exceptions import ConflictError, NotFoundError
 
 router = APIRouter(prefix="/v1/jobs", tags=["jobs"])
 

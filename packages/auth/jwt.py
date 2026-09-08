@@ -3,8 +3,8 @@ from uuid import uuid4
 
 import jwt
 
-from packages.core.config import Settings, get_settings
-from packages.core.exceptions import AuthenticationError
+from packages.config import Settings, get_settings
+from packages.exceptions import AuthenticationError
 
 
 def create_access_token(user_id: str, settings: Settings | None = None) -> str:

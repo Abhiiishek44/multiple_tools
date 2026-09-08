@@ -4,12 +4,12 @@ from pathlib import Path
 from typing import BinaryIO
 from uuid import uuid4
 
-from packages.core import job_repository
-from packages.core.config import get_settings
-from packages.core.exceptions import ConflictError, NotFoundError, ValidationError
-from packages.core.models import Job
+from packages.config import get_settings
+from packages.exceptions import ConflictError, NotFoundError, ValidationError
+from packages.jobs import repository as job_repository
+from packages.jobs.models import Job
 from plugins.registry import get_plugin
-from packages.queue.celery import celery_app
+from packages.queue import celery_app
 from packages.storage import get_storage
 
 

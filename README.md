@@ -18,7 +18,12 @@ apps/
   api/                 FastAPI routes, schemas, and orchestration services
   worker/              Generic Celery task
 packages/
-  core/                Configuration, database, job repository, errors
+  config.py            Environment configuration
+  database.py          Shared PostgreSQL connection
+  exceptions.py        Shared application errors
+  logging.py           Logging configuration
+  auth/                User model, repository, and JWT utilities
+  jobs/                Job model and repository
   queue/               Shared Celery configuration
   storage/             Provider-agnostic object storage interface and MinIO adapter
 plugins/

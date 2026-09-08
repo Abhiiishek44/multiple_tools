@@ -1,6 +1,6 @@
 from celery import Celery
 
-from packages.core.config import get_settings
+from packages.config import get_settings
 
 
 def create_celery_app() -> Celery:

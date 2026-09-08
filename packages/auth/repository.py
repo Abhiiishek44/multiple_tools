@@ -1,8 +1,8 @@
 from collections.abc import Mapping
 from typing import Any
 
-from packages.core.database import database_connection
-from packages.core.models import User
+from packages.auth.models import User
+from packages.database import database_connection
 
 
 def upsert_google_user(
