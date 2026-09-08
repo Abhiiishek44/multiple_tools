@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multiple-tools"
+version = "0.1.0"
+description = "Extensible asynchronous tool execution platform"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3==1.43.89",
+    "celery[redis]==5.5.3",
+    "fastapi==0.116.1",
+    "google-auth[requests]==2.57.1",
+    "markdown==3.10.3",
+    "openpyxl==3.1.5",
+    "pdf2docx==0.5.13",
+    "pdfplumber==0.11.10",
+    "pillow==12.3.0",
+    "pillow-heif==1.6.0",
+    "psycopg[binary]==3.2.9",
+    "pymupdf==1.28.2",
+    "python-multipart==0.0.20",
+    "python-docx==1.2.0",
+    "python-pptx==1.0.2",
+    "pytesseract==0.3.13",
+    "pyjwt==2.13.0",
+    "uvicorn[standard]==0.35.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["apps*", "packages*", "plugins*"]
+exclude = ["frontend*"]
