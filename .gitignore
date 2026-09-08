@@ -7,3 +7,4 @@ dist/
 *.egg-info/
 /storage/
 .venv/
+node_modules/

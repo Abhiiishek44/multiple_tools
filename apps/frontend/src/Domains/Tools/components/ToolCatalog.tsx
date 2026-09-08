@@ -1,34 +1,16 @@
-export type ConversionTool = {
-  id: string
-  name: string
-  from: string
-  to: string
-  description: string
-  tone: string
+import { useMemo, useState } from 'react'
+import type { ConversionTool } from '../api/conversion'
+
+type ToolCatalogProps = {
+  tools: ConversionTool[]
+  isLoading: boolean
+  error: string | null
+  onRetry: () => void
+  onSelect: (tool: ConversionTool) => void
 }
 
-const conversionTools: ConversionTool[] = [
-  { id: 'pdf-to-word', name: 'PDF to Word', from: 'PDF', to: 'DOCX', description: 'Turn PDFs into editable Word documents.', tone: 'blue' },
-  { id: 'word-to-pdf', name: 'Word to PDF', from: 'DOCX', to: 'PDF', description: 'Create polished PDFs from Word files.', tone: 'violet' },
-  { id: 'jpg-to-pdf', name: 'JPG to PDF', from: 'JPG', to: 'PDF', description: 'Combine JPG images into a clean PDF.', tone: 'emerald' },
-  { id: 'pdf-to-jpg', name: 'PDF to JPG', from: 'PDF', to: 'JPG', description: 'Export PDF pages as crisp JPG images.', tone: 'amber' },
-  { id: 'compress-pdf', name: 'Compress PDF', from: 'PDF', to: 'PDF', description: 'Reduce file size while keeping quality.', tone: 'purple' },
-  { id: 'pdf-to-excel', name: 'PDF to Excel', from: 'PDF', to: 'XLSX', description: 'Move PDF tables into editable sheets.', tone: 'indigo' },
-  { id: 'excel-to-pdf', name: 'Excel to PDF', from: 'XLSX', to: 'PDF', description: 'Share spreadsheets as reliable PDFs.', tone: 'pink' },
-  { id: 'pdf-to-powerpoint', name: 'PDF to PowerPoint', from: 'PDF', to: 'PPTX', description: 'Turn PDF pages into editable slides.', tone: 'sky' },
-  { id: 'powerpoint-to-pdf', name: 'PowerPoint to PDF', from: 'PPTX', to: 'PDF', description: 'Export presentations into a PDF.', tone: 'mint' },
-  { id: 'png-to-pdf', name: 'PNG to PDF', from: 'PNG', to: 'PDF', description: 'Convert PNG images into a PDF file.', tone: 'orange' },
-  { id: 'pdf-to-png', name: 'PDF to PNG', from: 'PDF', to: 'PNG', description: 'Save every PDF page as a PNG.', tone: 'cyan' },
-  { id: 'jpg-to-png', name: 'JPG to PNG', from: 'JPG', to: 'PNG', description: 'Convert JPG images to PNG format.', tone: 'lilac' },
-  { id: 'png-to-jpg', name: 'PNG to JPG', from: 'PNG', to: 'JPG', description: 'Create compact JPGs from PNG images.', tone: 'rose' },
-  { id: 'heic-to-jpg', name: 'HEIC to JPG', from: 'HEIC', to: 'JPG', description: 'Make HEIC photos easy to view and share.', tone: 'lime' },
-  { id: 'image-to-text', name: 'Image to Text', from: 'IMG', to: 'TXT', description: 'Extract text from an image with OCR.', tone: 'blue' },
-]
-
-type ToolCatalogProps = { onSelect: (tool: ConversionTool) => void }
-
 function FormatMark({ format }: { format: string }) {
-  if (['JPG', 'PNG', 'HEIC', 'IMG'].includes(format)) {
+  if (['JPG', 'PNG', 'HEIC', 'IMG', 'AVIF', 'WEBP', 'BMP', 'TIFF'].includes(format)) {
     return (
       <svg className="format-mark format-mark--image" viewBox="0 0 24 20">
         <circle cx="17.5" cy="5" r="2" />
@@ -99,28 +81,44 @@ function ToolVisual({ tool }: { tool: ConversionTool }) {
   return <span className="tool-card__visual"><FileBadge format={tool.from} /><ConversionArrow /><FileBadge format={tool.to} output /></span>
 }
 
-export function ToolCatalog({ onSelect }: ToolCatalogProps) {
+export function ToolCatalog({ tools, isLoading, error, onRetry, onSelect }: ToolCatalogProps) {
+  const [query, setQuery] = useState('')
+  const filteredTools = useMemo(() => {
+    const normalized = query.trim().toLowerCase()
+    if (!normalized) return tools
+    return tools.filter((tool) => `${tool.name} ${tool.description} ${tool.from} ${tool.to}`.toLowerCase().includes(normalized))
+  }, [query, tools])
+
   return (
     <main className="catalog-page">
       <section className="catalog-hero" aria-labelledby="catalog-title">
         <div className="hero-orb hero-orb--one" aria-hidden="true" />
         <div className="hero-orb hero-orb--two" aria-hidden="true" />
-        <span className="catalog-kicker"><span /> 15 tools. One simple workflow.</span>
+        <span className="catalog-kicker"><span /> {tools.length || 56} tools. One simple workflow.</span>
         <h1 id="catalog-title">Every file, in the<br /><em>format you need.</em></h1>
-        <p>Fast, private file conversion that works right in your browser. Choose a tool below to get started.</p>
+        <p>Fast, private document and image processing powered by the live conversion API. Choose a tool below to get started.</p>
         <a className="hero-cta" href="#conversion-tools">Explore all tools <span aria-hidden="true">↓</span></a>
         <div className="hero-trust" aria-label="Product benefits">
-          <span><i>✓</i> No sign-up</span><span><i>✓</i> Secure processing</span><span><i>✓</i> Quick results</span>
+          <span><i>✓</i> 56 backend tools</span><span><i>✓</i> Secure processing</span><span><i>✓</i> Real job progress</span>
         </div>
       </section>
 
       <section className="tools-section" id="conversion-tools" aria-labelledby="tools-title">
         <div className="section-heading">
-          <div><span className="section-index">01 / TOOLS</span><h2 id="tools-title">Choose your converter</h2></div>
+          <div><span className="section-index">01 / {tools.length || 56} TOOLS</span><h2 id="tools-title">Choose your converter</h2></div>
           <p>Click any service to begin. Your selected tool will stay visible while you work.</p>
         </div>
-        <div className="tool-grid">
-          {conversionTools.map((tool, index) => (
+        <label className="tool-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m16 16 4 4" /></svg>
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search all conversion tools…" aria-label="Search conversion tools" />
+          <span>{isLoading ? 'Loading…' : `${filteredTools.length} tools`}</span>
+        </label>
+        {error && <div className="catalog-notice" role="alert"><span>{error}</span><button type="button" onClick={onRetry}>Retry API</button></div>}
+        {isLoading ? (
+          <div className="tool-grid" aria-label="Loading tools">{Array.from({ length: 10 }, (_, index) => <div className="tool-card tool-card--skeleton" key={index} />)}</div>
+        ) : (
+          <div className="tool-grid">
+          {filteredTools.map((tool, index) => (
             <button className={`tool-card tool-card--${tool.tone}`} type="button" key={tool.id} onClick={() => onSelect(tool)} aria-label={`Open ${tool.name}`}>
               <span className="tool-card__number">{String(index + 1).padStart(2, '0')}</span>
               <span className="tool-card__visual-wrap" aria-hidden="true"><ToolVisual tool={tool} /></span>
@@ -128,7 +126,9 @@ export function ToolCatalog({ onSelect }: ToolCatalogProps) {
               <span className="tool-card__go" aria-hidden="true">↗</span>
             </button>
           ))}
-        </div>
+          {!filteredTools.length && !error && <p className="empty-tools">No tools match “{query}”.</p>}
+          </div>
+        )}
       </section>
 
       <section className="how-it-works" aria-labelledby="how-title">

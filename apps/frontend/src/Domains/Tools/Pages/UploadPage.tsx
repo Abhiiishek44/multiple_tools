@@ -2,19 +2,34 @@ import { useRef, useState, type ChangeEvent, type DragEvent } from 'react'
 
 import { FileIcon, LockIcon, UploadIcon } from '../../../Shared/Components/Icons'
 import { formatFileSize, getFileExtension } from '../../../Shared/Utils/file'
-import type { ConversionTool } from '../components/ToolCatalog'
+import type { ConversionTool, ToolOptions } from '../api/conversion'
 
 type UploadPageProps = {
   file: File | null
   onFileSelect: (file: File) => void
   onRemove: () => void
-  onConvert: () => void
+  onConvert: (options: ToolOptions) => void
   tool: ConversionTool
+  error: string | null
+  isSubmitting: boolean
 }
 
-export function UploadPage({ file, onFileSelect, onRemove, onConvert, tool }: UploadPageProps) {
+export function UploadPage({ file, onFileSelect, onRemove, onConvert, tool, error, isSubmitting }: UploadPageProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [password, setPassword] = useState('')
+  const [ownerPassword, setOwnerPassword] = useState('')
+  const [angle, setAngle] = useState('90')
+
+  const toolOptions = (): ToolOptions => {
+    if (tool.id === 'rotate-pdf') return { angle: Number(angle) }
+    if (tool.id === 'unlock-pdf') return { password }
+    if (tool.id === 'protect-pdf') return { password, ...(ownerPassword ? { owner_password: ownerPassword } : {}) }
+    return {}
+  }
+
+  const needsPassword = tool.id === 'protect-pdf' || tool.id === 'unlock-pdf'
+  const missingRequiredOption = needsPassword && !password
 
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0]
@@ -60,7 +75,7 @@ export function UploadPage({ file, onFileSelect, onRemove, onConvert, tool }: Up
                 <h2>Drag and drop your file here</h2>
                 <p>or <span>browse from your device</span></p>
               </div>
-              <span className="file-support">All common file types supported</span>
+              <span className="file-support">Accepted: {tool.inputSuffixes.join(', ').toUpperCase()} · Maximum 50 MB</span>
             </div>
           ) : (
             <div className="selected-file" aria-live="polite">
@@ -78,12 +93,22 @@ export function UploadPage({ file, onFileSelect, onRemove, onConvert, tool }: Up
             </div>
           )}
 
-          <input ref={inputRef} className="visually-hidden" type="file" onChange={handleInput} />
-          <button className="primary-button" type="button" onClick={onConvert} disabled={!file}>
-            Convert file
+          <input ref={inputRef} className="visually-hidden" type="file" accept={tool.inputSuffixes.join(',')} onChange={handleInput} />
+          {tool.id === 'rotate-pdf' && (
+            <label className="tool-option"><span>Rotation angle</span><select value={angle} onChange={(event) => setAngle(event.target.value)}><option value="90">90° clockwise</option><option value="180">180°</option><option value="270">270° clockwise</option><option value="-90">90° counter-clockwise</option></select></label>
+          )}
+          {needsPassword && (
+            <div className="tool-options">
+              <label className="tool-option"><span>{tool.id === 'protect-pdf' ? 'New PDF password' : 'Current PDF password'}</span><input type="password" value={password} maxLength={127} onChange={(event) => setPassword(event.target.value)} placeholder="Enter password" /></label>
+              {tool.id === 'protect-pdf' && <label className="tool-option"><span>Owner password <small>Optional</small></span><input type="password" value={ownerPassword} maxLength={127} onChange={(event) => setOwnerPassword(event.target.value)} placeholder="Defaults to the PDF password" /></label>}
+            </div>
+          )}
+          {error && <div className="form-error" role="alert">{error}</div>}
+          <button className="primary-button" type="button" onClick={() => onConvert(toolOptions())} disabled={!file || isSubmitting || missingRequiredOption}>
+            {isSubmitting ? 'Starting conversion…' : 'Convert file'}
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
           </button>
-          <div className="privacy-note"><LockIcon /><span>Private by design — your file is processed locally</span></div>
+          <div className="privacy-note"><LockIcon /><span>Private and secure — files are removed automatically after processing</span></div>
         </div>
       </section>
     </main>

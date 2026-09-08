@@ -1,20 +1,9 @@
-import { useEffect, useState } from 'react'
-
 import { FileIcon } from '../../../Shared/Components/Icons'
 import { formatFileSize, getFileExtension } from '../../../Shared/Utils/file'
+import type { ConversionJob } from '../api/conversion'
 
-export function ConvertingPage({ file }: { file: File }) {
-  const [progress, setProgress] = useState(8)
-
-  useEffect(() => {
-    const startedAt = Date.now()
-    const timer = window.setInterval(() => {
-      const elapsed = Date.now() - startedAt
-      setProgress(Math.min(99, Math.round(8 + (elapsed / 2400) * 91)))
-    }, 80)
-
-    return () => window.clearInterval(timer)
-  }, [])
+export function ConvertingPage({ file, job }: { file: File; job: ConversionJob }) {
+  const progress = Math.max(job.status === 'QUEUED' ? 4 : 8, Math.min(99, job.progress))
 
   return (
     <main className="page page--centered" aria-labelledby="conversion-title">
@@ -27,9 +16,9 @@ export function ConvertingPage({ file }: { file: File }) {
           <div className="loader__value"><strong>{progress}</strong><span>%</span></div>
         </div>
         <div className="status-copy">
-          <span className="eyebrow">CONVERSION IN PROGRESS</span>
-          <h1 id="conversion-title">Converting your file</h1>
-          <p>Please keep this window open. This will only take a moment.</p>
+          <span className="eyebrow">{job.status === 'QUEUED' ? 'WAITING FOR A WORKER' : 'CONVERSION IN PROGRESS'}</span>
+          <h1 id="conversion-title">{job.status === 'QUEUED' ? 'Your file is queued' : 'Converting your file'}</h1>
+          <p>Job {job.id.slice(0, 8)} · You can keep this window open while the backend processes it.</p>
         </div>
         <div className="compact-file">
           <div className="compact-file__icon"><FileIcon /></div>
