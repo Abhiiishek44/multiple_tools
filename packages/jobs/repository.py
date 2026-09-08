@@ -3,8 +3,8 @@ from typing import Any
 
 from psycopg.types.json import Jsonb
 
-from packages.core.database import database_connection
-from packages.core.models import Job
+from packages.database import database_connection
+from packages.jobs.models import Job
 
 
 def create_job(

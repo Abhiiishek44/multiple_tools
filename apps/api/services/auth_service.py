@@ -3,13 +3,13 @@ from google.auth.transport.requests import Request
 from google.oauth2 import id_token as google_id_token
 
 from apps.api.auth.schema import AuthResponse, UserResponse
-from packages.core import user_repository
-from packages.core.config import get_settings
-from packages.core.exceptions import (
+from packages.auth import repository as user_repository
+from packages.auth.jwt import create_access_token
+from packages.config import get_settings
+from packages.exceptions import (
     AuthenticationError,
     AuthenticationUnavailableError,
 )
-from packages.core.jwt import create_access_token
 
 
 def authenticate_google(id_token: str) -> AuthResponse:

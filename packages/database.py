@@ -6,7 +6,7 @@ import psycopg
 from psycopg import Connection
 from psycopg.rows import dict_row
 
-from packages.core.config import get_settings
+from packages.config import get_settings
 
 
 @contextmanager

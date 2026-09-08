@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-from packages.core.models import User
+from packages.auth.models import User
 
 
 class GoogleAuthRequest(BaseModel):

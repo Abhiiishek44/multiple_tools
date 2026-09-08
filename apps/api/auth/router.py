@@ -7,12 +7,12 @@ from fastapi.responses import RedirectResponse
 from apps.api.auth.schema import AuthResponse, GoogleAuthRequest, UserResponse
 from apps.api.dependencies import current_user_dependency
 from apps.api.services.auth_service import authenticate_google
-from packages.core.config import get_settings
-from packages.core.exceptions import (
+from packages.auth.models import User
+from packages.config import get_settings
+from packages.exceptions import (
     AuthenticationError,
     AuthenticationUnavailableError,
 )
-from packages.core.models import User
 
 
 router = APIRouter(prefix="/v1/auth", tags=["auth"])

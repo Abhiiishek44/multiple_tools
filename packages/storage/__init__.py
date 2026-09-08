@@ -2,7 +2,7 @@
 
 from functools import lru_cache
 
-from packages.core.config import get_settings
+from packages.config import get_settings
 from packages.storage.base import ArtifactStorage, StoredObject
 from packages.storage.minio import MinioStorage
 

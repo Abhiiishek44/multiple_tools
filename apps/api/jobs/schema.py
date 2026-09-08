@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from packages.core.models import Job
+from packages.jobs.models import Job
 
 
 class JobResponse(BaseModel):
