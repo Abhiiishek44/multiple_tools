@@ -18,14 +18,12 @@ apps/
   api/                 FastAPI routes, schemas, and orchestration services
   worker/              Generic Celery task
 packages/
-  config.py            Environment configuration
-  database.py          Shared PostgreSQL connection
-  exceptions.py        Shared application errors
-  logging.py           Logging configuration
+  core/                Environment configuration, errors, and logging
+  database/            Shared PostgreSQL connection
   auth/                User model, repository, and JWT utilities
   jobs/                Job model and repository
-  ocr/                 Reusable OpenRouter OCR client
-  queue/               Shared Celery configuration
+  documents/           Text normalization, OpenRouter OCR, and PDF parsing
+  task_queue/          Shared Celery configuration
   storage/             Provider-agnostic object storage interface and MinIO adapter
 plugins/
   pdf_documents_tools/ PDF and document conversion plugins
@@ -33,7 +31,7 @@ plugins/
     common_raster_conversions/ JPEG, PNG, WEBP, BMP, and TIFF tools
     heic_heif_conversions/     HEIC and HEIF tools
     avif_conversions/          AVIF tools
-  image_to_text/       OCR plugin
+  ocr_tools/           Image and PDF text-extraction plugins that use OCR
 infrastructure/         PostgreSQL, Redis, MinIO, and migrations
 ```
 
@@ -161,7 +159,14 @@ openssl rand -hex 32
 The frontend includes Google Identity Services sign-in. Set both
 `GOOGLE_CLIENT_ID` and `VITE_GOOGLE_CLIENT_ID` to the same OAuth web client ID.
 The browser posts the Google credential to `/v1/auth/google/callback`; the API
-sets an HTTP-only application cookie and redirects back to the frontend.
+sets an HTTP-only application cookie and redirects to `/dashboard`. On refresh,
+the frontend restores the signed-in user through `/v1/auth/me`; application JWTs
+are never stored in frontend JavaScript or browser local storage.
+
+Frontend routes are refresh-safe: `/dashboard` shows the categorized catalog,
+`/tools/{tool_name}` shows a tool upload screen, and `/jobs/{job_id}` restores a
+user-owned job from the backend. Production hosting must serve `index.html` as
+the fallback for these client-side routes.
 
 The converter catalog is loaded from `GET /v1/tools`. Selecting a tool uploads
 the file to `POST /v1/tools/{tool_name}/jobs`, polls the returned job through
@@ -214,8 +219,9 @@ curl -X POST \
 Create a tool directory with only `manifest.py` and `handler.py`. PDF and
 document tools belong under `plugins/pdf_documents_tools/`; image conversion
 tools belong in the matching category under `plugins/image_converter_tools/`.
-OCR remains in `plugins/ocr_tools/image_to_text/`. Its handler reuses
-`packages/ocr/`, which performs OCR exclusively through OpenRouter. The package
+OCR-dependent tools live under `plugins/ocr_tools/`. Both `image_to_text` and
+`pdf_to_text` reuse
+`packages/documents/ocr/`, which performs OCR exclusively through OpenRouter. The package
 normalizes image orientation and transparency, rejects oversized inputs, retries
 only transient provider failures, and returns structured text/model/token/cost
 metadata. Worker logs include that usage metadata without logging document
