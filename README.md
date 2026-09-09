@@ -158,9 +158,15 @@ Generate the backend-only JWT secret with:
 openssl rand -hex 32
 ```
 
-The frontend does not include Google authentication. API clients can submit a
-Google ID token to `POST /v1/auth/google`; the endpoint verifies it and returns
-the application's bearer token.
+The frontend includes Google Identity Services sign-in. Set both
+`GOOGLE_CLIENT_ID` and `VITE_GOOGLE_CLIENT_ID` to the same OAuth web client ID.
+The browser posts the Google credential to `/v1/auth/google/callback`; the API
+sets an HTTP-only application cookie and redirects back to the frontend.
+
+The converter catalog is loaded from `GET /v1/tools`. Selecting a tool uploads
+the file to `POST /v1/tools/{tool_name}/jobs`, polls the returned job through
+`GET /v1/jobs/{job_id}`, and downloads successful output from the job's output
+endpoint. The current registry exposes 56 tools.
 
 Use the returned bearer token for API-client job requests:
 
