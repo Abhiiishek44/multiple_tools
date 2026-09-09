@@ -5,8 +5,8 @@ from apps.api.auth.router import router as auth_router
 from apps.api.health.router import router as health_router
 from apps.api.jobs.router import router as jobs_router
 from apps.api.tools.router import router as tools_router
-from packages.config import get_settings
-from packages.logging import configure_logging
+from packages.core.config import get_settings
+from packages.core.logging import configure_logging
 
 configure_logging()
 app = FastAPI(title="Multiple Tools API", version="1.0.0")

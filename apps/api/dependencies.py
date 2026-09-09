@@ -6,8 +6,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from packages.auth import repository as user_repository
 from packages.auth.jwt import decode_access_token
 from packages.auth.models import User
-from packages.config import get_settings
-from packages.exceptions import AuthenticationError
+from packages.core.config import get_settings
+from packages.core.errors import AuthenticationError
 from packages.storage import get_storage
 from packages.storage.base import ArtifactStorage
 

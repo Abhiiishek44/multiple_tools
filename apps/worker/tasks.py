@@ -5,7 +5,7 @@ from pathlib import Path
 
 from celery import shared_task
 
-from packages.config import get_settings
+from packages.core.config import get_settings
 from packages.jobs import repository as job_repository
 from plugins.base import ToolContext
 from plugins.registry import get_plugin

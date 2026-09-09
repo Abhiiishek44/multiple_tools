@@ -8,8 +8,8 @@ from apps.api.auth.schema import AuthResponse, GoogleAuthRequest, UserResponse
 from apps.api.dependencies import current_user_dependency
 from apps.api.services.auth_service import authenticate_google
 from packages.auth.models import User
-from packages.config import get_settings
-from packages.exceptions import (
+from packages.core.config import get_settings
+from packages.core.errors import (
     AuthenticationError,
     AuthenticationUnavailableError,
 )
@@ -44,7 +44,8 @@ def google_redirect_callback(
         raise HTTPException(status_code=503, detail=str(error)) from error
 
     settings = get_settings()
-    response = RedirectResponse(settings.frontend_url, status_code=303)
+    dashboard_url = f"{settings.frontend_url.rstrip('/')}/dashboard"
+    response = RedirectResponse(dashboard_url, status_code=303)
     response.set_cookie(
         key=settings.auth_cookie_name,
         value=authentication.access_token,

@@ -19,7 +19,7 @@ from apps.api.services.job_service import submit_job
 from apps.api.services.tool_service import available_tools
 from apps.api.tools.schema import ToolResponse
 from packages.auth.models import User
-from packages.exceptions import ConflictError, ValidationError
+from packages.core.errors import ConflictError, ValidationError
 
 router = APIRouter(prefix="/v1/tools", tags=["tools"])
 
