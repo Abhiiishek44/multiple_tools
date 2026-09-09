@@ -2,8 +2,8 @@ from plugins.base import PluginManifest
 
 MANIFEST = PluginManifest(
     name="image-to-text",
-    version="1.0.0",
-    description="Extract text from an image using OCR",
+    version="2.0.0",
+    description="Extract text from an image using OpenRouter OCR",
     input_suffixes=frozenset({
         ".bmp", ".heic", ".heif", ".jpeg", ".jpg", ".png", ".tif", ".tiff", ".webp",
     }),

@@ -20,6 +20,12 @@ class Settings:
     minio_temp_prefix: str
     minio_temp_retention_minutes: int
     minio_cleanup_interval_minutes: int
+    openrouter_api_key: str | None
+    openrouter_base_url: str
+    openrouter_ocr_model: str | None
+    openrouter_timeout_seconds: int
+    ocr_max_pixels: int
+    ocr_max_payload_bytes: int
     google_client_id: str | None
     jwt_secret: str | None
     jwt_expiration_minutes: int
@@ -59,6 +65,18 @@ class Settings:
             ),
             minio_cleanup_interval_minutes=_positive_integer(
                 "MINIO_CLEANUP_INTERVAL_MINUTES", "30"
+            ),
+            openrouter_api_key=os.getenv("OPENROUTER_API_KEY") or None,
+            openrouter_base_url=os.getenv(
+                "OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"
+            ).rstrip("/"),
+            openrouter_ocr_model=os.getenv("OPENROUTER_OCR_MODEL") or None,
+            openrouter_timeout_seconds=_positive_integer(
+                "OPENROUTER_TIMEOUT_SECONDS", "120"
+            ),
+            ocr_max_pixels=_positive_integer("OCR_MAX_PIXELS", "40000000"),
+            ocr_max_payload_bytes=_positive_integer(
+                "OCR_MAX_PAYLOAD_BYTES", str(20 * 1024 * 1024)
             ),
             google_client_id=os.getenv("GOOGLE_CLIENT_ID") or None,
             jwt_secret=os.getenv("JWT_SECRET") or None,
