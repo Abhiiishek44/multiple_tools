@@ -24,6 +24,7 @@ packages/
   logging.py           Logging configuration
   auth/                User model, repository, and JWT utilities
   jobs/                Job model and repository
+  ocr/                 Reusable OpenRouter OCR client
   queue/               Shared Celery configuration
   storage/             Provider-agnostic object storage interface and MinIO adapter
 plugins/
@@ -81,15 +82,27 @@ npm run dev
 ```
 
 The worker uses Celery's default queue and can execute every registered plugin.
-Install the two worker system dependencies on Debian or Ubuntu:
+Install LibreOffice on Debian or Ubuntu for the Office conversion plugins:
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y libreoffice tesseract-ocr
+sudo apt-get install -y libreoffice
 ```
 
-LibreOffice handles Word, Excel, and PowerPoint to PDF. Tesseract handles OCR.
-All other conversions use the Python dependencies installed by the project.
+LibreOffice handles Word, Excel, and PowerPoint to PDF. OCR uses OpenRouter;
+there is no local Tesseract dependency. Configure the worker environment with:
+
+```bash
+OPENROUTER_API_KEY=your-secret-api-key
+OPENROUTER_OCR_MODEL=your-vision-capable-model
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+OPENROUTER_TIMEOUT_SECONDS=120
+```
+
+The API key is a backend secret and must never be exposed to frontend code.
+`pdf-to-text` extracts embedded text locally and calls OpenRouter only for pages
+whose native text is empty or unusable. Native and OCR text pass through the same
+deterministic Unicode and whitespace normalizer before the TXT file is written.
 
 ## Available tools
 
@@ -195,7 +208,13 @@ curl -X POST \
 Create a tool directory with only `manifest.py` and `handler.py`. PDF and
 document tools belong under `plugins/pdf_documents_tools/`; image conversion
 tools belong in the matching category under `plugins/image_converter_tools/`.
-OCR remains in `plugins/image_to_text/`. The registry discovers nested plugins automatically.
+OCR remains in `plugins/ocr_tools/image_to_text/`. Its handler reuses
+`packages/ocr/`, which performs OCR exclusively through OpenRouter. The package
+normalizes image orientation and transparency, rejects oversized inputs, retries
+only transient provider failures, and returns structured text/model/token/cost
+metadata. Worker logs include that usage metadata without logging document
+contents or API responses. `OCR_MAX_PIXELS` and `OCR_MAX_PAYLOAD_BYTES` configure
+the safety limits. The registry discovers nested plugins automatically.
 Shared plugin contracts and discovery live in `plugins/base.py` and
 `plugins/registry.py`.
 
