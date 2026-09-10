@@ -15,6 +15,7 @@ class Settings:
     minio_access_key: str
     minio_secret_key: str
     minio_region: str
+    minio_addressing_style: str
     minio_secure: bool
     minio_auto_create_bucket: bool
     minio_temp_prefix: str
@@ -49,6 +50,9 @@ class Settings:
             minio_access_key=os.getenv("MINIO_ACCESS_KEY", "minioadmin"),
             minio_secret_key=os.getenv("MINIO_SECRET_KEY", "minioadmin"),
             minio_region=os.getenv("MINIO_REGION", "us-east-1"),
+            minio_addressing_style=_choice(
+                "MINIO_ADDRESSING_STYLE", "auto", {"auto", "path", "virtual"}
+            ),
             minio_secure=_boolean("MINIO_SECURE", False),
             minio_auto_create_bucket=_boolean("MINIO_AUTO_CREATE_BUCKET", True),
             minio_temp_prefix=_object_prefix("MINIO_TEMP_PREFIX", os.getenv("MINIO_TEMP_PREFIX", "jobs/")),
@@ -101,3 +105,11 @@ def _object_prefix(name: str, value: str) -> str:
     if not normalized or any(part in {".", ".."} for part in normalized.split("/")):
         raise ValueError(f"{name} must be a non-empty safe object prefix")
     return f"{normalized}/"
+
+
+def _choice(name: str, default: str, choices: set[str]) -> str:
+    value = os.getenv(name, default).strip().lower()
+    if value not in choices:
+        allowed = ", ".join(sorted(choices))
+        raise ValueError(f"{name} must be one of: {allowed}")
+    return value

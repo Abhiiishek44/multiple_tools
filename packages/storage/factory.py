@@ -16,6 +16,7 @@ def get_storage() -> ArtifactStorage:
         access_key=settings.minio_access_key,
         secret_key=settings.minio_secret_key,
         region=settings.minio_region,
+        addressing_style=settings.minio_addressing_style,
         secure=settings.minio_secure,
         auto_create_bucket=settings.minio_auto_create_bucket,
     )

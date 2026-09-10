@@ -8,3 +8,8 @@ dist/
 /storage/
 .venv/
 node_modules/
+celerybeat-schedule
+celerybeat-schedule-shm
+celerybeat-schedule-wal
+.coverage
+htmlcov/

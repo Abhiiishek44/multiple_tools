@@ -1,0 +1,9 @@
+:{$PORT:8080} {
+	encode zstd gzip
+
+	respond /health 200
+
+	root * /srv
+	try_files {path} /index.html
+	file_server
+}
