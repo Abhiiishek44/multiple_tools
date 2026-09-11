@@ -132,6 +132,7 @@ MINIO_TEMP_PREFIX=jobs/
 
 GOOGLE_CLIENT_ID=replace-with-google-client-id.apps.googleusercontent.com
 JWT_SECRET=replace-with-a-random-secret-of-at-least-32-characters
+API_KEY_HMAC_SECRET=replace-with-a-different-random-secret-of-at-least-32-characters
 JWT_EXPIRATION_MINUTES=60
 JWT_ISSUER=multiple-tools-api
 JWT_AUDIENCE=multiple-tools-web

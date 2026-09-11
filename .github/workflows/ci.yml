@@ -36,10 +36,16 @@ jobs:
         run: uv sync --frozen
 
       - name: Run backend tests
-        run: uv run python -m unittest discover -v
+        run: uv run python -m unittest discover -s tests -v
+
+      - name: Run Python SDK tests
+        run: PYTHONPATH=sdks/python uv run python -m unittest discover -s sdks/python/tests -v
+
+      - name: Build Python SDK
+        run: uv build sdks/python
 
       - name: Compile deployment scripts
-        run: uv run python -m compileall -q apps packages plugins scripts
+        run: uv run python -m compileall -q apps packages plugins scripts sdks/python/multipletools
 
   frontend:
     name: Frontend checks

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from apps.api.api_keys.router import router as api_keys_router
 from apps.api.auth.router import router as auth_router
 from apps.api.health.router import router as health_router
 from apps.api.jobs.router import router as jobs_router
@@ -19,5 +20,6 @@ app.add_middleware(
 )
 app.include_router(health_router)
 app.include_router(auth_router)
+app.include_router(api_keys_router)
 app.include_router(tools_router)
 app.include_router(jobs_router)

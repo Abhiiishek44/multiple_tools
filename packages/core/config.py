@@ -36,6 +36,7 @@ class Settings:
     auth_cookie_name: str
     auth_cookie_secure: bool
     cors_origins: tuple[str, ...]
+    api_key_hmac_secret: str | None = None
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -69,6 +70,7 @@ class Settings:
             jwt_expiration_minutes=int(os.getenv("JWT_EXPIRATION_MINUTES", "60")),
             jwt_issuer=os.getenv("JWT_ISSUER", "multiple-tools-api"),
             jwt_audience=os.getenv("JWT_AUDIENCE", "multiple-tools-web"),
+            api_key_hmac_secret=os.getenv("API_KEY_HMAC_SECRET") or None,
             frontend_url=os.getenv("FRONTEND_URL", "http://localhost:5173"),
             auth_cookie_name=os.getenv("AUTH_COOKIE_NAME", "multiple_tools_access_token"),
             auth_cookie_secure=_boolean("AUTH_COOKIE_SECURE", False),
