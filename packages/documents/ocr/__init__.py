@@ -1,21 +1,15 @@
-"""Reusable OCR functionality backed by the configured provider."""
+"""Provider-independent document OCR functionality."""
 
-from pathlib import Path
-
-from packages.documents.ocr.base import OcrProvider
-from packages.documents.ocr.exceptions import (
+from .exceptions import (
     OcrConfigurationError,
     OcrError,
     OcrInputError,
     OcrRequestError,
     OcrResponseError,
 )
-from packages.documents.ocr.factory import get_ocr_provider
-from packages.documents.ocr.models import OcrResult
-
-
-def extract_text(source: Path, *, job_id: str | None = None) -> OcrResult:
-    return get_ocr_provider().extract_text(source, job_id=job_id)
+from .models import OcrResult
+from .providers import OcrProvider
+from .service import OcrService, extract_text, get_ocr_service
 
 
 __all__ = [
@@ -26,6 +20,7 @@ __all__ = [
     "OcrRequestError",
     "OcrResponseError",
     "OcrResult",
+    "OcrService",
     "extract_text",
-    "get_ocr_provider",
+    "get_ocr_service",
 ]

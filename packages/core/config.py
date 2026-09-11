@@ -15,6 +15,7 @@ class Settings:
     minio_access_key: str
     minio_secret_key: str
     minio_region: str
+    minio_addressing_style: str
     minio_secure: bool
     minio_auto_create_bucket: bool
     minio_temp_prefix: str
@@ -35,6 +36,7 @@ class Settings:
     auth_cookie_name: str
     auth_cookie_secure: bool
     cors_origins: tuple[str, ...]
+    api_key_hmac_secret: str | None = None
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -49,6 +51,9 @@ class Settings:
             minio_access_key=os.getenv("MINIO_ACCESS_KEY", "minioadmin"),
             minio_secret_key=os.getenv("MINIO_SECRET_KEY", "minioadmin"),
             minio_region=os.getenv("MINIO_REGION", "us-east-1"),
+            minio_addressing_style=_choice(
+                "MINIO_ADDRESSING_STYLE", "auto", {"auto", "path", "virtual"}
+            ),
             minio_secure=_boolean("MINIO_SECURE", False),
             minio_auto_create_bucket=_boolean("MINIO_AUTO_CREATE_BUCKET", True),
             minio_temp_prefix=_object_prefix("MINIO_TEMP_PREFIX", os.getenv("MINIO_TEMP_PREFIX", "jobs/")),
@@ -65,6 +70,7 @@ class Settings:
             jwt_expiration_minutes=int(os.getenv("JWT_EXPIRATION_MINUTES", "60")),
             jwt_issuer=os.getenv("JWT_ISSUER", "multiple-tools-api"),
             jwt_audience=os.getenv("JWT_AUDIENCE", "multiple-tools-web"),
+            api_key_hmac_secret=os.getenv("API_KEY_HMAC_SECRET") or None,
             frontend_url=os.getenv("FRONTEND_URL", "http://localhost:5173"),
             auth_cookie_name=os.getenv("AUTH_COOKIE_NAME", "multiple_tools_access_token"),
             auth_cookie_secure=_boolean("AUTH_COOKIE_SECURE", False),
@@ -101,3 +107,11 @@ def _object_prefix(name: str, value: str) -> str:
     if not normalized or any(part in {".", ".."} for part in normalized.split("/")):
         raise ValueError(f"{name} must be a non-empty safe object prefix")
     return f"{normalized}/"
+
+
+def _choice(name: str, default: str, choices: set[str]) -> str:
+    value = os.getenv(name, default).strip().lower()
+    if value not in choices:
+        allowed = ", ".join(sorted(choices))
+        raise ValueError(f"{name} must be one of: {allowed}")
+    return value

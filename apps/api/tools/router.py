@@ -13,19 +13,33 @@ from fastapi import (
     status,
 )
 
-from apps.api.dependencies import current_user_dependency
+from apps.api.dependencies import (
+    optional_bearer_principal_dependency,
+    principal_with_scope,
+)
 from apps.api.jobs.schema import JobResponse
 from apps.api.services.job_service import submit_job
 from apps.api.services.tool_service import available_tools
 from apps.api.tools.schema import ToolResponse
-from packages.auth.models import User
+from packages.auth.principal import Principal
+from packages.auth.scopes import JOBS_CREATE, TOOLS_READ
 from packages.core.errors import ConflictError, ValidationError
 
 router = APIRouter(prefix="/v1/tools", tags=["tools"])
 
 
 @router.get("")
-def list_tools() -> list[ToolResponse]:
+def list_tools(
+    principal: Annotated[
+        Principal | None, Depends(optional_bearer_principal_dependency)
+    ],
+) -> list[ToolResponse]:
+    # Preserve the existing anonymous web catalog. Authenticated API clients
+    # must still declare their intent through the tools:read scope.
+    if principal is not None and not principal.has_scope(TOOLS_READ):
+        raise HTTPException(
+            status_code=403, detail=f"API key requires scope: {TOOLS_READ}"
+        )
     return [ToolResponse.model_validate(tool) for tool in available_tools()]
 
 
@@ -37,7 +51,7 @@ def list_tools() -> list[ToolResponse]:
 def create_job(
     tool_name: str,
     request: Request,
-    current_user: Annotated[User, Depends(current_user_dependency)],
+    principal: Annotated[Principal, Depends(principal_with_scope(JOBS_CREATE))],
     file: Annotated[UploadFile, File()],
     options: Annotated[str | None, Form()] = None,
     idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
@@ -48,7 +62,7 @@ def create_job(
             filename=file.filename,
             media_type=file.content_type,
             stream=file.file,
-            user_id=current_user.id,
+            principal=principal,
             client_ip=_client_ip(request),
             user_agent=request.headers.get("user-agent"),
             options_json=options,

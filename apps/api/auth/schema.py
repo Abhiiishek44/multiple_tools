@@ -7,6 +7,10 @@ class GoogleAuthRequest(BaseModel):
     id_token: str = Field(min_length=1, max_length=10_000)
 
 
+class GoogleCredentialRequest(BaseModel):
+    credential: str = Field(min_length=1, max_length=10_000)
+
+
 class UserResponse(BaseModel):
     id: str
     email: str

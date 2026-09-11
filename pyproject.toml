@@ -14,6 +14,7 @@ dependencies = [
     "fastapi==0.116.1",
     "google-auth[requests]==2.57.1",
     "markdown==3.10.3",
+    "openrouter>=1.1.133",
     "openpyxl==3.1.5",
     "pdf2docx==0.5.13",
     "pdfplumber==0.11.10",

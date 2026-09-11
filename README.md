@@ -61,6 +61,8 @@ docker compose -f infrastructure/compose.yaml exec -T postgres \
   psql -U app -d app < infrastructure/migrations/004_add_google_auth.sql
 docker compose -f infrastructure/compose.yaml exec -T postgres \
   psql -U app -d app < infrastructure/migrations/005_add_job_request_metadata.sql
+docker compose -f infrastructure/compose.yaml exec -T postgres \
+  psql -U app -d app < infrastructure/migrations/006_add_api_keys.sql
 ```
 
 Start the API and a generic worker:
@@ -74,9 +76,31 @@ celery --app=apps.worker.celery_app:celery_app beat --loglevel=INFO
 Start the frontend in another terminal:
 
 ```bash
-cd apps/frontend
+cd apps/web
 npm install
 npm run dev
+```
+
+## Railway deployment
+
+Production container definitions, GitHub Actions CI, migration handling, and
+the Railway service setup are documented in
+[`docs/railway-deployment.md`](docs/railway-deployment.md).
+
+The CI workflow publishes three images on successful pushes to `main`:
+
+```text
+ghcr.io/abhiiishek44/multiple-tools-api:latest
+ghcr.io/abhiiishek44/multiple-tools-worker:latest
+ghcr.io/abhiiishek44/multiple-tools-web:latest
+```
+
+Their independent build definitions are under `docker/`:
+
+```text
+docker/Dockerfile.api
+docker/Dockerfile.worker
+docker/Dockerfile.web
 ```
 
 The worker uses Celery's default queue and can execute every registered plugin.
@@ -144,6 +168,7 @@ API in the root `.env`:
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 VITE_API_BASE_URL=http://localhost:8000
 JWT_SECRET=replace-with-output-from-openssl
+API_KEY_HMAC_SECRET=replace-with-a-different-output-from-openssl
 JWT_AUDIENCE=multiple-tools-web
 FRONTEND_URL=http://localhost:5173
 AUTH_COOKIE_SECURE=false
@@ -158,10 +183,12 @@ openssl rand -hex 32
 
 The frontend includes Google Identity Services sign-in. Set both
 `GOOGLE_CLIENT_ID` and `VITE_GOOGLE_CLIENT_ID` to the same OAuth web client ID.
-The browser posts the Google credential to `/v1/auth/google/callback`; the API
-sets an HTTP-only application cookie and redirects to `/dashboard`. On refresh,
-the frontend restores the signed-in user through `/v1/auth/me`; application JWTs
-are never stored in frontend JavaScript or browser local storage.
+Google Identity Services returns the credential to the frontend through its
+popup callback. The frontend posts it as JSON to `/v1/auth/google/callback`,
+then the API sets an HTTP-only application cookie and the frontend navigates to
+`/dashboard`. On refresh, the frontend restores the signed-in user through
+`/v1/auth/me`; application JWTs are never stored in frontend JavaScript or
+browser local storage.
 
 Frontend routes are refresh-safe: `/dashboard` shows the categorized catalog,
 `/tools/{tool_name}` shows a tool upload screen, and `/jobs/{job_id}` restores a
@@ -172,6 +199,34 @@ The converter catalog is loaded from `GET /v1/tools`. Selecting a tool uploads
 the file to `POST /v1/tools/{tool_name}/jobs`, polls the returned job through
 `GET /v1/jobs/{job_id}`, and downloads successful output from the job's output
 endpoint. The current registry exposes 56 tools.
+
+### External API keys
+
+Signed-in web users can create, list, and revoke external API keys through
+`POST /v1/api-keys`, `GET /v1/api-keys`, and `DELETE /v1/api-keys/{key_id}`.
+Creation accepts a name, scopes, and optional expiration timestamp. The raw
+`mt_live_<key_id>_<secret>` credential is returned only by the create request;
+only its HMAC is stored. Configure a separate `API_KEY_HMAC_SECRET` containing
+at least 32 characters before issuing keys.
+
+External clients authenticate with `Authorization: Bearer mt_live_...` and can
+use `POST /v1/jobs`, `GET /v1/jobs/{job_id}`, and
+`GET /v1/jobs/{job_id}/output`. Available scopes are `tools:read`,
+`jobs:create`, `jobs:read`, and `jobs:download`. The existing
+`POST /v1/tools/{tool_name}/jobs` web endpoint remains available.
+
+The typed Python SDK lives in `sdks/python` and communicates only with these
+HTTP endpoints:
+
+```python
+from multipletools import Client
+
+client = Client(api_key="mt_live_...", base_url="https://api.example.com")
+job = client.jobs.create(tool="pdf_to_word", file="document.pdf")
+job = client.jobs.get(job.id)
+client.jobs.download(job.id, "converted.docx")
+client.close()
+```
 
 Use the returned bearer token for API-client job requests:
 

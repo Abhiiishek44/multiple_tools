@@ -7,6 +7,7 @@ from typing import BinaryIO
 
 import boto3
 from botocore.client import BaseClient
+from botocore.config import Config
 from botocore.exceptions import ClientError
 
 from packages.storage.base import StoredObject
@@ -24,6 +25,7 @@ class MinioStorage:
         access_key: str,
         secret_key: str,
         region: str,
+        addressing_style: str,
         secure: bool,
         auto_create_bucket: bool,
     ) -> None:
@@ -36,6 +38,7 @@ class MinioStorage:
             aws_secret_access_key=secret_key,
             region_name=region,
             use_ssl=secure,
+            config=Config(s3={"addressing_style": addressing_style}),
         )
         if auto_create_bucket:
             self._ensure_bucket()
