@@ -5,9 +5,11 @@ from functools import lru_cache
 
 @dataclass(frozen=True, slots=True)
 class Settings:
+    # Database and task queue
     database_url: str
     celery_broker_url: str
-    celery_result_backend: str
+
+    # Object storage
     storage_backend: str
     max_upload_bytes: int
     minio_bucket: str
@@ -21,29 +23,46 @@ class Settings:
     minio_temp_prefix: str
     minio_temp_retention_minutes: int
     minio_cleanup_interval_minutes: int
+
+    # OCR provider and input limits
     openrouter_api_key: str | None
     openrouter_base_url: str
     openrouter_ocr_model: str | None
     openrouter_timeout_seconds: int
     ocr_max_pixels: int
     ocr_max_payload_bytes: int
+
+    # Authentication
     google_client_id: str | None
     jwt_secret: str | None
     jwt_expiration_minutes: int
     jwt_issuer: str
     jwt_audience: str
+    api_key_hmac_secret: str | None
+
+    # Browser and cookie integration
     frontend_url: str
     auth_cookie_name: str
     auth_cookie_secure: bool
     cors_origins: tuple[str, ...]
-    api_key_hmac_secret: str | None = None
+
+    def validate_api(self) -> None:
+        missing = [
+            name
+            for name, value in (
+                ("JWT_SECRET", self.jwt_secret),
+                ("API_KEY_HMAC_SECRET", self.api_key_hmac_secret),
+            )
+            if not value
+        ]
+        if missing:
+            raise ValueError(f"Missing required API settings: {', '.join(missing)}")
 
     @classmethod
     def from_environment(cls) -> "Settings":
         return cls(
             database_url=os.getenv("DATABASE_URL", "postgresql://app:app@localhost:5433/app"),
             celery_broker_url=os.getenv("CELERY_BROKER_URL", "redis://localhost:6380/0"),
-            celery_result_backend=os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6380/1"),
             storage_backend=os.getenv("STORAGE_BACKEND", "minio").lower(),
             max_upload_bytes=int(os.getenv("MAX_UPLOAD_BYTES", str(50 * 1024 * 1024))),
             minio_bucket=os.getenv("MINIO_BUCKET", "multiple-tools"),

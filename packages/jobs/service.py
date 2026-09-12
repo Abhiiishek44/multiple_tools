@@ -81,7 +81,12 @@ def submit_job(
             idempotency_key=idempotency_key,
         )
         # Keep the queue payload small and preserve the existing worker contract.
-        celery_app.send_task("tools.execute", args=[job.id], task_id=job.id)
+        celery_app.send_task(
+            "tools.execute",
+            args=[job.id],
+            task_id=job.id,
+            ignore_result=True,
+        )
         logger.info(
             "Queued job id=%s tool=%s principal=%s",
             job.id,
