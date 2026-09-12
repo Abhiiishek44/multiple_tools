@@ -1,4 +1,4 @@
-from multipletools.client import Client
+from multipletools.client import AsyncClient, Client
 from multipletools.exceptions import (
     APIError,
     AuthenticationError,
@@ -8,25 +8,29 @@ from multipletools.exceptions import (
     NotFoundError,
     PermissionDeniedError,
     RateLimitError,
+    ResponseValidationError,
     TimeoutError,
     ValidationError,
 )
-from multipletools.models import Job, Tool
+from multipletools.models import Job, JobStatus, Tool
+from multipletools.version import __version__
 
 __all__ = [
     "APIError",
+    "AsyncClient",
     "AuthenticationError",
     "Client",
     "ConflictError",
     "ConnectionError",
     "Job",
+    "JobStatus",
     "MultipleToolsError",
     "NotFoundError",
     "PermissionDeniedError",
     "RateLimitError",
+    "ResponseValidationError",
     "TimeoutError",
     "Tool",
     "ValidationError",
+    "__version__",
 ]
-
-__version__ = "0.1.0"

@@ -1,0 +1,72 @@
+name: Python SDK
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+  push:
+    paths:
+      - "sdks/python/**"
+      - "apps/api/**"
+      - ".github/workflows/python-sdk.yml"
+  pull_request:
+    paths:
+      - "sdks/python/**"
+      - "apps/api/**"
+      - ".github/workflows/python-sdk.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e "./sdks/python[test]"
+      - run: python -m pytest sdks/python/tests --cov=multipletools --cov-report=term-missing
+      - run: ruff check sdks/python
+      - run: mypy --config-file sdks/python/pyproject.toml sdks/python/src
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install build twine
+      - run: python -m build sdks/python
+      - run: python -m twine check sdks/python/dist/*
+      - run: python -m venv /tmp/sdk-verify
+      - run: /tmp/sdk-verify/bin/pip install sdks/python/dist/*.whl
+      - run: /tmp/sdk-verify/bin/python -c "from multipletools import AsyncClient, Client, __version__; print(__version__)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-sdk-distributions
+          path: sdks/python/dist/
+
+  publish:
+    if: github.event_name == 'release'
+    needs: [test, package]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/multipletools/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-sdk-distributions
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1

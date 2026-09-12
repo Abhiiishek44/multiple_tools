@@ -38,13 +38,27 @@ infrastructure/         PostgreSQL, Redis, MinIO, and migrations
 ## Local setup
 
 ```bash
-cp .env.example .env
-docker compose -f infrastructure/compose.yaml up -d
+cp env/examples/api.env.example env/local/api.env
+cp env/examples/worker.env.example env/local/worker.env
+cp env/examples/web.env.example env/local/web.env
+
+docker compose \
+  --env-file env/local/api.env \
+  -f infrastructure/compose.yaml up -d
 uv sync
+```
+
+Load the settings for the process. For the API:
+
+```bash
 set -a
-source .env
+source env/local/api.env
 set +a
 ```
+
+For the worker, source `env/local/worker.env`. For the frontend, source
+`env/local/web.env`. Production services should receive only the variables from
+their matching example file through the deployment platform's secret manager.
 
 MinIO's object-storage API is available at `http://localhost:9000`; its browser console is
 available at `http://localhost:9003`. The application creates the configured
@@ -76,6 +90,9 @@ celery --app=apps.worker.celery_app:celery_app beat --loglevel=INFO
 Start the frontend in another terminal:
 
 ```bash
+set -a
+source env/local/web.env
+set +a
 cd apps/web
 npm install
 npm run dev
@@ -161,18 +178,24 @@ webp-to-avif
 
 ### Google authentication
 
-Create a Google OAuth 2.0 Web client and configure its public client ID for the
-API in the root `.env`:
+Create a Google OAuth 2.0 Web client. Put backend authentication settings in
+`env/local/api.env`:
 
 ```bash
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
-VITE_API_BASE_URL=http://localhost:8000
 JWT_SECRET=replace-with-output-from-openssl
 API_KEY_HMAC_SECRET=replace-with-a-different-output-from-openssl
 JWT_AUDIENCE=multiple-tools-web
 FRONTEND_URL=http://localhost:5173
 AUTH_COOKIE_SECURE=false
 CORS_ORIGINS=http://localhost:5173
+```
+
+Put public browser settings in `env/local/web.env`:
+
+```bash
+VITE_API_BASE_URL=http://localhost:8000
+VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 ```
 
 Generate the backend-only JWT secret with:
@@ -294,7 +317,7 @@ external programs that plugin needs.
 API and worker processes use the same `ArtifactStorage` interface and exchange
 only object keys such as `jobs/{job_id}/input.pdf`. The current provider is
 MinIO, configured with `MINIO_ENDPOINT=localhost:9000` and the other
-`MINIO_*` variables in `.env`.
+`MINIO_*` variables in the API and worker environment files.
 
 The MinIO adapter uses boto3 internally to communicate with MinIO.
 This is an implementation detail: API routes, workers, and plugins depend only

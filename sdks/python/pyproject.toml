@@ -8,6 +8,8 @@ version = "0.1.0"
 description = "Official Python SDK for the Multiple Tools API"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
 
 authors = [
     { name = "Abhishek Kumbhar" }
@@ -29,7 +31,11 @@ classifiers = [
 
 [project.optional-dependencies]
 test = [
-    "pytest>=8,<9"
+    "mypy>=1.11,<2",
+    "pytest>=8,<9",
+    "pytest-asyncio>=0.24,<1",
+    "pytest-cov>=5,<7",
+    "ruff>=0.8,<1",
 ]
 
 [project.urls]
@@ -38,6 +44,7 @@ Repository = "https://github.com/Abhiiishek44/multipletools"
 Issues = "https://github.com/Abhiiishek44/multipletools/issues"
 
 [tool.setuptools.packages.find]
+where = ["src"]
 include = ["multipletools*"]
 
 [tool.setuptools.package-data]
@@ -45,3 +52,24 @@ multipletools = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "--strict-markers --strict-config"
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+branch = true
+source = ["multipletools"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]

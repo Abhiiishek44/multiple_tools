@@ -8,16 +8,13 @@ def create_celery_app() -> Celery:
     app = Celery(
         "multiple_tools",
         broker=settings.celery_broker_url,
-        backend=settings.celery_result_backend,
         include=["apps.worker.tasks"],
     )
     app.conf.update(
         broker_connection_retry_on_startup=True,
-        result_expires=3600,
-        task_track_started=True,
+        task_ignore_result=True,
         worker_prefetch_multiplier=1,
         task_serializer="json",
-        result_serializer="json",
         accept_content=["json"],
         timezone="UTC",
         enable_utc=True,

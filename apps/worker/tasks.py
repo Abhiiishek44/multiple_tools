@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 @shared_task(name="tools.execute", acks_late=True)
-def execute_tool(job_id: str) -> dict[str, str]:
+def execute_tool(job_id: str) -> None:
     logger.info("Received job id=%s", job_id)
     job = job_repository.get_job(job_id)
     if job is None:
@@ -24,7 +24,7 @@ def execute_tool(job_id: str) -> dict[str, str]:
         raise ValueError(f"Job not found: {job_id}")
     if job_repository.mark_running(job.id) is None:
         logger.info("Skipping unclaimable job id=%s status=%s", job.id, job.status)
-        return {"job_id": job.id, "status": job.status}
+        return
 
     output_key: str | None = None
     try:
@@ -61,9 +61,8 @@ def execute_tool(job_id: str) -> dict[str, str]:
             current = job_repository.get_job(job.id)
             status = current.status if current else "FAILED"
             logger.warning("Discarded output after job status changed id=%s status=%s", job.id, status)
-            return {"job_id": job.id, "status": status}
+            return
         logger.info("Completed job id=%s tool=%s", job.id, job.tool_name)
-        return {"job_id": job.id, "status": updated.status}
     except Exception as error:
         if output_key is not None:
             get_storage().delete(output_key)
@@ -73,7 +72,7 @@ def execute_tool(job_id: str) -> dict[str, str]:
 
 
 @shared_task(name="storage.cleanup_temporary")
-def cleanup_temporary_objects() -> dict[str, int]:
+def cleanup_temporary_objects() -> None:
     settings = get_settings()
     storage = get_storage()
     prefix = settings.minio_temp_prefix
@@ -123,4 +122,3 @@ def cleanup_temporary_objects() -> dict[str, int]:
         counts["skipped"],
         counts["failed"],
     )
-    return counts
