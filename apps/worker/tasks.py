@@ -7,9 +7,9 @@ from celery import shared_task
 
 from packages.core.config import get_settings
 from packages.jobs import repository as job_repository
+from packages.storage import get_storage
 from plugins.base import ToolContext
 from plugins.registry import get_plugin
-from packages.storage import get_storage
 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def execute_tool(job_id: str) -> None:
 
     output_key: str | None = None
     try:
-        plugin = get_plugin(job.tool_name)
+        plugin = get_plugin(job.tool_name, job.tool_version)
         logger.info("Executing job id=%s tool=%s", job.id, job.tool_name)
         storage = get_storage()
         output_key = (

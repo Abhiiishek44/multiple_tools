@@ -1,12 +1,4 @@
-from plugins.base import PluginManifest
+from plugins.image_converter_tools.definitions import image_to_pdf
 
 
-MANIFEST = PluginManifest(
-    name="tiff-to-pdf",
-    version="1.0.0",
-    description="Convert a TIFF image to PDF",
-    input_suffixes=frozenset({".tif", ".tiff"}),
-    input_media_types=frozenset({"image/tiff"}),
-    output_suffix=".pdf",
-    output_media_type="application/pdf",
-)
+MANIFEST = image_to_pdf("tiff")

@@ -1,12 +1,4 @@
-from plugins.base import PluginManifest
+from plugins.image_converter_tools.definitions import image_conversion
 
 
-MANIFEST = PluginManifest(
-    name="webp-to-avif",
-    version="1.0.0",
-    description="Convert WEBP image to AVIF",
-    input_suffixes=frozenset({".webp"}),
-    input_media_types=frozenset({"image/webp"}),
-    output_suffix=".avif",
-    output_media_type="image/avif",
-)
+MANIFEST = image_conversion("webp", "avif")

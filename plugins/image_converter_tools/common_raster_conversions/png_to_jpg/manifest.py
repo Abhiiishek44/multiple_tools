@@ -1,11 +1,4 @@
-from plugins.base import PluginManifest
+from plugins.image_converter_tools.definitions import image_conversion
 
-MANIFEST = PluginManifest(
-    name="png-to-jpg",
-    version="1.0.0",
-    description="Convert a PNG image to JPEG",
-    input_suffixes=frozenset({".png"}),
-    input_media_types=frozenset({"image/png"}),
-    output_suffix=".jpg",
-    output_media_type="image/jpeg",
-)
+
+MANIFEST = image_conversion("png", "jpg", description="Convert a PNG image to JPEG")

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { getConversionJob } from '../../features/jobs/api'
-import type { ConversionJob } from '../../features/jobs/types'
-import { ApiError } from '../api/errors'
+import { getConversionJob } from '../api'
+import type { ConversionJob } from '../types'
+import { ApiError } from '../../../shared/api/errors'
 
 type Options = {
   jobId?: string
@@ -40,3 +40,4 @@ export function useJobPolling({ jobId, status, onUpdate, onFailure, onUnauthoriz
     return () => { stopped = true; if (timer) window.clearTimeout(timer) }
   }, [jobId, onFailure, onUnauthorized, onUpdate, status])
 }
+
