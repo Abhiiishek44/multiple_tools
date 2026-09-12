@@ -1,12 +1,4 @@
-from plugins.base import PluginManifest
+from plugins.image_converter_tools.definitions import image_conversion
 
 
-MANIFEST = PluginManifest(
-    name="heic-to-png",
-    version="1.0.0",
-    description="Convert HEIC/HEIF image to PNG",
-    input_suffixes=frozenset({".heic", ".heif"}),
-    input_media_types=frozenset({"image/heic", "image/heic-sequence", "image/heif", "image/heif-sequence"}),
-    output_suffix=".png",
-    output_media_type="image/png",
-)
+MANIFEST = image_conversion("heic", "png")

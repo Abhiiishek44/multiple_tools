@@ -1,12 +1,4 @@
-from plugins.base import PluginManifest
+from plugins.image_converter_tools.definitions import image_conversion
 
 
-MANIFEST = PluginManifest(
-    name="png-to-tiff",
-    version="1.0.0",
-    description="Convert PNG image to TIFF",
-    input_suffixes=frozenset({".png"}),
-    input_media_types=frozenset({"image/png"}),
-    output_suffix=".tiff",
-    output_media_type="image/tiff",
-)
+MANIFEST = image_conversion("png", "tiff")

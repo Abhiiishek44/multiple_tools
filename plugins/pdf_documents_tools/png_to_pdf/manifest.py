@@ -1,11 +1,4 @@
-from plugins.base import PluginManifest
+from plugins.image_converter_tools.definitions import image_to_pdf
 
-MANIFEST = PluginManifest(
-    name="png-to-pdf",
-    version="1.0.0",
-    description="Convert a PNG image to PDF",
-    input_suffixes=frozenset({".png"}),
-    input_media_types=frozenset({"image/png"}),
-    output_suffix=".pdf",
-    output_media_type="application/pdf",
-)
+
+MANIFEST = image_to_pdf("png")

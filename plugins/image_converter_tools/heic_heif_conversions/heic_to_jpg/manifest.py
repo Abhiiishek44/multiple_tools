@@ -1,16 +1,4 @@
-from plugins.base import PluginManifest
+from plugins.image_converter_tools.definitions import image_conversion
 
-MANIFEST = PluginManifest(
-    name="heic-to-jpg",
-    version="1.0.0",
-    description="Convert a HEIC or HEIF image to JPEG",
-    input_suffixes=frozenset({".heic", ".heif"}),
-    input_media_types=frozenset({
-        "image/heic",
-        "image/heif",
-        "image/heic-sequence",
-        "image/heif-sequence",
-    }),
-    output_suffix=".jpg",
-    output_media_type="image/jpeg",
-)
+
+MANIFEST = image_conversion("heic", "jpg", description="Convert a HEIC or HEIF image to JPEG")

@@ -4,6 +4,7 @@ import { useAuth } from '../features/auth/context/useAuth'
 import { LoginPage } from '../features/auth/pages/LoginPage'
 import { createConversionJob, downloadConversionOutput, getConversionJob } from '../features/jobs/api'
 import { FlowSteps, type JobView } from '../features/jobs/components/FlowSteps'
+import { useJobPolling } from '../features/jobs/hooks/useJobPolling'
 import { CreateJobPage } from '../features/jobs/pages/CreateJobPage'
 import { JobProgressPage } from '../features/jobs/pages/JobProgressPage'
 import { JobResultPage } from '../features/jobs/pages/JobResultPage'
@@ -13,7 +14,6 @@ import { ToolsPage } from '../features/tools/pages/ToolsPage'
 import type { ConversionTool } from '../features/tools/types'
 import { ApiError } from '../shared/api/errors'
 import { AppHeader } from '../shared/components/layout/AppHeader'
-import { useJobPolling } from '../shared/hooks/useJobPolling'
 import { routeFromLocation, routePath, type AppRoute } from './routes'
 
 export function AppRouter() {
@@ -51,16 +51,10 @@ export function AppRouter() {
   }, [])
 
   useEffect(() => {
-    let active = true
-    void listConversionTools().then((available) => {
-      if (active) setTools(available)
-    }).catch((error: unknown) => {
-      if (active) setCatalogError(error instanceof Error ? `Could not reach the tools API: ${error.message}` : 'Could not reach the tools API.')
-    }).finally(() => {
-      if (active) setIsLoadingTools(false)
-    })
-    return () => { active = false }
-  }, [])
+    // The catalog is external API state loaded once when the router mounts.
+    // oxlint-disable-next-line react/set-state-in-effect
+    void loadTools()
+  }, [loadTools])
 
   useEffect(() => {
     if (route.name !== 'login' || authStatus !== 'authenticated') return
