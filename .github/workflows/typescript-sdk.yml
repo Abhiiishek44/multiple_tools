@@ -1,0 +1,62 @@
+name: TypeScript SDK
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+  push:
+    paths:
+      - "sdks/typescript/**"
+      - "apps/api/**"
+      - ".github/workflows/typescript-sdk.yml"
+  pull_request:
+    paths:
+      - "sdks/typescript/**"
+      - "apps/api/**"
+      - ".github/workflows/typescript-sdk.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: sdks/typescript/package-lock.json
+      - run: npm ci
+        working-directory: sdks/typescript
+      - run: npm test
+        working-directory: sdks/typescript
+      - run: npm pack --dry-run
+        working-directory: sdks/typescript
+
+  publish:
+    if: github.event_name == 'release'
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/multipletools
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+        working-directory: sdks/typescript
+      - run: npm publish
+        working-directory: sdks/typescript
+

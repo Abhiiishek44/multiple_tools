@@ -1,0 +1,59 @@
+{
+  "name": "multipletools",
+  "version": "0.1.0",
+  "description": "Official TypeScript SDK for the Multiple Tools API",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true});require('node:fs').rmSync('.test-dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "test": "npm run build && tsc -p tsconfig.test.json && node --test .test-dist/tests",
+    "test:coverage": "npm run build && tsc -p tsconfig.test.json && node --test --experimental-test-coverage .test-dist/tests",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhiiishek44/multiple_tools.git",
+    "directory": "sdks/typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/Abhiiishek44/multiple_tools/issues"
+  },
+  "homepage": "https://github.com/Abhiiishek44/multiple_tools#readme",
+  "keywords": [
+    "multipletools",
+    "file-conversion",
+    "pdf",
+    "typescript",
+    "sdk"
+  ],
+  "author": "Abhishek Kumbhar",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "typescript": "^6.0.2"
+  }
+}

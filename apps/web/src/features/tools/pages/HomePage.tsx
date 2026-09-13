@@ -1,0 +1,12 @@
+import { AppFooter } from '../../../shared/components/layout/AppFooter'
+import { CategoryIcon } from '../../../shared/components/icons/Icons'
+import { FaqSection } from '../../../shared/components/ui/FaqSection'
+import { CATEGORY_DETAILS, SITE_FAQS } from '../catalog'
+import { ToolCard } from '../components/ToolCard'
+import { TOOL_CATEGORIES, type ConversionTool, type ToolCategory } from '../types'
+
+type Props = { tools: ConversionTool[]; isLoading: boolean; onSelect: (tool: ConversionTool) => void; onTools: () => void; onCategory: (category: ToolCategory) => void; onHome: () => void }
+
+export function HomePage({ tools, isLoading, onSelect, onTools, onCategory, onHome }: Props) {
+  return <main><section className="home-hero"><div className="hero-badge"><span>New</span> One workspace for every file</div><h1>Simple tools for<br /><em>everyday file work.</em></h1><p>Convert documents, PDFs, spreadsheets, and images with a focused workflow backed by your existing Multiple Tools API.</p><div className="category-tiles">{TOOL_CATEGORIES.map((category) => <button className={`category-tile tone-${category.toLowerCase().replace(' ', '-')}`} type="button" key={category} onClick={() => category === 'All tools' ? onTools() : onCategory(category)}><span><CategoryIcon category={category} /></span><strong>{category}</strong><small>{category === 'All tools' ? `${tools.length} converters` : CATEGORY_DETAILS[category].description}</small></button>)}</div></section><section className="content-section popular-section"><div className="section-heading"><div><p className="eyebrow">Start here</p><h2 className="section-title">Popular tools</h2></div><button className="text-link" type="button" onClick={onTools}>See all tools →</button></div>{isLoading ? <div className="tool-grid">{Array.from({ length: 8 }, (_, index) => <div className="tool-card skeleton" key={index} />)}</div> : <div className="tool-grid">{tools.slice(0, 8).map((tool) => <ToolCard tool={tool} onSelect={onSelect} key={tool.id} />)}</div>}</section><section className="steps-strip"><div><span>01</span><strong>Choose a tool</strong><p>Find the exact conversion you need.</p></div><div><span>02</span><strong>Add your file</strong><p>Drop it into the secure upload area.</p></div><div><span>03</span><strong>Download</strong><p>Follow live progress and save the result.</p></div></section><FaqSection items={SITE_FAQS} /><AppFooter onHome={onHome} onTools={onTools} /></main>
+}

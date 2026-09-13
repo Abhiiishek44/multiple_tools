@@ -5,13 +5,13 @@ from plugins.base import ToolContext
 
 
 def convert(context: ToolContext, source: Path, destination: Path) -> Path:
-    mode = context.options.get("mode", "preserve-layout")
-    if mode == "preserve-layout":
-        return _convert_preserving_layout(context, source, destination)
-    if mode != "editable":
+    mode = context.options.get("mode", "editable")
+    if mode == "editable":
+        return _convert_editable(context, source, destination)
+    if mode != "preserve-layout":
         raise ValueError("mode must be either 'preserve-layout' or 'editable'")
 
-    return _convert_editable(context, source, destination)
+    return _convert_preserving_layout(context, source, destination)
 
 
 def _convert_editable(

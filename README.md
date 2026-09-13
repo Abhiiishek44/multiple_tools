@@ -38,64 +38,42 @@ infrastructure/         PostgreSQL, Redis, MinIO, and migrations
 ## Local setup
 
 ```bash
-cp env/examples/api.env.example env/local/api.env
-cp env/examples/worker.env.example env/local/worker.env
-cp env/examples/web.env.example env/local/web.env
-
-docker compose \
-  --env-file env/local/api.env \
-  -f infrastructure/compose.yaml up -d
-uv sync
+make setup
 ```
 
-Load the settings for the process. For the API:
+`make setup` creates missing local env files without overwriting existing ones,
+generates local authentication secrets, installs dependencies, starts the
+infrastructure services, and applies migrations. Add your Google OAuth and
+OpenRouter credentials to the generated files when those features are needed.
+
+Start the complete development stack:
 
 ```bash
-set -a
-source env/local/api.env
-set +a
+make dev
 ```
 
-For the worker, source `env/local/worker.env`. For the frontend, source
-`env/local/web.env`. Production services should receive only the variables from
-their matching example file through the deployment platform's secret manager.
+Run `make help` for individual service, validation, build, infrastructure, SDK,
+and container-image commands. Production services should receive only the
+variables from their matching example file through the deployment platform's
+secret manager.
 
 MinIO's object-storage API is available at `http://localhost:9000`; its browser console is
 available at `http://localhost:9003`. The application creates the configured
 bucket on first use in local development.
 
-Apply migrations to an existing database volume:
+Apply migrations to an existing database:
 
 ```bash
-docker compose -f infrastructure/compose.yaml exec -T postgres \
-  psql -U app -d app < infrastructure/migrations/001_create_tool_jobs.sql
-docker compose -f infrastructure/compose.yaml exec -T postgres \
-  psql -U app -d app < infrastructure/migrations/003_add_job_options.sql
-docker compose -f infrastructure/compose.yaml exec -T postgres \
-  psql -U app -d app < infrastructure/migrations/004_add_google_auth.sql
-docker compose -f infrastructure/compose.yaml exec -T postgres \
-  psql -U app -d app < infrastructure/migrations/005_add_job_request_metadata.sql
-docker compose -f infrastructure/compose.yaml exec -T postgres \
-  psql -U app -d app < infrastructure/migrations/006_add_api_keys.sql
+make db-migrate
 ```
 
-Start the API and a generic worker:
+Start an individual process when needed:
 
 ```bash
-uvicorn apps.api.main:app --reload
-celery --app=apps.worker.celery_app:celery_app worker --loglevel=INFO
-celery --app=apps.worker.celery_app:celery_app beat --loglevel=INFO
-```
-
-Start the frontend in another terminal:
-
-```bash
-set -a
-source env/local/web.env
-set +a
-cd apps/web
-npm install
-npm run dev
+make api
+make worker
+make beat
+make web
 ```
 
 ## Railway deployment
@@ -118,6 +96,21 @@ Their independent build definitions are under `docker/`:
 docker/Dockerfile.api
 docker/Dockerfile.worker
 docker/Dockerfile.web
+```
+
+Local releases are published to Docker Hub by default:
+
+```bash
+docker login
+make docker-release
+```
+
+This pushes `abhiiishek44/multiple-tools-api`,
+`abhiiishek44/multiple-tools-worker`, and `abhiiishek44/multiple-tools-web`
+with a version derived from Git. Override the Docker Hub namespace when needed:
+
+```bash
+make docker-release IMAGE_REGISTRY=docker.io/your-dockerhub-username
 ```
 
 The worker uses Celery's default queue and can execute every registered plugin.
@@ -250,6 +243,26 @@ job = client.jobs.get(job.id)
 client.jobs.download(job.id, "converted.docx")
 client.close()
 ```
+
+The production-ready TypeScript SDK lives in `sdks/typescript` and exposes the
+same API as Promise-based Node.js resources:
+
+```ts
+import { Client } from 'multipletools'
+
+const client = new Client({ apiKey: 'mt_live_...' })
+const job = await client.jobs.create({
+  tool: 'pdf-to-word',
+  file: './document.pdf',
+})
+const completed = await client.jobs.wait(job.id)
+if (completed.status === 'SUCCESS') {
+  await client.jobs.download(job.id, { destination: './converted.docx' })
+}
+```
+
+Install it with `npm install multipletools`. The production API URL is built
+in; pass `baseURL: 'http://localhost:8000'` for local development.
 
 Use the returned bearer token for API-client job requests:
 
