@@ -1,30 +1,60 @@
-import type { ReactNode } from 'react'
-import { LockIcon } from '../icons/Icons'
+import { useEffect, useState, type ReactNode } from 'react'
+import { CATEGORY_DETAILS } from '../../../features/tools/catalog'
+import { TOOL_CATEGORIES, type ConversionTool, type ToolCategory } from '../../../features/tools/types'
+import { useUi } from '../../context/useUi'
+import { GridIcon, HeartIcon, MenuIcon, MoonIcon, SearchIcon, SunIcon } from '../icons/Icons'
+import { ToolFinder } from './ToolFinder'
 
-type AppHeaderProps = {
+type Props = {
   authControl: ReactNode
-  selectedTool: { from: string; name: string } | null
-  onHome: () => void
+  title: string
+  tools: ConversionTool[]
+  onMenu: () => void
+  onTools: () => void
+  onApiDocs: () => void
+  onPythonSdk: () => void
+  onCategory: (category: ToolCategory) => void
+  onSelect: (tool: ConversionTool) => void
 }
 
-export function AppHeader({ authControl, selectedTool, onHome }: AppHeaderProps) {
-  return (
-    <header className="sticky top-0 z-30 flex min-h-[73px] items-center justify-between gap-4 border-b border-slate-200 bg-white/95 px-5 py-3 shadow-sm backdrop-blur sm:px-8">
-      <button className="flex shrink-0 items-center gap-2.5 text-xl font-black tracking-tight text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600" type="button" aria-label="Convertly home" onClick={onHome}>
-        <span className="grid size-10 place-items-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/20" aria-hidden="true"><svg className="size-6 fill-none stroke-current stroke-[1.8]" viewBox="0 0 24 24"><path d="M7 7.5h8.5A3.5 3.5 0 0 1 19 11v1M17 9.5l2 2 2-2M17 16.5H8.5A3.5 3.5 0 0 1 5 13v-1M7 14.5l-2-2-2 2" /></svg></span>
-        <span className="hidden sm:inline">Convertly</span>
-      </button>
-      <div className="flex min-w-0 items-center gap-3">
-        {selectedTool && (
-          <button className="hidden min-w-0 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-left transition hover:border-blue-300 hover:bg-blue-50 md:flex" type="button" onClick={onHome} title="Back to all tools">
-            <span className="rounded-lg bg-blue-600 px-2 py-1 text-[10px] font-black text-white">{selectedTool.from}</span>
-            <span className="min-w-0"><small className="block text-[9px] font-bold uppercase tracking-wider text-slate-400">Selected service</small><strong className="block truncate text-xs text-slate-800">{selectedTool.name}</strong></span>
-            <i className="ml-1 text-lg not-italic text-slate-400" aria-hidden="true">×</i>
-          </button>
-        )}
-        {authControl}
-        <div className="hidden items-center gap-1.5 text-xs font-bold text-slate-500 xl:flex [&_svg]:size-4"><LockIcon /><span>Private &amp; secure</span></div>
+export function AppHeader({ authControl, title, tools, onMenu, onTools, onApiDocs, onPythonSdk, onCategory, onSelect }: Props) {
+  const [finder, setFinder] = useState<'search' | 'favorites' | null>(null)
+  const [megaOpen, setMegaOpen] = useState(false)
+  const { theme, favorites, toggleTheme } = useUi()
+
+  useEffect(() => {
+    const openSearch = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setFinder('search')
+      }
+    }
+    window.addEventListener('keydown', openSearch)
+    return () => window.removeEventListener('keydown', openSearch)
+  }, [])
+
+  return <>
+    <header className="app-header">
+      <div className="header-crumb">
+        <button className="mobile-menu" type="button" onClick={onMenu} aria-label="Open menu"><MenuIcon /></button>
+        <span aria-hidden="true">⌂</span><span className="crumb-chevron">›</span><strong>{title}</strong>
       </div>
+      <div className="header-actions">
+        <button className="browse-button" type="button" aria-expanded={megaOpen} onClick={() => setMegaOpen((value) => !value)}><GridIcon /><span>Browse tools</span><small>⌄</small></button>
+        <button className="header-search" type="button" aria-label="Search tools" onClick={() => setFinder('search')}><SearchIcon /><span>Search tools…</span><kbd>Ctrl K</kbd></button>
+        <button className="icon-button" type="button" onClick={toggleTheme} aria-label={`Use ${theme === 'light' ? 'dark' : 'light'} theme`}>{theme === 'light' ? <SunIcon /> : <MoonIcon />}</button>
+        <button className="icon-button favorite-control" type="button" onClick={() => setFinder('favorites')} aria-label="Favorite tools"><HeartIcon /><span>{favorites.length}</span></button>
+        {authControl}
+      </div>
+      {megaOpen && <div className="mega-menu">
+        <div className="mega-heading"><div><strong>Explore tools</strong><p>Pick a category or jump straight into a converter.</p></div><button type="button" onClick={() => { onTools(); setMegaOpen(false) }}>View all {tools.length} →</button></div>
+        <div className="mega-grid">{TOOL_CATEGORIES.slice(1).map((category) => <section key={category}>
+          <button type="button" onClick={() => { onCategory(category); setMegaOpen(false) }}><span className={`nav-color tone-${category.toLowerCase()}`} /><span><strong>{category}</strong><small>{CATEGORY_DETAILS[category].description}</small></span></button>
+          {tools.filter((tool) => tool.category === category).slice(0, 3).map((tool) => <button className="mega-tool" type="button" key={tool.id} onClick={() => { onSelect(tool); setMegaOpen(false) }}>{tool.name}</button>)}
+        </section>)}</div>
+        <div className="mega-developers"><span><strong>Build with Multiple Tools</strong><small>Use the same conversions from your own product.</small></span><button type="button" onClick={() => { onApiDocs(); setMegaOpen(false) }}>API Key</button><button type="button" onClick={() => { onPythonSdk(); setMegaOpen(false) }}>Python SDK</button></div>
+      </div>}
     </header>
-  )
+    {finder && <ToolFinder tools={tools} favoritesOnly={finder === 'favorites'} onClose={() => setFinder(null)} onSelect={onSelect} />}
+  </>
 }

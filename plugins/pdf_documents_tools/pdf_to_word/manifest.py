@@ -3,10 +3,10 @@ from plugins.base import PluginManifest
 
 MANIFEST = PluginManifest(
     name="pdf-to-word",
-    version="1.1.0",
+    version="1.2.0",
     description=(
-        "Convert a PDF document to a layout-preserving DOCX; pass "
-        "mode=editable to reconstruct editable content"
+        "Convert a PDF document to an editable DOCX; pass "
+        "mode=preserve-layout to render each page as an image"
     ),
     input_suffixes=frozenset({".pdf"}),
     input_media_types=frozenset({"application/pdf"}),

@@ -1,25 +1,61 @@
+import { useEffect, useRef, useState } from 'react'
+import { LogoutIcon } from '../../../shared/components/icons/Icons'
 import { useAuth } from '../context/useAuth'
 
 type AuthControlProps = { onLogin: () => void; onSignedOut: () => void }
 
 export function AuthControl({ onLogin, onSignedOut }: AuthControlProps) {
   const { user, status, signOut } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [signingOut, setSigningOut] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const closeMenu = (event: MouseEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) setMenuOpen(false)
+    }
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+
+    document.addEventListener('mousedown', closeMenu)
+    document.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.removeEventListener('mousedown', closeMenu)
+      document.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [menuOpen])
 
   const handleSignOut = async () => {
+    setSigningOut(true)
     try {
       await signOut()
     } finally {
+      setSigningOut(false)
+      setMenuOpen(false)
       onSignedOut()
     }
   }
 
-  if (status === 'loading') return <span className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-500">Checking session…</span>
-  if (!user) return <button className="min-h-10 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" type="button" onClick={onLogin}>Log in</button>
+  if (status === 'loading') return <span className="auth-loading">Checking…</span>
+  if (!user) return <button className="login-button" type="button" onClick={onLogin}>Log in</button>
 
-  return (
-    <button className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white p-1 pr-3 text-slate-800 shadow-sm transition hover:border-blue-300" type="button" onClick={() => void handleSignOut()} title="Sign out">
-      {user.picture_url ? <img className="size-8 rounded-full" src={user.picture_url} alt="" referrerPolicy="no-referrer" /> : <span className="grid size-8 place-items-center rounded-full bg-blue-600 text-xs font-extrabold text-white">{user.name.slice(0, 1).toUpperCase()}</span>}
-      <strong className="hidden max-w-28 truncate text-xs sm:block">{user.name}</strong>
+  return <div className="account-control" ref={menuRef}>
+    <button className="user-button" type="button" aria-haspopup="menu" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
+      {user.picture_url ? <img src={user.picture_url} alt="" referrerPolicy="no-referrer" /> : <span>{user.name.slice(0, 1).toUpperCase()}</span>}
+      <strong>{user.name}</strong>
     </button>
-  )
+    {menuOpen && <div className="account-menu" role="menu">
+      <div className="account-menu-user">
+        <strong>{user.name}</strong>
+        <span>{user.email}</span>
+      </div>
+      <button type="button" role="menuitem" disabled={signingOut} onClick={() => void handleSignOut()}>
+        <LogoutIcon />
+        <span>{signingOut ? 'Logging out…' : 'Log out'}</span>
+      </button>
+    </div>}
+  </div>
 }
