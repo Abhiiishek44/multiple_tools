@@ -14,7 +14,7 @@ WEB_IMAGE := $(IMAGE_REGISTRY)/multiple-tools-web
 
 .DEFAULT_GOAL := help
 
-.PHONY: help setup env install dev api worker beat web \
+.PHONY: help setup env install generate dev api worker beat web \
 	infra-up infra-down infra-logs db-migrate check build sdk-build clean \
 	docker-build-api docker-build-worker docker-build-web docker-images \
 	docker-release require-api-env require-worker-env require-web-env
@@ -27,6 +27,7 @@ help: ## Show available commands
 		'  help             Show available commands' \
 		'  setup            Create env files, install dependencies, start infrastructure, and migrate' \
 		'  install          Install Python and frontend dependencies' \
+		'  generate         Generate frontend and SDK tool catalogs' \
 		'  dev              Run API, worker, scheduler, and frontend' \
 		'  api              Start FastAPI' \
 		'  worker           Start Celery worker' \
@@ -76,6 +77,10 @@ install: ## Install Python and frontend dependencies
 	uv sync --frozen
 	uv sync --project sdks/python --all-extras --frozen
 	npm --prefix apps/web ci
+	npm --prefix sdks/typescript ci
+
+generate: ## Generate frontend and SDK tool catalogs
+	uv run python scripts/generate_tool_catalog.py
 
 dev: require-api-env require-worker-env require-web-env ## Run API, worker, scheduler, and frontend
 	@$(MAKE) --no-print-directory -j4 api worker beat web
@@ -109,7 +114,7 @@ db-migrate: require-api-env ## Apply database migrations
 	@set -a; source "$(API_ENV)"; set +a; \
 		uv run python scripts/migrate.py
 
-check: ## Compile backend, lint frontend, and run tests
+check: generate ## Compile backend, lint frontend, and run tests
 	uv run python -m compileall -q apps packages plugins scripts
 	@if [[ -d tests ]]; then \
 		uv run python -m unittest discover -s tests -v; \
@@ -127,8 +132,9 @@ build: ## Build frontend and all SDK packages
 	npm --prefix apps/web run build
 	@$(MAKE) --no-print-directory sdk-build
 
-sdk-build: ## Build all SDK packages
+sdk-build: generate ## Build all SDK packages
 	uv build --clear sdks/python
+	npm --prefix sdks/typescript run build
 
 clean: ## Remove generated build artifacts
 	rm -rf build dist apps/web/dist sdks/python/build sdks/python/dist \
@@ -148,6 +154,7 @@ docker-build-web: require-web-env ## Build the web image
 			--file docker/Dockerfile.web \
 			--build-arg "VITE_API_BASE_URL=$$VITE_API_BASE_URL" \
 			--build-arg "VITE_GOOGLE_CLIENT_ID=$$VITE_GOOGLE_CLIENT_ID" \
+			--build-arg "VITE_SITE_URL=$$VITE_SITE_URL" \
 			--tag "$(WEB_IMAGE):$(IMAGE_TAG)" .
 
 docker-images: docker-build-api docker-build-worker docker-build-web ## Build all application images
@@ -166,3 +173,4 @@ require-worker-env:
 
 require-web-env:
 	@test -f "$(WEB_ENV)" || { printf 'Missing %s; run make env or make setup.\n' "$(WEB_ENV)" >&2; exit 1; }
+	

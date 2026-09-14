@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "generate": "python3 ../../scripts/generate_tool_catalog.py --target web",
+    "build": "npm run generate && tsc -b && vite build && node scripts/generate-static-pages.mjs",
     "lint": "oxlint",
     "preview": "vite preview"
   },

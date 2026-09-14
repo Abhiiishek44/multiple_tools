@@ -38,17 +38,44 @@ if (completed.status === 'SUCCESS') {
 }
 ```
 
-The client uses the production API at `https://api.multipletools.com` by
-default. Point it at a local or self-hosted API when needed:
+The client uses the local API at `http://localhost:8000` by default. Point it
+at the production or another self-hosted API when needed:
 
 ```ts
 const client = new Client({
   apiKey: 'mt_live_...',
-  baseURL: 'http://localhost:8000',
+  baseURL: 'https://api.example.com',
   timeout: 60_000,
   maxRetries: 2,
 })
 ```
+
+## Conversion shortcuts
+
+Named shortcuts create ordinary jobs and preserve the existing polling and
+download workflow:
+
+```ts
+const job = await client.convert.jpg_to_pdf('./image.jpg')
+const completed = await client.jobs.wait(job.id)
+
+if (completed.status === 'SUCCESS') {
+  await client.jobs.download(completed.id, './converted.pdf')
+}
+```
+
+Options accepted by `jobs.create` remain available as the second argument:
+
+```ts
+await client.convert.pdf_to_text('./scanned.pdf', {
+  options: { language: 'en' },
+  idempotencyKey: 'scan-123',
+})
+```
+
+Every tool in the current catalog has a snake-case shortcut. For example,
+`compress-pdf` is available as `client.convert.compress_pdf(...)`. The generic
+`client.jobs.create(...)` API remains available for forward compatibility.
 
 Timeout and polling values are expressed in milliseconds.
 

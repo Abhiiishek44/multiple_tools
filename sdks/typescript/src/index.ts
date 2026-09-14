@@ -15,6 +15,6 @@ export {
   type APIErrorOptions,
 } from './errors.js'
 export type { Health, Job, JobStatus, Tool } from './models.js'
+export type { ConversionMethod, ConversionOptions, ConversionsResource } from './resources/conversions.js'
 export type { CreateJobParams, DownloadOptions, FileInput, WaitForJobOptions } from './resources/jobs.js'
 export { VERSION } from './version.js'
-

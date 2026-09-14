@@ -1,5 +1,4 @@
-from plugins.base import PluginManifest
-
+from plugins.base import PluginManifest, PluginOption
 
 MANIFEST = PluginManifest(
     name="unlock-pdf",
@@ -9,4 +8,12 @@ MANIFEST = PluginManifest(
     input_media_types=frozenset({"application/pdf"}),
     output_suffix=".pdf",
     output_media_type="application/pdf",
+    options=(
+        PluginOption(
+            name="password",
+            label="Current PDF password",
+            type="password",
+            required=True,
+        ),
+    ),
 )

@@ -33,20 +33,21 @@ class Jobs:
     ) -> Job:
         canonical_tool = _tool_name(tool)
         headers = {"Idempotency-Key": idempotency_key or uuid4().hex}
-        data = _form_data(canonical_tool, options)
+        data = _form_data(options)
+        request_path = f"/v1/tools/{quote(canonical_tool, safe='')}/jobs"
         if isinstance(file, (str, os.PathLike)):
-            path = Path(file)
-            with path.open("rb") as stream:
+            file_path = Path(file)
+            with file_path.open("rb") as stream:
                 payload = self._http.request_json(
                     "POST",
-                    "/v1/jobs",
+                    request_path,
                     headers=headers,
                     data=data,
                     files={
                         "file": (
-                            path.name,
+                            file_path.name,
                             stream,
-                            media_type or _media_type(path.name),
+                            media_type or _media_type(file_path.name),
                         )
                     },
                 )
@@ -54,7 +55,7 @@ class Jobs:
             filename = _stream_filename(file)
             payload = self._http.request_json(
                 "POST",
-                "/v1/jobs",
+                request_path,
                 headers=headers,
                 data=data,
                 files={"file": (filename, file, media_type or _media_type(filename))},
@@ -140,20 +141,21 @@ class AsyncJobs:
     ) -> Job:
         canonical_tool = _tool_name(tool)
         headers = {"Idempotency-Key": idempotency_key or uuid4().hex}
-        data = _form_data(canonical_tool, options)
+        data = _form_data(options)
+        request_path = f"/v1/tools/{quote(canonical_tool, safe='')}/jobs"
         if isinstance(file, (str, os.PathLike)):
-            path = Path(file)
-            with path.open("rb") as stream:
+            file_path = Path(file)
+            with file_path.open("rb") as stream:
                 payload = await self._http.request_json(
                     "POST",
-                    "/v1/jobs",
+                    request_path,
                     headers=headers,
                     data=data,
                     files={
                         "file": (
-                            path.name,
+                            file_path.name,
                             stream,
-                            media_type or _media_type(path.name),
+                            media_type or _media_type(file_path.name),
                         )
                     },
                 )
@@ -161,7 +163,7 @@ class AsyncJobs:
             filename = _stream_filename(file)
             payload = await self._http.request_json(
                 "POST",
-                "/v1/jobs",
+                request_path,
                 headers=headers,
                 data=data,
                 files={"file": (filename, file, media_type or _media_type(filename))},
@@ -243,8 +245,8 @@ def _tool_name(tool: str) -> str:
     return value
 
 
-def _form_data(tool: str, options: Mapping[str, object] | None) -> dict[str, str]:
-    data = {"tool": tool}
+def _form_data(options: Mapping[str, object] | None) -> dict[str, str]:
+    data: dict[str, str] = {}
     if options is not None:
         data["options"] = json.dumps(options, separators=(",", ":"))
     return data

@@ -58,6 +58,40 @@ export const PYTHON_OPTIONS = `job = client.jobs.create(
     media_type="image/jpeg",
 )`
 
+export const TYPESCRIPT_INSTALL = `npm install multipletools`
+
+export const TYPESCRIPT_ENV = `export MULTIPLETOOLS_API_KEY="mt_live_..."
+export MULTIPLETOOLS_BASE_URL="https://api.example.com"`
+
+export const TYPESCRIPT_SHORTCUT = `import { Client } from 'multipletools'
+
+const client = new Client({
+  apiKey: process.env.MULTIPLETOOLS_API_KEY!,
+  baseURL: process.env.MULTIPLETOOLS_BASE_URL!,
+})
+
+const job = await client.convert.pdf_to_word('./document.pdf')
+const completed = await client.jobs.wait(job.id)
+
+if (completed.status === 'SUCCESS') {
+  await client.jobs.download(completed.id, './converted.docx')
+}`
+
+export const TYPESCRIPT_GENERIC_JOB = `const job = await client.jobs.create({
+  tool: 'image-compressor',
+  file: './photo.jpg',
+  options: { quality: 82 },
+  idempotencyKey: 'upload-2026-09-13-001',
+  mediaType: 'image/jpeg',
+})`
+
+export const TYPESCRIPT_BUFFER = `const output = await client.jobs.download(job.id)
+
+// Or write atomically to a destination:
+await client.jobs.download(job.id, {
+  destination: './output/result.docx',
+})`
+
 export const SDK_EXCEPTIONS = [
   'AuthenticationError',
   'PermissionDeniedError',

@@ -6,6 +6,8 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ### Added
 
+- Registry-driven `client.convert` shortcuts with synchronous and asynchronous
+  parity.
 - Synchronous and asynchronous clients.
 - Job polling helpers, atomic streaming downloads, and safe request retries.
 - Structured API errors and strict response validation.

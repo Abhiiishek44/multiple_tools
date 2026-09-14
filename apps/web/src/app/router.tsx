@@ -4,6 +4,7 @@ import { useAuth } from '../features/auth/context/useAuth'
 import { LoginPage } from '../features/auth/pages/LoginPage'
 import { ApiDocsPage } from '../features/developers/pages/ApiDocsPage'
 import { PythonSdkPage } from '../features/developers/pages/PythonSdkPage'
+import { TypeScriptSdkPage } from '../features/developers/pages/TypeScriptSdkPage'
 import { createConversionJob, downloadConversionOutput, getConversionJob } from '../features/jobs/api'
 import type { JobView } from '../features/jobs/components/FlowSteps'
 import { useJobPolling } from '../features/jobs/hooks/useJobPolling'
@@ -11,11 +12,12 @@ import { CreateJobPage } from '../features/jobs/pages/CreateJobPage'
 import { JobProgressPage } from '../features/jobs/pages/JobProgressPage'
 import { JobResultPage } from '../features/jobs/pages/JobResultPage'
 import type { ConversionJob, ToolOptions } from '../features/jobs/types'
-import { listConversionTools } from '../features/tools/api'
+import { TOOL_CATALOG } from '../features/tools/api'
+import { ALL_TOOLS, getCategorySlug } from '../features/tools/catalog'
 import { HomePage } from '../features/tools/pages/HomePage'
-import { ToolDetailPage } from '../features/tools/pages/ToolDetailPage'
+import { ToolPage } from '../features/tools/pages/ToolPage'
 import { ToolsPage } from '../features/tools/pages/ToolsPage'
-import { TOOL_CATEGORIES, type ConversionTool, type ToolCategory } from '../features/tools/types'
+import type { ConversionTool, ToolCategory } from '../features/tools/types'
 import { ApiError } from '../shared/api/errors'
 import { AppShell } from '../shared/components/layout/AppShell'
 import { routeFromLocation, routePath, type AppRoute } from './routes'
@@ -23,9 +25,8 @@ import { routeFromLocation, routePath, type AppRoute } from './routes'
 export function AppRouter() {
   const [route, setRoute] = useState<AppRoute>(() => routeFromLocation())
   const [file, setFile] = useState<File | null>(null)
-  const [tools, setTools] = useState<ConversionTool[]>([])
-  const [isLoadingTools, setIsLoadingTools] = useState(true)
-  const [catalogError, setCatalogError] = useState<string | null>(null)
+  const tools: ConversionTool[] = TOOL_CATALOG
+  const isLoadingTools = false
   const [job, setJob] = useState<ConversionJob | null>(null)
   const [workflowError, setWorkflowError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -37,28 +38,16 @@ export function AppRouter() {
     if (replace) window.history.replaceState(null, '', path)
     else window.history.pushState(null, '', path)
     setRoute(next)
-    document.querySelector<HTMLElement>('.app-content')?.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
-
-  const loadTools = useCallback(async () => {
-    try { setTools(await listConversionTools()); setCatalogError(null) }
-    catch (error) { setCatalogError(error instanceof Error ? `Could not reach the tools API: ${error.message}` : 'Could not reach the tools API.') }
-    finally { setIsLoadingTools(false) }
+    document.querySelector<HTMLElement>('[data-scroll-container]')?.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   useEffect(() => {
     const canonical = routeFromLocation()
     if (window.location.pathname !== routePath(canonical)) window.history.replaceState(null, '', routePath(canonical))
-    const handlePopState = () => { setFile(null); setJob(null); setWorkflowError(null); setRoute(routeFromLocation()); document.querySelector<HTMLElement>('.app-content')?.scrollTo({ top: 0 }) }
+    const handlePopState = () => { setFile(null); setJob(null); setWorkflowError(null); setRoute(routeFromLocation()); document.querySelector<HTMLElement>('[data-scroll-container]')?.scrollTo({ top: 0 }) }
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
-
-  useEffect(() => {
-    // The catalog is external API state loaded once when the router mounts.
-    // oxlint-disable-next-line react/set-state-in-effect
-    void loadTools()
-  }, [loadTools])
 
   useEffect(() => {
     if (route.name !== 'login' || authStatus !== 'authenticated') return
@@ -98,7 +87,8 @@ export function AppRouter() {
   const showCatalog = () => { resetWorkflow(); navigate({ name: 'catalog' }) }
   const showApiDocs = () => { resetWorkflow(); navigate({ name: 'api-docs' }) }
   const showPythonSdk = () => { resetWorkflow(); navigate({ name: 'python-sdk' }) }
-  const showCategory = (category: ToolCategory) => { resetWorkflow(); navigate(category === 'All tools' ? { name: 'catalog' } : { name: 'catalog', category }) }
+  const showTypeScriptSdk = () => { resetWorkflow(); navigate({ name: 'typescript-sdk' }) }
+  const showCategory = (category: ToolCategory) => { resetWorkflow(); navigate(category === ALL_TOOLS ? { name: 'catalog' } : { name: 'catalog', category: getCategorySlug(category, tools) }) }
   const selectTool = (tool: ConversionTool) => { resetWorkflow(); navigate({ name: 'tool', toolName: tool.id }) }
   const restart = () => { resetWorkflow(); navigate(selectedTool ? { name: 'tool', toolName: selectedTool.id } : { name: 'dashboard' }) }
 
@@ -132,17 +122,17 @@ export function AppRouter() {
 
   const restoringJob = route.name === 'job' && (job?.id !== route.jobId || isLoadingTools)
   const unknownTool = route.name === 'tool' && !isLoadingTools && !selectedTool
-  const catalogCategory: ToolCategory = route.name === 'catalog' && TOOL_CATEGORIES.includes(route.category as ToolCategory) ? route.category as ToolCategory : 'All tools'
-  const shellTitle = selectedTool?.name || (route.name === 'catalog' ? catalogCategory : route.name === 'login' ? 'Log in' : route.name === 'api-docs' ? 'API Key' : route.name === 'python-sdk' ? 'Python SDK' : 'Home')
-  const shellActive = selectedTool?.category || (route.name === 'catalog' ? catalogCategory === 'All tools' ? 'tools' : catalogCategory : route.name === 'api-docs' ? 'api' : route.name === 'python-sdk' ? 'sdk' : 'home')
+  const catalogCategory: ToolCategory = route.name === 'catalog' && route.category ? tools.find((tool) => tool.categorySlug === route.category)?.category || ALL_TOOLS : ALL_TOOLS
+  const shellTitle = selectedTool?.name || (route.name === 'catalog' ? catalogCategory : route.name === 'login' ? 'Log in' : route.name === 'api-docs' ? 'API Key' : route.name === 'python-sdk' ? 'Python SDK' : route.name === 'typescript-sdk' ? 'TypeScript SDK' : 'Home')
+  const shellActive = selectedTool?.category || (route.name === 'catalog' ? catalogCategory === 'All tools' ? 'tools' : catalogCategory : route.name === 'api-docs' ? 'api' : route.name === 'python-sdk' ? 'python-sdk' : route.name === 'typescript-sdk' ? 'typescript-sdk' : 'home')
 
   return (
-    <AppShell title={shellTitle} active={shellActive} tools={tools} onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} onPythonSdk={showPythonSdk} onCategory={showCategory} onSelect={selectTool} authControl={<AuthControl onLogin={() => navigate({ name: 'login' })} onSignedOut={showHome} />}>
-      {route.name === 'login' ? <LoginPage onBack={showHome} /> : route.name === 'api-docs' ? <ApiDocsPage onLogin={() => navigate({ name: 'login' })} /> : route.name === 'python-sdk' ? <PythonSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : restoringJob ? (
-        <main className="restore-state"><section><p className="eyebrow">Restoring job</p><h1>{authStatus === 'anonymous' ? 'Sign in to view this job' : 'Loading your conversion'}</h1><p>{workflowError || 'Checking your session and loading the latest status from the backend.'}</p></section></main>
+    <AppShell title={shellTitle} active={shellActive} tools={tools} onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} onPythonSdk={showPythonSdk} onTypeScriptSdk={showTypeScriptSdk} onCategory={showCategory} onSelect={selectTool} authControl={<AuthControl onLogin={() => navigate({ name: 'login' })} onSignedOut={showHome} />}>
+      {route.name === 'login' ? <LoginPage onBack={showHome} /> : route.name === 'api-docs' ? <ApiDocsPage onLogin={() => navigate({ name: 'login' })} /> : route.name === 'python-sdk' ? <PythonSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : route.name === 'typescript-sdk' ? <TypeScriptSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : restoringJob ? (
+        <main className="grid min-h-[calc(100vh-62px)] place-items-center p-[30px]"><section className="w-[min(430px,100%)] rounded-3xl border border-[var(--border)] bg-[var(--surface-soft)] p-[38px] text-center shadow-[var(--panel-shadow)]"><p className="mb-2 text-[10px] font-[850] uppercase tracking-[.14em] text-[var(--accent-strong)]">Restoring job</p><h1 className="m-0 text-3xl tracking-[-.045em]">{authStatus === 'anonymous' ? 'Sign in to view this job' : 'Loading your conversion'}</h1><p className="text-xs leading-[1.65] text-[var(--muted)]">{workflowError || 'Checking your session and loading the latest status from the backend.'}</p></section></main>
       ) : selectedTool ? (
-        <ToolDetailPage tool={selectedTool} tools={tools} view={view} onSelect={selectTool} onHome={showHome} onTools={showCatalog}><div key={`${route.name}-${view}`}>{view === 'create' && <CreateJobPage file={file} tool={selectedTool} error={workflowError} isSubmitting={isSubmitting} onFileSelect={selectFile} onRemove={() => { setFile(null); setWorkflowError(null) }} onConvert={(options) => void convert(options)} />}{view === 'progress' && job && <JobProgressPage file={file} job={job} />}{view === 'result' && job && <JobResultPage file={file} tool={selectedTool} job={job} error={workflowError} onDownload={() => void download()} onRestart={restart} />}</div></ToolDetailPage>
-      ) : route.name === 'dashboard' ? <HomePage tools={tools} isLoading={isLoadingTools} onSelect={selectTool} onTools={showCatalog} onCategory={showCategory} onHome={showHome} /> : <ToolsPage tools={tools} isLoading={isLoadingTools} category={catalogCategory} error={unknownTool && route.name === 'tool' ? `Unknown tool: ${route.toolName}` : catalogError} onRetry={() => { setCatalogError(null); setIsLoadingTools(true); void loadTools() }} onSelect={selectTool} onCategory={showCategory} onHome={showHome} onTools={showCatalog} />}
+        <ToolPage tool={selectedTool} tools={tools} view={view} onSelect={selectTool} onHome={showHome} onTools={showCatalog}><div key={`${route.name}-${view}`}>{view === 'create' && <CreateJobPage file={file} tool={selectedTool} error={workflowError} isSubmitting={isSubmitting} onFileSelect={selectFile} onRemove={() => { setFile(null); setWorkflowError(null) }} onConvert={(options) => void convert(options)} />}{view === 'progress' && job && <JobProgressPage file={file} job={job} />}{view === 'result' && job && <JobResultPage file={file} tool={selectedTool} job={job} error={workflowError} onDownload={() => void download()} onRestart={restart} />}</div></ToolPage>
+      ) : route.name === 'dashboard' ? <HomePage tools={tools} isLoading={isLoadingTools} onSelect={selectTool} onTools={showCatalog} onCategory={showCategory} onHome={showHome} /> : <ToolsPage tools={tools} isLoading={isLoadingTools} category={catalogCategory} error={unknownTool && route.name === 'tool' ? `Unknown tool: ${route.toolName}` : null} onRetry={() => undefined} onSelect={selectTool} onCategory={showCategory} onHome={showHome} onTools={showCatalog} />}
     </AppShell>
   )
 }

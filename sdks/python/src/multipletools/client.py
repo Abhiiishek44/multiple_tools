@@ -7,7 +7,14 @@ from urllib.parse import urlparse
 import httpx
 
 from multipletools._internal.http import AsyncHttpClient, HttpClient, RetryConfig
-from multipletools.resources import AsyncJobs, AsyncTools, Jobs, Tools
+from multipletools.resources import (
+    AsyncConversions,
+    AsyncJobs,
+    AsyncTools,
+    Conversions,
+    Jobs,
+    Tools,
+)
 
 
 class Client:
@@ -30,6 +37,7 @@ class Client:
         )
         self.jobs = Jobs(self._http)
         self.tools = Tools(self._http)
+        self.convert = Conversions(self.jobs)
 
     def close(self) -> None:
         self._http.close()
@@ -66,6 +74,7 @@ class AsyncClient:
         )
         self.jobs = AsyncJobs(self._http)
         self.tools = AsyncTools(self._http)
+        self.convert = AsyncConversions(self.jobs)
 
     async def close(self) -> None:
         await self._http.close()
