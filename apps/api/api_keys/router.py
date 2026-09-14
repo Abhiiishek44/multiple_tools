@@ -7,7 +7,7 @@ from apps.api.api_keys.schemas import (
     ApiKeyCreateResponse,
     ApiKeyResponse,
 )
-from apps.api.dependencies import current_user_dependency
+from apps.api.dependencies import require_authenticated_user
 from packages.api_keys import service
 from packages.auth.models import User
 from packages.core.errors import NotFoundError, ValidationError
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/v1/api-keys", tags=["api-keys"])
 def create_api_key(
     request: ApiKeyCreateRequest,
     response: Response,
-    user: Annotated[User, Depends(current_user_dependency)],
+    user: Annotated[User, Depends(require_authenticated_user)],
 ) -> ApiKeyCreateResponse:
     try:
         created = service.create_api_key(
@@ -38,7 +38,7 @@ def create_api_key(
 
 @router.get("", response_model=list[ApiKeyResponse])
 def list_api_keys(
-    user: Annotated[User, Depends(current_user_dependency)],
+    user: Annotated[User, Depends(require_authenticated_user)],
 ) -> list[ApiKeyResponse]:
     return [
         ApiKeyResponse.from_api_key(api_key)
@@ -49,7 +49,7 @@ def list_api_keys(
 @router.delete("/{key_id}", status_code=status.HTTP_204_NO_CONTENT)
 def revoke_api_key(
     key_id: str,
-    user: Annotated[User, Depends(current_user_dependency)],
+    user: Annotated[User, Depends(require_authenticated_user)],
 ) -> Response:
     try:
         service.revoke_api_key(key_id, user.id)
