@@ -8,11 +8,15 @@ on:
     paths:
       - "sdks/typescript/**"
       - "apps/api/**"
+      - "plugins/**"
+      - "scripts/generate_tool_catalog.py"
       - ".github/workflows/typescript-sdk.yml"
   pull_request:
     paths:
       - "sdks/typescript/**"
       - "apps/api/**"
+      - "plugins/**"
+      - "scripts/generate_tool_catalog.py"
       - ".github/workflows/typescript-sdk.yml"
 
 permissions:
@@ -59,4 +63,3 @@ jobs:
         working-directory: sdks/typescript
       - run: npm publish
         working-directory: sdks/typescript
-

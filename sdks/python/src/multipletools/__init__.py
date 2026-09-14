@@ -13,15 +13,18 @@ from multipletools.exceptions import (
     ValidationError,
 )
 from multipletools.models import Job, JobStatus, Tool
+from multipletools.resources import AsyncConversions, Conversions
 from multipletools.version import __version__
 
 __all__ = [
     "APIError",
     "AsyncClient",
+    "AsyncConversions",
     "AuthenticationError",
     "Client",
     "ConflictError",
     "ConnectionError",
+    "Conversions",
     "Job",
     "JobStatus",
     "MultipleToolsError",

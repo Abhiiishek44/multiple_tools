@@ -1,10 +1,11 @@
 import { HttpClient } from './internal/http.js'
 import { parseHealth } from './internal/validation.js'
 import type { Health } from './models.js'
+import { createConversionsResource, type ConversionsResource } from './resources/conversions.js'
 import { JobsResource } from './resources/jobs.js'
 import { ToolsResource } from './resources/tools.js'
 
-export const DEFAULT_BASE_URL = 'https://api.multipletools.com'
+export const DEFAULT_BASE_URL = 'http://localhost:8000'
 
 export interface ClientOptions {
   apiKey: string
@@ -18,6 +19,7 @@ export interface ClientOptions {
 export class Client {
   readonly tools: ToolsResource
   readonly jobs: JobsResource
+  readonly convert: ConversionsResource
   readonly #http: HttpClient
 
   constructor(options: ClientOptions) {
@@ -32,6 +34,7 @@ export class Client {
     this.#http = new HttpClient({ apiKey, baseURL, timeout, maxRetries })
     this.tools = new ToolsResource(this.#http)
     this.jobs = new JobsResource(this.#http)
+    this.convert = createConversionsResource(this.jobs)
   }
 
   async health(options: { signal?: AbortSignal } = {}): Promise<Health> {
@@ -54,4 +57,3 @@ function validateBaseURL(value: string): string {
   parsed.hash = ''
   return parsed.toString().replace(/\/$/, '')
 }
-

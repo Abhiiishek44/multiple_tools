@@ -45,7 +45,6 @@ export class JobsResource {
     const tool = canonicalTool(params.tool)
     const upload = await prepareUpload(params.file, params.filename, params.mediaType)
     const form = new FormData()
-    form.set('tool', tool)
     form.set('file', upload.blob, upload.filename)
     if (params.options !== undefined) {
       try {
@@ -56,7 +55,7 @@ export class JobsResource {
     }
 
     const idempotencyKey = params.idempotencyKey?.trim() || randomUUID()
-    const payload = await this.#http.requestJSON<unknown>('POST', JOBS_PATH, {
+    const payload = await this.#http.requestJSON<unknown>('POST', `/v1/tools/${encodeURIComponent(tool)}/jobs`, {
       body: form,
       headers: { 'Idempotency-Key': idempotencyKey },
       retryable: true,

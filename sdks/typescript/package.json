@@ -23,8 +23,9 @@
     "node": ">=20"
   },
   "scripts": {
+    "generate": "python3 ../../scripts/generate_tool_catalog.py --target typescript",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true});require('node:fs').rmSync('.test-dist',{recursive:true,force:true})\"",
-    "build": "npm run clean && tsc -p tsconfig.json",
+    "build": "npm run generate && npm run clean && tsc -p tsconfig.json",
     "test": "npm run build && tsc -p tsconfig.test.json && node --test .test-dist/tests",
     "test:coverage": "npm run build && tsc -p tsconfig.test.json && node --test --experimental-test-coverage .test-dist/tests",
     "typecheck": "tsc -p tsconfig.json --noEmit",

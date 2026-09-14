@@ -42,3 +42,21 @@ tool-specific settings with `options={...}`.
 HTTP failures raise typed exceptions from `multipletools.exceptions`, including
 authentication, permission, validation, not-found, conflict, rate-limit,
 timeout, and connection errors.
+
+## Conversion shortcuts
+
+Named shortcuts create ordinary jobs, so polling and downloads continue to use
+the existing jobs API:
+
+```python
+with Client(api_key="mt_live_...") as client:
+    job = client.convert.pdf_to_word("document.pdf")
+    completed = client.jobs.wait(job.id)
+    if completed.status == "SUCCESS":
+        client.jobs.download(completed.id, "converted.docx")
+```
+
+Every tool in the current catalog has a snake-case shortcut. For example,
+`compress-pdf` is available as `client.convert.compress_pdf(...)`.
+`AsyncClient.convert` exposes the same methods as awaitable calls. The generic
+`client.jobs.create(...)` API remains available for forward compatibility.

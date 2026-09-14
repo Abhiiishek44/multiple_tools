@@ -1,14 +1,19 @@
 FROM node:22-alpine AS builder
 
-WORKDIR /app
+RUN apk add --no-cache python3
+WORKDIR /workspace/apps/web
 COPY apps/web/package.json apps/web/package-lock.json ./
 RUN npm ci
 COPY apps/web/ ./
+COPY plugins/ /workspace/plugins/
+COPY scripts/generate_tool_catalog.py /workspace/scripts/generate_tool_catalog.py
 
 ARG VITE_API_BASE_URL
 ARG VITE_GOOGLE_CLIENT_ID
+ARG VITE_SITE_URL
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL \
-    VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID
+    VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID \
+    VITE_SITE_URL=$VITE_SITE_URL
 
 RUN npm run build
 
@@ -16,7 +21,6 @@ FROM caddy:2-alpine
 
 ENV PORT=8080
 COPY apps/web/Caddyfile /etc/caddy/Caddyfile
-COPY --from=builder /app/dist /srv
+COPY --from=builder /workspace/apps/web/dist /srv
 
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
-    
