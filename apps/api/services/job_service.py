@@ -3,7 +3,7 @@
 import json
 from typing import BinaryIO, Mapping
 
-from packages.auth.principal import Principal
+from packages.auth.actor import AuthenticatedActor
 from packages.core.errors import ValidationError
 from packages.jobs.models import Job
 from packages.jobs import service as job_service
@@ -15,7 +15,7 @@ def submit_job(
     filename: str | None,
     media_type: str | None,
     stream: BinaryIO,
-    principal: Principal | None = None,
+    actor: AuthenticatedActor | None = None,
     user_id: str | None = None,
     client_ip: str | None = None,
     user_agent: str | None = None,
@@ -23,14 +23,16 @@ def submit_job(
     options_json: str | None = None,
     idempotency_key: str | None = None,
 ) -> Job:
-    actor = principal or Principal.for_user(_required_user_id(user_id))
+    authenticated_actor = actor or AuthenticatedActor.for_user(
+        _required_user_id(user_id)
+    )
     parsed_options = dict(options) if options is not None else parse_options(options_json)
     return job_service.submit_job(
         tool_name=tool_name,
         filename=filename,
         media_type=media_type,
         stream=stream,
-        principal=actor,
+        actor=authenticated_actor,
         options=parsed_options,
         client_ip=client_ip,
         user_agent=user_agent,
@@ -56,20 +58,28 @@ _parse_options = parse_options
 
 
 def find_job(
-    job_id: str, user_id: str | None = None, principal: Principal | None = None
+    job_id: str,
+    user_id: str | None = None,
+    actor: AuthenticatedActor | None = None,
 ) -> Job:
-    actor = principal or Principal.for_user(_required_user_id(user_id))
-    return job_service.find_job(job_id, actor)
+    authenticated_actor = actor or AuthenticatedActor.for_user(
+        _required_user_id(user_id)
+    )
+    return job_service.find_job(job_id, authenticated_actor)
 
 
 def output_reader(
-    job_id: str, user_id: str | None = None, principal: Principal | None = None
+    job_id: str,
+    user_id: str | None = None,
+    actor: AuthenticatedActor | None = None,
 ) -> tuple[BinaryIO, str, str]:
-    actor = principal or Principal.for_user(_required_user_id(user_id))
-    return job_service.output_reader(job_id, actor)
+    authenticated_actor = actor or AuthenticatedActor.for_user(
+        _required_user_id(user_id)
+    )
+    return job_service.output_reader(job_id, authenticated_actor)
 
 
 def _required_user_id(user_id: str | None) -> str:
     if not user_id:
-        raise TypeError("principal or user_id is required")
+        raise TypeError("actor or user_id is required")
     return user_id

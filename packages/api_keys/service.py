@@ -8,7 +8,7 @@ from packages.auth.api_keys import (
     parse_api_key,
     verify_api_key_secret,
 )
-from packages.auth.principal import Principal
+from packages.auth.actor import AuthenticatedActor
 from packages.auth.scopes import validate_scopes
 from packages.core.errors import AuthenticationError, NotFoundError, ValidationError
 
@@ -48,7 +48,7 @@ def create_api_key(
     return CreatedApiKey(api_key=stored, raw_key=generated.raw_key)
 
 
-def authenticate_api_key(raw_key: str) -> Principal:
+def authenticate_api_key(raw_key: str) -> AuthenticatedActor:
     parsed = parse_api_key(raw_key)
     stored = repository.get_api_key(parsed.key_id)
     expected_hash = stored.secret_hash if stored is not None else "0" * 64
@@ -65,7 +65,9 @@ def authenticate_api_key(raw_key: str) -> Principal:
         raise AuthenticationError("Invalid API key")
 
     repository.mark_used(stored.key_id, now)
-    return Principal.for_api_key(stored.owner_id, stored.key_id, stored.scopes)
+    return AuthenticatedActor.for_api_key(
+        stored.owner_id, stored.key_id, stored.scopes
+    )
 
 
 def list_api_keys(owner_id: str) -> tuple[ApiKey, ...]:

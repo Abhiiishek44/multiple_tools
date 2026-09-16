@@ -8,7 +8,7 @@ from packages.auth import repository as user_repository
 from packages.api_keys.service import authenticate_api_key
 from packages.auth.jwt import decode_access_token
 from packages.auth.models import User
-from packages.auth.principal import Principal
+from packages.auth.actor import AuthenticatedActor
 from packages.core.config import get_settings
 from packages.core.errors import AuthenticationError
 from packages.storage import get_storage
@@ -22,12 +22,14 @@ def storage_dependency() -> ArtifactStorage:
     return get_storage()
 
 
-def current_user_dependency(
+def require_authenticated_user(
     request: Request,
     credentials: Annotated[
         HTTPAuthorizationCredentials | None, Depends(bearer_scheme)
     ],
 ) -> User:
+    """Authenticate a user JWT from the Bearer header or session cookie."""
+
     if credentials is not None and credentials.scheme.lower() == "bearer":
         token = credentials.credentials
     else:
@@ -44,58 +46,68 @@ def current_user_dependency(
     return user
 
 
-def current_principal_dependency(
+def require_authenticated_actor(
     request: Request,
     credentials: Annotated[
         HTTPAuthorizationCredentials | None, Depends(bearer_scheme)
     ],
-) -> Principal:
-    principal = _resolve_principal(request, credentials)
-    if principal is None:
+) -> AuthenticatedActor:
+    """Authenticate the user or API key making this request."""
+
+    actor = _authenticate_request(request, credentials)
+    if actor is None:
         raise _unauthorized("Authentication is required")
-    return principal
+    return actor
 
 
-def optional_bearer_principal_dependency(
+def get_optional_bearer_actor(
     credentials: Annotated[
         HTTPAuthorizationCredentials | None, Depends(bearer_scheme)
     ],
-) -> Principal | None:
+) -> AuthenticatedActor | None:
+    """Authenticate an optional Bearer token without reading session cookies."""
+
     # Public endpoints use this variant so an unrelated stale browser cookie
     # cannot turn an otherwise anonymous request into a 401 response.
     if credentials is None or credentials.scheme.lower() != "bearer":
         return None
-    return _principal_from_token(credentials.credentials)
+    return _authenticate_token(credentials.credentials)
 
 
-def principal_with_scope(scope: str) -> Callable[..., Principal]:
+def require_scope(scope: str) -> Callable[..., AuthenticatedActor]:
+    """Build a dependency that requires authentication and one permission scope."""
+
     def dependency(
-        principal: Annotated[Principal, Depends(current_principal_dependency)],
-    ) -> Principal:
-        if not principal.has_scope(scope):
+        actor: Annotated[AuthenticatedActor, Depends(require_authenticated_actor)],
+    ) -> AuthenticatedActor:
+        if not actor.has_scope(scope):
             raise HTTPException(
                 status_code=403,
                 detail=f"API key requires scope: {scope}",
             )
-        return principal
+        return actor
 
     return dependency
 
 
-def _resolve_principal(
+def _authenticate_request(
     request: Request,
     credentials: HTTPAuthorizationCredentials | None,
-) -> Principal | None:
+) -> AuthenticatedActor | None:
+    """Select a request credential and authenticate it when present."""
+
     if credentials is not None and credentials.scheme.lower() == "bearer":
         token = credentials.credentials
     else:
         token = request.cookies.get(get_settings().auth_cookie_name)
     if not token:
         return None
-    return _principal_from_token(token)
+    return _authenticate_token(token)
 
 
-def _principal_from_token(token: str) -> Principal:
+def _authenticate_token(token: str) -> AuthenticatedActor:
+    """Authenticate an API key or user JWT and describe its actor."""
+
     try:
         if token.startswith("mt_live_"):
             return authenticate_api_key(token)
@@ -104,7 +116,7 @@ def _principal_from_token(token: str) -> Principal:
         raise _unauthorized(str(error)) from error
     if user_repository.get_user(user_id) is None:
         raise _unauthorized("Access token user no longer exists")
-    return Principal.for_user(user_id)
+    return AuthenticatedActor.for_user(user_id)
 
 
 def _unauthorized(detail: str) -> HTTPException:

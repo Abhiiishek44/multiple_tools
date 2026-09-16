@@ -9,7 +9,9 @@ import { cn, toneClass } from '../../styles'
 type Props = {
   authControl: ReactNode
   title: string
+  breadcrumbs: { label: string; onClick?: () => void }[]
   tools: ConversionTool[]
+  searchCategory?: ToolCategory
   onMenu: () => void
   onTools: () => void
   onApiDocs: () => void
@@ -19,7 +21,7 @@ type Props = {
   onSelect: (tool: ConversionTool) => void
 }
 
-export function AppHeader({ authControl, title, tools, onMenu, onTools, onApiDocs, onPythonSdk, onTypeScriptSdk, onCategory, onSelect }: Props) {
+export function AppHeader({ authControl, title, breadcrumbs, tools, searchCategory, onMenu, onTools, onApiDocs, onPythonSdk, onTypeScriptSdk, onCategory, onSelect }: Props) {
   const [finder, setFinder] = useState<'search' | 'favorites' | null>(null)
   const [megaOpen, setMegaOpen] = useState(false)
   const { theme, favorites, toggleTheme } = useUi()
@@ -29,6 +31,7 @@ export function AppHeader({ authControl, title, tools, onMenu, onTools, onApiDoc
     const openSearch = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault()
+        setMegaOpen(false)
         setFinder('search')
       }
     }
@@ -38,15 +41,16 @@ export function AppHeader({ authControl, title, tools, onMenu, onTools, onApiDoc
 
   return <>
     <header className="relative z-40 flex h-[54px] shrink-0 items-center justify-between gap-3.5 rounded-t-[20px] bg-[color-mix(in_srgb,var(--surface)_94%,transparent)] py-0 pl-5 pr-3.5 backdrop-blur-2xl max-[860px]:rounded-none max-[860px]:border-b max-[860px]:border-[var(--border)]">
-      <div className="flex min-w-0 items-center gap-2.5 text-sm text-[var(--faint)]">
+      <nav className="flex min-w-0 items-center gap-2 text-sm text-[var(--faint)]" aria-label="Breadcrumb">
         <button className="hidden size-[38px] cursor-pointer place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] max-[860px]:grid [&_svg]:size-[18px]" type="button" onClick={onMenu} aria-label="Open menu"><MenuIcon /></button>
-        <span className="max-[860px]:hidden" aria-hidden="true">⌂</span><span className="text-xl text-[var(--border)] max-[860px]:hidden">›</span><strong className="overflow-hidden text-ellipsis whitespace-nowrap text-[var(--text)]">{title}</strong>
-      </div>
+        <div className="flex min-w-0 items-center gap-2 overflow-hidden max-[700px]:hidden">{breadcrumbs.map((crumb, index) => <span className="flex min-w-0 items-center gap-2" key={`${crumb.label}-${index}`}>{index > 0 && <span className="text-xl text-[var(--border)]" aria-hidden="true">›</span>}{crumb.onClick ? <button className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap border-0 bg-transparent p-0 text-[13px] text-[var(--muted)] transition-colors hover:text-[var(--text)]" type="button" onClick={crumb.onClick}>{crumb.label}</button> : <strong className="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-[var(--text)]">{crumb.label}</strong>}</span>)}</div>
+        <strong className="hidden overflow-hidden text-ellipsis whitespace-nowrap text-[var(--text)] max-[700px]:block">{title}</strong>
+      </nav>
       <div className="flex items-center gap-[7px] [&_button]:cursor-pointer">
         <button className="flex h-[38px] items-center gap-[9px] rounded-xl border-0 bg-[var(--surface-soft)] px-[13px] text-sm text-[var(--muted)] max-[860px]:hidden [&_svg]:size-4 [&>span]:text-[13px] [&>span]:font-[650] [&>span]:text-[var(--text)] [&>small]:ml-[3px]" type="button" aria-expanded={megaOpen} onClick={() => setMegaOpen((value) => !value)}><GridIcon /><span>Browse tools</span><small>⌄</small></button>
-        <button className="flex h-[38px] w-[min(310px,26vw)] items-center gap-[9px] rounded-xl border-0 bg-[var(--surface-soft)] px-[13px] text-left text-sm text-[var(--muted)] max-[860px]:w-[38px] max-[860px]:justify-center max-[860px]:rounded-full max-[860px]:p-0 [&_svg]:size-4 [&>span]:min-w-0 [&>span]:flex-1 max-[860px]:[&>span]:hidden" type="button" aria-label="Search tools" onClick={() => setFinder('search')}><SearchIcon /><span>Search tools…</span><kbd className="rounded-md bg-[var(--accent)] px-1.5 py-0.5 font-sans text-[9px] font-bold text-[var(--accent-text)] max-[860px]:hidden">Ctrl K</kbd></button>
+        <button className="flex h-[38px] w-[min(430px,34vw)] items-center gap-[9px] rounded-xl border border-transparent bg-[var(--surface-soft)] px-[13px] text-left text-sm text-[var(--muted)] transition-[border-color,background-color,transform] duration-200 hover:border-[var(--border)] hover:bg-[var(--surface-strong)] active:scale-[.985] max-[860px]:w-[38px] max-[860px]:justify-center max-[860px]:rounded-full max-[860px]:p-0 [&_svg]:size-4 [&>span]:min-w-0 [&>span]:flex-1 max-[860px]:[&>span]:hidden" type="button" aria-label={searchCategory ? `Search ${searchCategory} tools` : 'Search tools'} aria-expanded={finder === 'search'} onClick={() => setFinder('search')}><SearchIcon /><span>{searchCategory ? `Search ${searchCategory} tools…` : 'Search tools…'}</span><kbd className="rounded-md bg-[var(--accent)] px-1.5 py-0.5 font-sans text-[9px] font-bold text-[var(--accent-text)] max-[860px]:hidden">⌘/Ctrl K</kbd></button>
         <button className="grid size-[38px] place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] [&_svg]:size-[18px]" type="button" onClick={toggleTheme} aria-label={`Use ${theme === 'light' ? 'dark' : 'light'} theme`}>{theme === 'light' ? <SunIcon /> : <MoonIcon />}</button>
-        <button className="relative grid size-[38px] place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] [&_svg]:size-[18px]" type="button" onClick={() => setFinder('favorites')} aria-label="Favorite tools"><HeartIcon /><span className="absolute -right-0.5 -top-[3px] grid h-[15px] min-w-[15px] place-items-center rounded-lg bg-[var(--accent)] px-[3px] text-[8px] font-black text-[var(--accent-text)]">{favorites.length}</span></button>
+        <button className={cn('relative grid size-[38px] place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] transition-[transform,color,background-color] duration-200 hover:bg-[var(--surface-soft)] active:scale-75 [&_svg]:size-[18px] [&_svg]:transition-[fill,stroke,transform] [&_svg]:duration-200', finder === 'favorites' && 'text-[#f05252] [&_svg]:animate-[heart-pop_320ms_ease-out] [&_svg]:stroke-[#f05252]')} type="button" onClick={() => setFinder((current) => current === 'favorites' ? null : 'favorites')} aria-pressed={finder === 'favorites'} aria-expanded={finder === 'favorites'} aria-label="Favorite tools"><HeartIcon filled={finder === 'favorites'} /><span className="absolute -right-0.5 -top-[3px] grid h-[15px] min-w-[15px] place-items-center rounded-lg bg-[var(--accent)] px-[3px] text-[8px] font-black text-[var(--accent-text)]">{favorites.length}</span></button>
         {authControl}
       </div>
       {megaOpen && <div className="absolute right-3.5 top-[49px] w-[min(900px,calc(100vw-300px))] rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--panel-shadow)] max-[860px]:hidden">
@@ -58,6 +62,6 @@ export function AppHeader({ authControl, title, tools, onMenu, onTools, onApiDoc
         <div className="mt-3.5 flex items-center gap-[9px] rounded-[14px] bg-[var(--text)] px-3.5 py-3 text-[var(--surface)] [&>span]:min-w-0 [&>span]:flex-1 [&_strong]:block [&_strong]:text-[11px] [&_small]:mt-[3px] [&_small]:block [&_small]:text-[9px] [&_small]:opacity-65 [&>button]:shrink-0 [&>button]:rounded-[9px] [&>button]:border-0 [&>button]:bg-[color-mix(in_srgb,var(--surface)_10%,transparent)] [&>button]:px-[11px] [&>button]:py-2 [&>button]:text-[9px] [&>button]:font-[750] [&>button]:text-inherit"><span><strong>Build with Multiple Tools</strong><small>Use the same conversions from your own product.</small></span><button type="button" onClick={() => { onApiDocs(); setMegaOpen(false) }}>API Key</button><button type="button" onClick={() => { onPythonSdk(); setMegaOpen(false) }}>Python SDK</button><button type="button" onClick={() => { onTypeScriptSdk(); setMegaOpen(false) }}>TypeScript SDK</button></div>
       </div>}
     </header>
-    {finder && <ToolFinder tools={tools} favoritesOnly={finder === 'favorites'} onClose={() => setFinder(null)} onSelect={onSelect} />}
+    {finder && <ToolFinder tools={tools} category={finder === 'search' ? searchCategory : undefined} favoritesOnly={finder === 'favorites'} onClose={() => setFinder(null)} onSelect={onSelect} />}
   </>
 }

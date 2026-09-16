@@ -8,7 +8,7 @@ from apps.api.auth.schema import (
     GoogleCredentialRequest,
     UserResponse,
 )
-from apps.api.dependencies import current_user_dependency
+from apps.api.dependencies import require_authenticated_user
 from apps.api.services.auth_service import authenticate_google
 from packages.auth.models import User
 from packages.core.config import get_settings
@@ -65,7 +65,7 @@ def google_redirect_callback(
 
 @router.get("/me", response_model=UserResponse)
 def authenticated_user(
-    user: Annotated[User, Depends(current_user_dependency)],
+    user: Annotated[User, Depends(require_authenticated_user)],
 ) -> UserResponse:
     return UserResponse.from_user(user)
 
