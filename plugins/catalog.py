@@ -34,10 +34,7 @@ _DISPLAY_NAMES = {
 
 
 def build_tool_catalog(manifests: Iterable[PluginManifest]) -> list[dict[str, object]]:
-    base = [_base_metadata(manifest) for manifest in sorted(manifests, key=lambda item: item.name)]
-    for tool in base:
-        tool["related_tools"] = _related_tools(tool, base)
-    return base
+    return [_base_metadata(manifest) for manifest in sorted(manifests, key=lambda item: item.name)]
 
 
 def _base_metadata(manifest: PluginManifest) -> dict[str, object]:
@@ -71,30 +68,11 @@ def _base_metadata(manifest: PluginManifest) -> dict[str, object]:
         ],
         "options": [_option_metadata(option) for option in manifest.options],
         "keywords": [manifest.name, name.lower(), f"{source.lower()} to {target.lower()}", category.lower()],
-        "faq": [
-            {
-                "question": f"How do I use {name}?",
-                "answer": f"Upload a supported {source} file, choose any available settings, start the tool, and download the resulting {target} file.",
-            },
-            {
-                "question": f"Which formats does {name} support?",
-                "answer": f"Accepted input formats are {', '.join(input_formats)}. The output format is {', '.join(output_formats)}.",
-            },
-            {
-                "question": "Is my original file changed?",
-                "answer": "No. The original file remains on your device and the tool creates a separate output file.",
-            },
-            {
-                "question": "Can I use this tool through the API?",
-                "answer": f"Yes. Create a job with the {manifest.name} tool slug, then poll and download it with the API or an SDK.",
-            },
-        ],
         "how_it_works": [
             f"Choose a supported {source} file from your device.",
             "Review the available settings and start the job.",
             f"Follow progress and download the finished {target} file.",
         ],
-        "related_tools": [],
     }
 
 
@@ -138,17 +116,3 @@ def _friendly_name(name: str) -> str:
 def _format_suffix(suffix: str) -> str:
     value = suffix.removeprefix(".").lower()
     return {"jpeg": "JPG", "docx": "DOCX", "xlsx": "XLSX", "pptx": "PPTX"}.get(value, value.upper())
-
-
-def _related_tools(tool: dict[str, object], tools: list[dict[str, object]]) -> list[str]:
-    input_formats = set(tool["input_formats"])
-    output_formats = set(tool["output_formats"])
-
-    def score(candidate: dict[str, object]) -> tuple[int, str]:
-        value = 4 if candidate["category"] == tool["category"] else 0
-        value += 5 if output_formats.intersection(candidate["input_formats"]) else 0
-        value += 2 if input_formats.intersection(candidate["input_formats"]) else 0
-        return (-value, str(candidate["slug"]))
-
-    candidates = [candidate for candidate in tools if candidate["slug"] != tool["slug"]]
-    return [str(candidate["slug"]) for candidate in sorted(candidates, key=score)[:6]]

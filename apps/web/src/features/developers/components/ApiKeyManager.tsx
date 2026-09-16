@@ -15,7 +15,7 @@ const SCOPE_OPTIONS = [
 const ALL_SCOPES = SCOPE_OPTIONS.map((scope) => scope.value)
 const formatDate = (value: string) => new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(value))
 
-const keyButton = 'inline-flex h-10 cursor-pointer items-center gap-2 rounded-[10px] border-0 bg-[var(--accent)] px-4 text-xs font-[750] text-[var(--accent-text)] shadow-[0_7px_20px_color-mix(in_srgb,var(--accent)_20%,transparent)] transition hover:-translate-y-px hover:bg-[var(--accent-strong)] [&_svg]:w-3.5 [&_svg]:stroke-[2.2]'
+const keyButton = 'inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-[var(--accent)] bg-[var(--accent)] px-4 text-xs font-semibold text-[var(--accent-text)] transition-colors hover:border-[var(--accent-strong)] hover:bg-[var(--accent-strong)] [&_svg]:w-3.5 [&_svg]:stroke-[2.2]'
 const tableGrid = 'grid grid-cols-[minmax(150px,1.2fr)_minmax(140px,1fr)_minmax(105px,.7fr)_72px_72px] items-center gap-x-3.5'
 const cellTitle = 'block overflow-hidden text-ellipsis whitespace-nowrap text-[13px]'
 const cellMeta = 'mt-[5px] block overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-[var(--faint)]'

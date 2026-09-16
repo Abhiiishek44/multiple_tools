@@ -33,7 +33,6 @@ function pageHTML(title, description, path, body, jsonLd) {
 }
 
 function toolBody(tool) {
-  const related = tool.related_tools.map((slug) => catalog.find((candidate) => candidate.slug === slug)).filter(Boolean)
   const method = tool.slug.replaceAll('-', '_')
   return `<main class="static-seo-page">
     <nav aria-label="Breadcrumb"><a href="/tools">Tools</a> / <a href="/categories/${tool.category_slug}">${escapeHTML(tool.category)}</a> / ${escapeHTML(tool.display_name)}</nav>
@@ -44,8 +43,6 @@ function toolBody(tool) {
     <section><h2>How ${escapeHTML(tool.display_name)} works</h2><ol>${list(tool.how_it_works, (step) => `<li>${escapeHTML(step)}</li>`)}</ol></section>
     <section><h2>Features</h2><ul>${list(tool.features, (feature) => `<li>${escapeHTML(feature)}</li>`)}</ul></section>
     <section><h2>API example</h2><pre><code>POST /v1/tools/${tool.slug}/jobs</code></pre><h2>Python SDK example</h2><pre><code>client.convert.${method}("input${tool.input_suffixes[0]}")</code></pre><h2>TypeScript SDK example</h2><pre><code>await client.convert.${method}('./input${tool.input_suffixes[0]}')</code></pre></section>
-    <section><h2>Frequently asked questions</h2>${list(tool.faq, (item) => `<article><h3>${escapeHTML(item.question)}</h3><p>${escapeHTML(item.answer)}</p></article>`)}</section>
-    <section><h2>Related tools</h2><ul>${list(related, (item) => `<li><a href="/${item.slug}">${escapeHTML(item.display_name)}</a></li>`)}</ul></section>
   </main>`
 }
 
@@ -54,7 +51,6 @@ function toolJsonLd(tool) {
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'WebApplication', name: tool.title, description: tool.description, url: absolute(`/${tool.slug}`), applicationCategory: 'UtilitiesApplication', operatingSystem: 'Any', featureList: tool.features, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
-      { '@type': 'FAQPage', mainEntity: tool.faq.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })) },
     ],
   }
 }

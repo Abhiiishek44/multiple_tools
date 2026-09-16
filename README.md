@@ -19,12 +19,10 @@ apps/
   worker/              Generic Celery task
 packages/
   core/                Environment configuration, errors, and logging
-  database/            Shared PostgreSQL connection
   auth/                User model, repository, and JWT utilities
   jobs/                Job model and repository
   documents/           Text normalization, OpenRouter OCR, and PDF parsing
-  task_queue/          Shared Celery configuration
-  storage/             Provider-agnostic object storage interface and MinIO adapter
+  storage/             Provider-neutral object-storage contract and factory
 plugins/
   pdf_documents_tools/ PDF and document conversion plugins
   image_converter_tools/
@@ -32,7 +30,8 @@ plugins/
     heic_heif_conversions/     HEIC and HEIF tools
     avif_conversions/          AVIF tools
   ocr_tools/           Image and PDF text-extraction plugins that use OCR
-infrastructure/         PostgreSQL, Redis, MinIO, and migrations
+deploy/                 Dockerfiles, Compose, PostgreSQL init, and migrations
+infrastructure/         Database, Celery, and S3-compatible runtime adapters
 ```
 
 ## Local setup
@@ -90,12 +89,12 @@ ghcr.io/abhiiishek44/multiple-tools-worker:latest
 ghcr.io/abhiiishek44/multiple-tools-web:latest
 ```
 
-Their independent build definitions are under `docker/`:
+Their independent build definitions are under `deploy/docker/`:
 
 ```text
-docker/Dockerfile.api
-docker/Dockerfile.worker
-docker/Dockerfile.web
+deploy/docker/Dockerfile.api
+deploy/docker/Dockerfile.worker
+deploy/docker/Dockerfile.web
 ```
 
 Local releases are published to Docker Hub by default:
@@ -171,8 +170,8 @@ webp-to-avif
 
 ### Google authentication
 
-Create a Google OAuth 2.0 Web client. Put backend authentication settings in
-`env/local/api.env`:
+Create a Google OAuth 2.0 Web client. The API and worker share the backend
+settings in the repository-root `.env` file:
 
 ```bash
 GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
@@ -184,7 +183,7 @@ AUTH_COOKIE_SECURE=false
 CORS_ORIGINS=http://localhost:5173
 ```
 
-Put public browser settings in `env/local/web.env`:
+Put public browser settings in `apps/web/.env`:
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8000

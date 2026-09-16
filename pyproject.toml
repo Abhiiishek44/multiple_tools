@@ -31,5 +31,5 @@ dependencies = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["apps*", "packages*", "plugins*"]
+include = ["apps*", "packages*", "plugins*", "infrastructure*"]
 exclude = ["frontend*"]

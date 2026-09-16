@@ -12,6 +12,7 @@ COPY pyproject.toml README.md ./
 COPY apps ./apps
 COPY packages ./packages
 COPY plugins ./plugins
+COPY infrastructure ./infrastructure
 RUN pip install --upgrade pip setuptools wheel && pip install .
 
 FROM python:3.12-slim-bookworm

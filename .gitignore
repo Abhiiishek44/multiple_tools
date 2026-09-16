@@ -1,5 +1,4 @@
-.env
-/env/local/*.env
+**/.env
 **/__pycache__/
 **/*.py[cod]
 .pytest_cache/

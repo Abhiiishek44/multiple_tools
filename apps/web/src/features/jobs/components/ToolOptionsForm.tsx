@@ -33,6 +33,6 @@ export function ToolOptionsForm({ tool, hasFile, isSubmitting, error, onConvert 
       {option.description && <small className="font-medium text-[var(--faint)]">{option.description}</small>}
     </label>)}</div>}
     {error && <Alert>{error}</Alert>}
-    <button className={primaryAction} type="button" onClick={submit} disabled={!hasFile || isSubmitting || requiredMissing}>{isSubmitting ? 'Starting conversion…' : `Convert to ${tool.to}`}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5" /></svg></button>
+    <button className={primaryAction} type="button" onClick={submit} disabled={!hasFile || isSubmitting || requiredMissing}>{isSubmitting ? 'Uploading file…' : error && hasFile ? 'Retry conversion' : `Convert to ${tool.to}`}<svg className={isSubmitting ? 'animate-spin' : ''} viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5" /></svg></button>
   </div>
 }

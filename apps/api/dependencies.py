@@ -74,6 +74,24 @@ def get_optional_bearer_actor(
     return _authenticate_token(credentials.credentials)
 
 
+def optional_scope(scope: str) -> Callable[..., AuthenticatedActor | None]:
+    """Allow browser guests, while enforcing scopes for Bearer API clients."""
+
+    def dependency(
+        actor: Annotated[
+            AuthenticatedActor | None, Depends(get_optional_bearer_actor)
+        ],
+    ) -> AuthenticatedActor | None:
+        if actor is not None and not actor.has_scope(scope):
+            raise HTTPException(
+                status_code=403,
+                detail=f"API key requires scope: {scope}",
+            )
+        return actor
+
+    return dependency
+
+
 def require_scope(scope: str) -> Callable[..., AuthenticatedActor]:
     """Build a dependency that requires authentication and one permission scope."""
 

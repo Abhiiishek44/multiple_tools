@@ -20,8 +20,8 @@ export function CodeExampleTabs({ examples }: { examples: CodeExample[] }) {
 
   const selectWithKeyboard = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
     const lastIndex = examples.length - 1
-    const nextIndex = event.key === 'ArrowRight' ? (index + 1) % examples.length
-      : event.key === 'ArrowLeft' ? (index - 1 + examples.length) % examples.length
+    const nextIndex = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? (index + 1) % examples.length
+      : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? (index - 1 + examples.length) % examples.length
         : event.key === 'Home' ? 0
           : event.key === 'End' ? lastIndex
             : -1
@@ -33,15 +33,15 @@ export function CodeExampleTabs({ examples }: { examples: CodeExample[] }) {
   }
 
   return (
-    <div className="mt-6">
-      <div className="flex max-w-full gap-1.5 overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface-soft)] p-1.5 [scrollbar-width:none]" role="tablist" aria-label="Code example language">
+    <div className="mt-8 grid grid-cols-[190px_minmax(0,1fr)] items-start gap-x-10 gap-y-5 max-[760px]:grid-cols-1">
+      <div className="grid gap-2" role="tablist" aria-label="Code example language" aria-orientation="vertical">
         {examples.map((example, index) => {
           const selected = example.id === activeExample.id
           return (
             <button
               className={cn(
-                'flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-transparent bg-transparent px-3.5 text-xs font-bold text-[var(--muted)] transition hover:bg-[var(--surface)] hover:text-[var(--text)]',
-                selected && 'border-[var(--border)] bg-[var(--surface)] text-[var(--text)] shadow-[0_4px_14px_rgba(20,24,16,.06)]',
+                'flex min-h-11 w-full cursor-pointer items-center rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-left transition-colors hover:border-[var(--faint)] hover:bg-[var(--surface-soft)]',
+                selected && 'border-[var(--accent)]! bg-[var(--accent)]! [&_strong]:text-[var(--accent-text)]!',
               )}
               id={`${groupId}-${example.id}-tab`}
               key={example.id}
@@ -53,18 +53,13 @@ export function CodeExampleTabs({ examples }: { examples: CodeExample[] }) {
               onClick={() => setActiveId(example.id)}
               onKeyDown={(event) => selectWithKeyboard(event, index)}
             >
-              <span className={cn('grid h-6 min-w-7 place-items-center rounded-md bg-[var(--surface-strong)] px-1.5 text-[8px] font-black tracking-[.04em] text-[var(--muted)]', selected && 'bg-[var(--accent)] text-[var(--accent-text)]')}>{example.badge}</span>
-              {example.label}
+              <strong className="text-xs font-semibold text-[var(--text)]">{example.label}</strong>
             </button>
           )
         })}
       </div>
 
-      <div id={`${groupId}-${activeExample.id}-panel`} role="tabpanel" aria-labelledby={`${groupId}-${activeExample.id}-tab`} tabIndex={0}>
-        <div className="mt-4 flex items-start justify-between gap-5 max-[700px]:flex-col max-[700px]:gap-1">
-          <div><strong className="text-sm">{activeExample.label}</strong><p className="mb-0 mt-1 text-xs leading-relaxed text-[var(--muted)]">{activeExample.description}</p></div>
-          <span className="shrink-0 rounded-full border border-[var(--border)] bg-[var(--surface-soft)] px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[.08em] text-[var(--faint)]">{activeExample.language}</span>
-        </div>
+      <div className="flex min-w-0 max-w-full justify-end max-[760px]:justify-start" id={`${groupId}-${activeExample.id}-panel`} role="tabpanel" aria-labelledby={`${groupId}-${activeExample.id}-tab`} tabIndex={0}>
         <CodeBlock code={activeExample.code} language={activeExample.language} label={activeExample.label} />
       </div>
     </div>

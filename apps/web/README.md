@@ -26,11 +26,15 @@ Keep code inside a feature when it belongs to that business capability. Move cod
 The build runs `scripts/generate_tool_catalog.py` before TypeScript and Vite. It derives the frontend catalog and SDK method maps from backend plugin manifests. After Vite builds the SPA, `scripts/generate-static-pages.mjs` emits crawlable tool/category entry pages, canonical and social metadata, JSON-LD, `sitemap.xml`, and `robots.txt`.
 
 Set `VITE_SITE_URL` to the public site origin so canonical and sitemap URLs use the production domain.
+Frontend environment values live in `apps/web/.env`; copy `.env.example` to
+create it. Only `VITE_` variables are exposed to browser code.
 
 For local development, keep `VITE_API_BASE_URL=/api`. Vite proxies that path to
 FastAPI so session cookies stay same-origin whether the site is opened through
-`localhost` or a LAN address. Production builds should set it to the public API
-origin.
+`localhost` or a LAN address. `API_PROXY_TARGET` selects the backend used by
+that development proxy and defaults to `http://127.0.0.1:8000`; it can also be
+set to a deployed API origin. Production builds should set `VITE_API_BASE_URL`
+to the public API origin.
 
 `AuthProvider` is the only global context. It owns the current user and session status and exposes session refresh, logout, and invalidation through `useAuth()`. API clients, tools, files, and jobs remain outside React Context.
 

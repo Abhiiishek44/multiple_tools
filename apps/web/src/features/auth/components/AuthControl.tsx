@@ -41,7 +41,7 @@ export function AuthControl({ onLogin, onSignedOut }: AuthControlProps) {
   }
 
   if (status === 'loading') return <span className="rounded-[10px] bg-[var(--surface-soft)] p-2.5 text-[10px] font-bold text-[var(--muted)] max-[700px]:hidden">Checking…</span>
-  if (!user) return <button className="h-[38px] cursor-pointer rounded-xl border-0 bg-[var(--text)] px-4 text-xs font-[750] text-[var(--surface)] max-[700px]:w-[38px] max-[700px]:overflow-hidden max-[700px]:px-0 max-[700px]:text-[0px] max-[700px]:before:text-[15px] max-[700px]:before:content-['↪']" type="button" onClick={onLogin}>Log in</button>
+  if (!user) return <button className="h-[38px] cursor-pointer rounded-lg border border-[var(--text)] bg-[var(--text)] px-4 text-xs font-semibold text-[var(--surface)] transition-colors hover:bg-[var(--accent)] hover:border-[var(--accent)] max-[700px]:w-[38px] max-[700px]:overflow-hidden max-[700px]:px-0 max-[700px]:text-[0px] max-[700px]:before:text-[15px] max-[700px]:before:content-['↪']" type="button" onClick={onLogin}>Log in</button>
 
   return <div className="relative" ref={menuRef}>
     <button className="flex h-[38px] cursor-pointer items-center gap-[7px] rounded-[20px] border border-[var(--border)] bg-[var(--surface)] py-[3px] pl-[3px] pr-[9px] max-[700px]:w-[38px] max-[700px]:p-[3px]" type="button" aria-haspopup="menu" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>

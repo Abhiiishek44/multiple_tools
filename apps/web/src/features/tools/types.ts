@@ -11,8 +11,6 @@ export type ToolOption = {
   choices: ToolOptionChoice[]
 }
 
-export type ToolFaq = { question: string; answer: string }
-
 export type ConversionTool = {
   id: string
   slug: string
@@ -34,9 +32,7 @@ export type ConversionTool = {
   features: string[]
   options: ToolOption[]
   keywords: string[]
-  faq: ToolFaq[]
   howItWorks: string[]
-  relatedTools: string[]
 }
 
 export type ApiTool = {
@@ -58,7 +54,5 @@ export type ApiTool = {
   features: string[]
   options: ToolOption[]
   keywords: string[]
-  faq: ToolFaq[]
   how_it_works: string[]
-  related_tools: string[]
 }

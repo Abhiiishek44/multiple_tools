@@ -16,11 +16,6 @@ class ToolOptionResponse(BaseModel):
     choices: list[ToolOptionChoiceResponse]
 
 
-class ToolFaqResponse(BaseModel):
-    question: str
-    answer: str
-
-
 class ToolResponse(BaseModel):
     name: str
     slug: str
@@ -40,6 +35,4 @@ class ToolResponse(BaseModel):
     features: list[str]
     options: list[ToolOptionResponse]
     keywords: list[str]
-    faq: list[ToolFaqResponse]
     how_it_works: list[str]
-    related_tools: list[str]

@@ -12,12 +12,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/10-enable-vector.sql:ro
-      - ./migrations/001_create_tool_jobs.sql:/docker-entrypoint-initdb.d/20-create-tool-jobs.sql:ro
-      - ./migrations/002_simplify_job_states.sql:/docker-entrypoint-initdb.d/21-simplify-job-states.sql:ro
-      - ./migrations/003_add_job_options.sql:/docker-entrypoint-initdb.d/22-add-job-options.sql:ro
-      - ./migrations/004_add_google_auth.sql:/docker-entrypoint-initdb.d/23-add-google-auth.sql:ro
-      - ./migrations/005_add_job_request_metadata.sql:/docker-entrypoint-initdb.d/24-add-job-request-metadata.sql:ro
-      - ./migrations/006_add_api_keys.sql:/docker-entrypoint-initdb.d/25-add-api-keys.sql:ro
+      - ./postgres/migrations/001_create_tool_jobs.sql:/docker-entrypoint-initdb.d/20-create-tool-jobs.sql:ro
+      - ./postgres/migrations/002_simplify_job_states.sql:/docker-entrypoint-initdb.d/21-simplify-job-states.sql:ro
+      - ./postgres/migrations/003_add_job_options.sql:/docker-entrypoint-initdb.d/22-add-job-options.sql:ro
+      - ./postgres/migrations/004_add_google_auth.sql:/docker-entrypoint-initdb.d/23-add-google-auth.sql:ro
+      - ./postgres/migrations/005_add_job_request_metadata.sql:/docker-entrypoint-initdb.d/24-add-job-request-metadata.sql:ro
+      - ./postgres/migrations/006_add_api_keys.sql:/docker-entrypoint-initdb.d/25-add-api-keys.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s

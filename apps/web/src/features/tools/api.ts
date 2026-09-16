@@ -23,9 +23,7 @@ function toConversionTool(tool: ApiTool): ConversionTool {
     features: tool.features,
     options: tool.options,
     keywords: tool.keywords,
-    faq: tool.faq,
     howItWorks: tool.how_it_works,
-    relatedTools: tool.related_tools,
   }
 }
 
