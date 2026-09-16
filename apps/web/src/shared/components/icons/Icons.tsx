@@ -8,8 +8,8 @@ export function SearchIcon({ className }: IconProps) {
   return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m16 16 4 4" /></svg>
 }
 
-export function HeartIcon({ className }: IconProps) {
-  return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 5.8a5.5 5.5 0 0 0-7.8 0L12 6.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+export function HeartIcon({ className, filled = false }: IconProps & { filled?: boolean }) {
+  return <svg className={className} style={filled ? { fill: '#f05252', stroke: '#f05252' } : undefined} viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 5.8a5.5 5.5 0 0 0-7.8 0L12 6.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z" /></svg>
 }
 
 export function SunIcon({ className }: IconProps) {

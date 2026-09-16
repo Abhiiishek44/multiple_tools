@@ -125,9 +125,29 @@ export function AppRouter() {
   const catalogCategory: ToolCategory = route.name === 'catalog' && route.category ? tools.find((tool) => tool.categorySlug === route.category)?.category || ALL_TOOLS : ALL_TOOLS
   const shellTitle = selectedTool?.name || (route.name === 'catalog' ? catalogCategory : route.name === 'login' ? 'Log in' : route.name === 'api-docs' ? 'API Key' : route.name === 'python-sdk' ? 'Python SDK' : route.name === 'typescript-sdk' ? 'TypeScript SDK' : 'Home')
   const shellActive = selectedTool?.category || (route.name === 'catalog' ? catalogCategory === 'All tools' ? 'tools' : catalogCategory : route.name === 'api-docs' ? 'api' : route.name === 'python-sdk' ? 'python-sdk' : route.name === 'typescript-sdk' ? 'typescript-sdk' : 'home')
+  const homeBreadcrumb = { label: 'Home', onClick: showHome }
+  const toolsBreadcrumb = { label: 'Tools', onClick: showCatalog }
+  const shellBreadcrumbs: { label: string; onClick?: () => void }[] = (() => {
+    if (route.name === 'dashboard') return [{ label: 'Home' }]
+    if (route.name === 'catalog') return catalogCategory === ALL_TOOLS
+      ? [homeBreadcrumb, { label: 'Tools' }]
+      : [homeBreadcrumb, toolsBreadcrumb, { label: catalogCategory }]
+    if ((route.name === 'tool' || route.name === 'job') && selectedTool) {
+      const categoryBreadcrumb = { label: selectedTool.category, onClick: () => showCategory(selectedTool.category) }
+      return route.name === 'job'
+        ? [homeBreadcrumb, toolsBreadcrumb, categoryBreadcrumb, { label: selectedTool.name, onClick: () => selectTool(selectedTool) }, { label: 'Job' }]
+        : [homeBreadcrumb, toolsBreadcrumb, categoryBreadcrumb, { label: selectedTool.name }]
+    }
+    if (route.name === 'api-docs') return [homeBreadcrumb, { label: 'Developers' }, { label: 'API Key' }]
+    if (route.name === 'python-sdk') return [homeBreadcrumb, { label: 'Developers' }, { label: 'Python SDK' }]
+    if (route.name === 'typescript-sdk') return [homeBreadcrumb, { label: 'Developers' }, { label: 'TypeScript SDK' }]
+    if (route.name === 'login') return [homeBreadcrumb, { label: 'Log in' }]
+    return [homeBreadcrumb, toolsBreadcrumb, { label: 'Unknown tool' }]
+  })()
+  const searchCategory = route.name === 'catalog' && catalogCategory !== ALL_TOOLS ? catalogCategory : undefined
 
   return (
-    <AppShell title={shellTitle} active={shellActive} tools={tools} onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} onPythonSdk={showPythonSdk} onTypeScriptSdk={showTypeScriptSdk} onCategory={showCategory} onSelect={selectTool} authControl={<AuthControl onLogin={() => navigate({ name: 'login' })} onSignedOut={showHome} />}>
+    <AppShell title={shellTitle} breadcrumbs={shellBreadcrumbs} active={shellActive} searchCategory={searchCategory} tools={tools} onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} onPythonSdk={showPythonSdk} onTypeScriptSdk={showTypeScriptSdk} onCategory={showCategory} onSelect={selectTool} authControl={<AuthControl onLogin={() => navigate({ name: 'login' })} onSignedOut={showHome} />}>
       {route.name === 'login' ? <LoginPage onBack={showHome} /> : route.name === 'api-docs' ? <ApiDocsPage onLogin={() => navigate({ name: 'login' })} /> : route.name === 'python-sdk' ? <PythonSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : route.name === 'typescript-sdk' ? <TypeScriptSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : restoringJob ? (
         <main className="grid min-h-[calc(100vh-62px)] place-items-center p-[30px]"><section className="w-[min(430px,100%)] rounded-3xl border border-[var(--border)] bg-[var(--surface-soft)] p-[38px] text-center shadow-[var(--panel-shadow)]"><p className="mb-2 text-[10px] font-[850] uppercase tracking-[.14em] text-[var(--accent-strong)]">Restoring job</p><h1 className="m-0 text-3xl tracking-[-.045em]">{authStatus === 'anonymous' ? 'Sign in to view this job' : 'Loading your conversion'}</h1><p className="text-xs leading-[1.65] text-[var(--muted)]">{workflowError || 'Checking your session and loading the latest status from the backend.'}</p></section></main>
       ) : selectedTool ? (

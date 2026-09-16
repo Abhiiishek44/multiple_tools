@@ -15,7 +15,9 @@ WEB_IMAGE := $(IMAGE_REGISTRY)/multiple-tools-web
 .DEFAULT_GOAL := help
 
 .PHONY: help setup env install generate dev api worker beat web \
-	infra-up infra-down infra-logs db-migrate check build sdk-build clean \
+	infra-up infra-down infra-logs db-migrate check build clean \
+	sdk-build sdk-build-python sdk-publish-python \
+	sdk-build-typescript sdk-publish-typescript \
 	docker-build-api docker-build-worker docker-build-web docker-images \
 	docker-release require-api-env require-worker-env require-web-env
 
@@ -39,8 +41,14 @@ help: ## Show available commands
 		'  db-migrate       Apply database migrations' \
 		'  check            Compile backend, lint frontend, and run tests' \
 		'  build            Build frontend and all SDK packages' \
-		'  sdk-build        Build all SDK packages' \
 		'  clean            Remove generated build artifacts' \
+		'' \
+		'SDK packages' \
+		'  sdk-build               Build all SDK packages' \
+		'  sdk-build-python        Build the Python SDK package' \
+		'  sdk-publish-python      Build and publish the Python SDK to PyPI' \
+		'  sdk-build-typescript    Build the TypeScript SDK package' \
+		'  sdk-publish-typescript  Build and publish the TypeScript SDK to npm' \
 		'' \
 		'Container images' \
 		'  docker-build-api        Build the API image' \
@@ -132,9 +140,19 @@ build: ## Build frontend and all SDK packages
 	npm --prefix apps/web run build
 	@$(MAKE) --no-print-directory sdk-build
 
-sdk-build: generate ## Build all SDK packages
+sdk-build: sdk-build-python sdk-build-typescript ## Build all SDK packages
+
+sdk-build-python: generate ## Build the Python SDK package
 	uv build --clear sdks/python
+
+sdk-publish-python: sdk-build-python ## Build and publish the Python SDK to PyPI
+	uv publish sdks/python/dist/*.whl sdks/python/dist/*.tar.gz
+
+sdk-build-typescript: generate ## Build the TypeScript SDK package
 	npm --prefix sdks/typescript run build
+
+sdk-publish-typescript: sdk-build-typescript ## Build and publish the TypeScript SDK to npm
+	npm --prefix sdks/typescript publish --access public --provenance=false
 
 clean: ## Remove generated build artifacts
 	rm -rf build dist apps/web/dist sdks/python/build sdks/python/dist \
@@ -173,4 +191,3 @@ require-worker-env:
 
 require-web-env:
 	@test -f "$(WEB_ENV)" || { printf 'Missing %s; run make env or make setup.\n' "$(WEB_ENV)" >&2; exit 1; }
-	
