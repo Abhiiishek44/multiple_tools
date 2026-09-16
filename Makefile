@@ -1,9 +1,8 @@
 SHELL := /bin/bash
 
-API_ENV := env/local/api.env
-WORKER_ENV := env/local/worker.env
-WEB_ENV := env/local/web.env
-COMPOSE := docker compose --env-file $(API_ENV) -f infrastructure/compose.yaml
+BACKEND_ENV := .env
+WEB_ENV := apps/web/.env
+COMPOSE := docker compose --env-file $(BACKEND_ENV) -f deploy/compose.yaml
 
 IMAGE_REGISTRY ?= docker.io/abhiiikumbhar
 IMAGE_TAG ?= latest
@@ -19,7 +18,7 @@ WEB_IMAGE := $(IMAGE_REGISTRY)/multiple-tools-web
 	sdk-build sdk-build-python sdk-publish-python \
 	sdk-build-typescript sdk-publish-typescript \
 	docker-build-api docker-build-worker docker-build-web docker-images \
-	docker-release require-api-env require-worker-env require-web-env
+	docker-release require-backend-env require-web-env
 
 help: ## Show available commands
 	@printf '%s\n' \
@@ -63,21 +62,23 @@ setup: env ## Create env files, install dependencies, start infrastructure, and 
 	@$(MAKE) --no-print-directory db-migrate
 
 env:
-	@mkdir -p env/local
-	@for service in api worker web; do \
-		target="env/local/$$service.env"; \
-		if [[ -e "$$target" ]]; then \
-			printf 'Keeping existing %s\n' "$$target"; \
-		else \
-			cp "env/examples/$$service.env.example" "$$target"; \
-			printf 'Created %s\n' "$$target"; \
-		fi; \
-	done
+	@if [[ -e "$(BACKEND_ENV)" ]]; then \
+		printf 'Keeping existing %s\n' "$(BACKEND_ENV)"; \
+	else \
+		cp env/examples/backend.env.example "$(BACKEND_ENV)"; \
+		printf 'Created %s\n' "$(BACKEND_ENV)"; \
+	fi
+	@if [[ -e "$(WEB_ENV)" ]]; then \
+		printf 'Keeping existing %s\n' "$(WEB_ENV)"; \
+	else \
+		cp apps/web/.env.example "$(WEB_ENV)"; \
+		printf 'Created %s\n' "$(WEB_ENV)"; \
+	fi
 	@for key in JWT_SECRET API_KEY_HMAC_SECRET; do \
-		if grep -q "^$$key=$$" "$(API_ENV)"; then \
+		if grep -q "^$$key=$$" "$(BACKEND_ENV)"; then \
 			value="$$(openssl rand -hex 32)"; \
-			sed -i "s|^$$key=$$|$$key=$$value|" "$(API_ENV)"; \
-			printf 'Generated %s in %s\n' "$$key" "$(API_ENV)"; \
+			sed -i "s|^$$key=$$|$$key=$$value|" "$(BACKEND_ENV)"; \
+			printf 'Generated %s in %s\n' "$$key" "$(BACKEND_ENV)"; \
 		fi; \
 	done
 
@@ -90,40 +91,40 @@ install: ## Install Python and frontend dependencies
 generate: ## Generate frontend and SDK tool catalogs
 	uv run python scripts/generate_tool_catalog.py
 
-dev: require-api-env require-worker-env require-web-env ## Run API, worker, scheduler, and frontend
+dev: require-backend-env require-web-env ## Run API, worker, scheduler, and frontend
 	@$(MAKE) --no-print-directory -j4 api worker beat web
 
-api: require-api-env ## Start FastAPI
-	@set -a; source "$(API_ENV)"; set +a; \
+api: require-backend-env ## Start FastAPI
+	@set -a; source "$(BACKEND_ENV)"; set +a; \
 		exec  uv run uvicorn apps.api.main:app --host 0.0.0.0  --reload
 
-worker: require-worker-env ## Start Celery worker
-	@set -a; source "$(WORKER_ENV)"; set +a; \
+worker: require-backend-env ## Start Celery worker
+	@set -a; source "$(BACKEND_ENV)"; set +a; \
 		exec uv run celery --app=apps.worker.celery_app:celery_app worker --loglevel=INFO
 
-beat: require-worker-env ## Start Celery scheduler
-	@set -a; source "$(WORKER_ENV)"; set +a; \
+beat: require-backend-env ## Start Celery scheduler
+	@set -a; source "$(BACKEND_ENV)"; set +a; \
 		exec uv run celery --app=apps.worker.celery_app:celery_app beat --loglevel=INFO
 
 web: require-web-env ## Start frontend
 	@set -a; source "$(WEB_ENV)"; set +a; \
 		exec npm --prefix apps/web run dev
 
-infra-up: require-api-env ## Start PostgreSQL, Redis, and MinIO
+infra-up: require-backend-env ## Start PostgreSQL, Redis, and MinIO
 	$(COMPOSE) up -d --wait
 
 infra-down: ## Stop infrastructure
-	docker compose -f infrastructure/compose.yaml down
+	docker compose -f deploy/compose.yaml down
 
 infra-logs: ## Follow infrastructure logs
-	docker compose -f infrastructure/compose.yaml logs --follow
+	docker compose -f deploy/compose.yaml logs --follow
 
-db-migrate: require-api-env ## Apply database migrations
-	@set -a; source "$(API_ENV)"; set +a; \
+db-migrate: require-backend-env ## Apply database migrations
+	@set -a; source "$(BACKEND_ENV)"; set +a; \
 		uv run python scripts/migrate.py
 
 check: generate ## Compile backend, lint frontend, and run tests
-	uv run python -m compileall -q apps packages plugins scripts
+	uv run python -m compileall -q apps packages plugins infrastructure scripts
 	@if [[ -d tests ]]; then \
 		uv run python -m unittest discover -s tests -v; \
 	else \
@@ -157,19 +158,19 @@ sdk-publish-typescript: sdk-build-typescript ## Build and publish the TypeScript
 clean: ## Remove generated build artifacts
 	rm -rf build dist apps/web/dist sdks/python/build sdks/python/dist \
 		sdks/python/src/*.egg-info .pytest_cache htmlcov .coverage
-	find apps packages plugins sdks -type d -name __pycache__ -prune -exec rm -rf {} +
-	find apps packages plugins sdks -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+	find apps packages plugins infrastructure sdks -type d -name __pycache__ -prune -exec rm -rf {} +
+	find apps packages plugins infrastructure sdks -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
 docker-build-api: ## Build the API image
-	docker build --file docker/Dockerfile.api --tag "$(API_IMAGE):$(IMAGE_TAG)" .
+	docker build --file deploy/docker/Dockerfile.api --tag "$(API_IMAGE):$(IMAGE_TAG)" .
 
 docker-build-worker: ## Build the worker image
-	docker build --file docker/Dockerfile.worker --tag "$(WORKER_IMAGE):$(IMAGE_TAG)" .
+	docker build --file deploy/docker/Dockerfile.worker --tag "$(WORKER_IMAGE):$(IMAGE_TAG)" .
 
 docker-build-web: require-web-env ## Build the web image
 	@set -a; source "$(WEB_ENV)"; set +a; \
 		docker build \
-			--file docker/Dockerfile.web \
+			--file deploy/docker/Dockerfile.web \
 			--build-arg "VITE_API_BASE_URL=$$VITE_API_BASE_URL" \
 			--build-arg "VITE_GOOGLE_CLIENT_ID=$$VITE_GOOGLE_CLIENT_ID" \
 			--build-arg "VITE_SITE_URL=$$VITE_SITE_URL" \
@@ -183,11 +184,8 @@ docker-release: ## Build and push versioned images
 	docker push "$(WORKER_IMAGE):$(RELEASE_VERSION)"
 	docker push "$(WEB_IMAGE):$(RELEASE_VERSION)"
 
-require-api-env:
-	@test -f "$(API_ENV)" || { printf 'Missing %s; run make env or make setup.\n' "$(API_ENV)" >&2; exit 1; }
-
-require-worker-env:
-	@test -f "$(WORKER_ENV)" || { printf 'Missing %s; run make env or make setup.\n' "$(WORKER_ENV)" >&2; exit 1; }
+require-backend-env:
+	@test -f "$(BACKEND_ENV)" || { printf 'Missing %s; run make env or make setup.\n' "$(BACKEND_ENV)" >&2; exit 1; }
 
 require-web-env:
 	@test -f "$(WEB_ENV)" || { printf 'Missing %s; run make env or make setup.\n' "$(WEB_ENV)" >&2; exit 1; }

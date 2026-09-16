@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Any
 
 from packages.api_keys.models import ApiKey
-from packages.database import database_connection
+from infrastructure.database import database_connection
 
 
 def create_api_key(

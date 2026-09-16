@@ -1,11 +1,66 @@
 @import "tailwindcss";
 
+button {
+  font: inherit;
+  box-shadow: none !important;
+}
+
+button[aria-label="Copy code"] svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text);
+  font-weight: 800;
+}
+
 @keyframes heart-pop {
   0% { transform: scale(0.72); }
   55% { transform: scale(1.28) rotate(-7deg); }
   100% { transform: scale(1) rotate(0); }
 }
 
+@keyframes progress-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes success-mark-enter {
+  0% { opacity: 0; transform: scale(.72); }
+  65% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes success-ring-out {
+  0% { opacity: .75; transform: scale(.72); }
+  100% { opacity: 0; transform: scale(1.45); }
+}
+
+.progress-spinner-origin {
+  animation: progress-spin 1.1s linear infinite;
+  transform-origin: center;
+}
+
+.success-mark {
+  position: relative;
+  animation: success-mark-enter 420ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.success-mark-icon {
+  animation: success-mark-enter 480ms 80ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.success-mark-ring {
+  animation: success-ring-out 700ms 140ms ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; }
+  .progress-spinner-origin,
+  .success-mark,
+  .success-mark-icon,
+  .success-mark-ring { animation: none !important; }
 }

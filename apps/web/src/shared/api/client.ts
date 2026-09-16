@@ -1,6 +1,10 @@
 import { ApiError } from './errors'
 
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '')
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
+
+// Browser requests stay same-origin in development so Vite can proxy them.
+// This avoids credential and CORS failures when the upstream API is remote.
+export const API_BASE_URL = (import.meta.env.DEV ? '/api' : configuredApiBaseUrl).replace(/\/$/, '')
 
 export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, { credentials: 'include', ...init })
@@ -10,7 +14,7 @@ export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T
 }
 
 export async function responseError(response: Response) {
-  if (response.status === 401) return 'Please sign in with Google before starting a conversion.'
+  if (response.status === 401) return 'Authentication is required for this request.'
   try {
     const body = await response.json() as { detail?: string | Array<{ msg?: string }> }
     if (typeof body.detail === 'string') return body.detail

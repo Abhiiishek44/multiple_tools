@@ -2,7 +2,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from packages.auth.models import User
-from packages.database import database_connection
+from infrastructure.database import database_connection
 
 
 def upsert_google_user(

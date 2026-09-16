@@ -37,36 +37,10 @@
       "avif to jpg",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use AVIF to JPG?",
-        "answer": "Upload a supported AVIF file, choose any available settings, start the tool, and download the resulting JPG file."
-      },
-      {
-        "question": "Which formats does AVIF to JPG support?",
-        "answer": "Accepted input formats are AVIF. The output format is JPG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the avif-to-jpg tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported AVIF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished JPG file."
-    ],
-    "related_tools": [
-      "jpg-to-avif",
-      "jpg-to-bmp",
-      "jpg-to-heic",
-      "jpg-to-png",
-      "jpg-to-tiff",
-      "jpg-to-webp"
     ]
   },
   {
@@ -107,36 +81,10 @@
       "avif to png",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use AVIF to PNG?",
-        "answer": "Upload a supported AVIF file, choose any available settings, start the tool, and download the resulting PNG file."
-      },
-      {
-        "question": "Which formats does AVIF to PNG support?",
-        "answer": "Accepted input formats are AVIF. The output format is PNG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the avif-to-png tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported AVIF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PNG file."
-    ],
-    "related_tools": [
-      "png-to-avif",
-      "png-to-bmp",
-      "png-to-heic",
-      "png-to-jpg",
-      "png-to-tiff",
-      "png-to-webp"
     ]
   },
   {
@@ -177,36 +125,10 @@
       "avif to webp",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use AVIF to WebP?",
-        "answer": "Upload a supported AVIF file, choose any available settings, start the tool, and download the resulting WebP file."
-      },
-      {
-        "question": "Which formats does AVIF to WebP support?",
-        "answer": "Accepted input formats are AVIF. The output format is WEBP."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the avif-to-webp tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported AVIF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished WebP file."
-    ],
-    "related_tools": [
-      "webp-to-avif",
-      "webp-to-jpg",
-      "webp-to-png",
-      "avif-to-jpg",
-      "avif-to-png",
-      "image-to-text"
     ]
   },
   {
@@ -247,36 +169,10 @@
       "bmp to jpg",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use BMP to JPG?",
-        "answer": "Upload a supported BMP file, choose any available settings, start the tool, and download the resulting JPG file."
-      },
-      {
-        "question": "Which formats does BMP to JPG support?",
-        "answer": "Accepted input formats are BMP. The output format is JPG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the bmp-to-jpg tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported BMP file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished JPG file."
-    ],
-    "related_tools": [
-      "jpg-to-avif",
-      "jpg-to-bmp",
-      "jpg-to-heic",
-      "jpg-to-png",
-      "jpg-to-tiff",
-      "jpg-to-webp"
     ]
   },
   {
@@ -317,36 +213,10 @@
       "bmp to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use BMP to PDF?",
-        "answer": "Upload a supported BMP file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does BMP to PDF support?",
-        "answer": "Accepted input formats are BMP. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the bmp-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported BMP file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -387,36 +257,10 @@
       "bmp to png",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use BMP to PNG?",
-        "answer": "Upload a supported BMP file, choose any available settings, start the tool, and download the resulting PNG file."
-      },
-      {
-        "question": "Which formats does BMP to PNG support?",
-        "answer": "Accepted input formats are BMP. The output format is PNG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the bmp-to-png tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported BMP file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PNG file."
-    ],
-    "related_tools": [
-      "png-to-avif",
-      "png-to-bmp",
-      "png-to-heic",
-      "png-to-jpg",
-      "png-to-tiff",
-      "png-to-webp"
     ]
   },
   {
@@ -456,36 +300,10 @@
       "pdf to optimized pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use Compress PDF?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting OPTIMIZED PDF file."
-      },
-      {
-        "question": "Which formats does Compress PDF support?",
-        "answer": "Accepted input formats are PDF. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the compress-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished OPTIMIZED PDF file."
-    ],
-    "related_tools": [
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint",
-      "pdf-to-word"
     ]
   },
   {
@@ -526,36 +344,10 @@
       "csv to excel",
       "spreadsheets"
     ],
-    "faq": [
-      {
-        "question": "How do I use CSV to Excel?",
-        "answer": "Upload a supported CSV file, choose any available settings, start the tool, and download the resulting Excel file."
-      },
-      {
-        "question": "Which formats does CSV to Excel support?",
-        "answer": "Accepted input formats are CSV. The output format is XLSX."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the csv-to-excel tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported CSV file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Excel file."
-    ],
-    "related_tools": [
-      "excel-to-csv",
-      "excel-to-pdf",
-      "csv-to-pdf",
-      "avif-to-jpg",
-      "avif-to-png",
-      "avif-to-webp"
     ]
   },
   {
@@ -596,36 +388,10 @@
       "csv to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use CSV to PDF?",
-        "answer": "Upload a supported CSV file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does CSV to PDF support?",
-        "answer": "Accepted input formats are CSV. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the csv-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported CSV file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -665,36 +431,10 @@
       "excel to csv",
       "spreadsheets"
     ],
-    "faq": [
-      {
-        "question": "How do I use Excel to CSV?",
-        "answer": "Upload a supported Excel file, choose any available settings, start the tool, and download the resulting CSV file."
-      },
-      {
-        "question": "Which formats does Excel to CSV support?",
-        "answer": "Accepted input formats are XLSX. The output format is CSV."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the excel-to-csv tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Excel file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished CSV file."
-    ],
-    "related_tools": [
-      "csv-to-excel",
-      "csv-to-pdf",
-      "excel-to-pdf",
-      "avif-to-jpg",
-      "avif-to-png",
-      "avif-to-webp"
     ]
   },
   {
@@ -737,36 +477,10 @@
       "excel to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use Excel to PDF?",
-        "answer": "Upload a supported Excel file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does Excel to PDF support?",
-        "answer": "Accepted input formats are XLS, XLSX. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the excel-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Excel file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -811,36 +525,10 @@
       "heic to jpg",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use HEIC to JPG?",
-        "answer": "Upload a supported HEIC file, choose any available settings, start the tool, and download the resulting JPG file."
-      },
-      {
-        "question": "Which formats does HEIC to JPG support?",
-        "answer": "Accepted input formats are HEIC, HEIF. The output format is JPG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the heic-to-jpg tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported HEIC file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished JPG file."
-    ],
-    "related_tools": [
-      "jpg-to-avif",
-      "jpg-to-bmp",
-      "jpg-to-heic",
-      "jpg-to-png",
-      "jpg-to-tiff",
-      "jpg-to-webp"
     ]
   },
   {
@@ -885,36 +573,10 @@
       "heic to png",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use HEIC to PNG?",
-        "answer": "Upload a supported HEIC file, choose any available settings, start the tool, and download the resulting PNG file."
-      },
-      {
-        "question": "Which formats does HEIC to PNG support?",
-        "answer": "Accepted input formats are HEIC, HEIF. The output format is PNG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the heic-to-png tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported HEIC file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PNG file."
-    ],
-    "related_tools": [
-      "png-to-avif",
-      "png-to-bmp",
-      "png-to-heic",
-      "png-to-jpg",
-      "png-to-tiff",
-      "png-to-webp"
     ]
   },
   {
@@ -959,36 +621,10 @@
       "heic to webp",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use HEIC to WebP?",
-        "answer": "Upload a supported HEIC file, choose any available settings, start the tool, and download the resulting WebP file."
-      },
-      {
-        "question": "Which formats does HEIC to WebP support?",
-        "answer": "Accepted input formats are HEIC, HEIF. The output format is WEBP."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the heic-to-webp tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported HEIC file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished WebP file."
-    ],
-    "related_tools": [
-      "webp-to-avif",
-      "webp-to-jpg",
-      "webp-to-png",
-      "image-to-text",
-      "heic-to-jpg",
-      "heic-to-png"
     ]
   },
   {
@@ -1031,36 +667,10 @@
       "html to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use HTML to PDF?",
-        "answer": "Upload a supported HTML file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does HTML to PDF support?",
-        "answer": "Accepted input formats are HTM, HTML. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the html-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported HTML file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -1103,36 +713,10 @@
       "html to word",
       "documents"
     ],
-    "faq": [
-      {
-        "question": "How do I use HTML to Word?",
-        "answer": "Upload a supported HTML file, choose any available settings, start the tool, and download the resulting Word file."
-      },
-      {
-        "question": "Which formats does HTML to Word support?",
-        "answer": "Accepted input formats are HTM, HTML. The output format is DOCX."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the html-to-word tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported HTML file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Word file."
-    ],
-    "related_tools": [
-      "word-to-html",
-      "word-to-text",
-      "word-to-pdf",
-      "markdown-to-word",
-      "text-to-word",
-      "html-to-pdf"
     ]
   },
   {
@@ -1194,36 +778,10 @@
       "image to text",
       "ocr"
     ],
-    "faq": [
-      {
-        "question": "How do I use Image to Text?",
-        "answer": "Upload a supported Image file, choose any available settings, start the tool, and download the resulting Text file."
-      },
-      {
-        "question": "Which formats does Image to Text support?",
-        "answer": "Accepted input formats are BMP, HEIC, HEIF, JPG, JPG, PNG, TIF, TIFF, WEBP. The output format is TXT."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the image-to-text tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Image file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Text file."
-    ],
-    "related_tools": [
-      "text-to-pdf",
-      "text-to-word",
-      "pdf-to-text",
-      "bmp-to-jpg",
-      "bmp-to-pdf",
-      "bmp-to-png"
     ]
   },
   {
@@ -1265,36 +823,10 @@
       "jpg to avif",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use JPG to AVIF?",
-        "answer": "Upload a supported JPG file, choose any available settings, start the tool, and download the resulting AVIF file."
-      },
-      {
-        "question": "Which formats does JPG to AVIF support?",
-        "answer": "Accepted input formats are JPG, JPG. The output format is AVIF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the jpg-to-avif tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported JPG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished AVIF file."
-    ],
-    "related_tools": [
-      "avif-to-jpg",
-      "avif-to-png",
-      "avif-to-webp",
-      "jpg-to-bmp",
-      "jpg-to-heic",
-      "jpg-to-png"
     ]
   },
   {
@@ -1336,36 +868,10 @@
       "jpg to bmp",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use JPG to BMP?",
-        "answer": "Upload a supported JPG file, choose any available settings, start the tool, and download the resulting BMP file."
-      },
-      {
-        "question": "Which formats does JPG to BMP support?",
-        "answer": "Accepted input formats are JPG, JPG. The output format is BMP."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the jpg-to-bmp tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported JPG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished BMP file."
-    ],
-    "related_tools": [
-      "bmp-to-jpg",
-      "bmp-to-png",
-      "image-to-text",
-      "jpg-to-avif",
-      "jpg-to-heic",
-      "jpg-to-png"
     ]
   },
   {
@@ -1407,36 +913,10 @@
       "jpg to heic",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use JPG to HEIC?",
-        "answer": "Upload a supported JPG file, choose any available settings, start the tool, and download the resulting HEIC file."
-      },
-      {
-        "question": "Which formats does JPG to HEIC support?",
-        "answer": "Accepted input formats are JPG, JPG. The output format is HEIC."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the jpg-to-heic tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported JPG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished HEIC file."
-    ],
-    "related_tools": [
-      "heic-to-jpg",
-      "heic-to-png",
-      "heic-to-webp",
-      "image-to-text",
-      "jpg-to-avif",
-      "jpg-to-bmp"
     ]
   },
   {
@@ -1478,36 +958,10 @@
       "jpg to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use JPG to PDF?",
-        "answer": "Upload a supported JPG file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does JPG to PDF support?",
-        "answer": "Accepted input formats are JPG, JPG. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the jpg-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported JPG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -1549,36 +1003,10 @@
       "jpg to png",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use JPG to PNG?",
-        "answer": "Upload a supported JPG file, choose any available settings, start the tool, and download the resulting PNG file."
-      },
-      {
-        "question": "Which formats does JPG to PNG support?",
-        "answer": "Accepted input formats are JPG, JPG. The output format is PNG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the jpg-to-png tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported JPG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PNG file."
-    ],
-    "related_tools": [
-      "png-to-avif",
-      "png-to-bmp",
-      "png-to-heic",
-      "png-to-jpg",
-      "png-to-tiff",
-      "png-to-webp"
     ]
   },
   {
@@ -1620,36 +1048,10 @@
       "jpg to tiff",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use JPG to TIFF?",
-        "answer": "Upload a supported JPG file, choose any available settings, start the tool, and download the resulting TIFF file."
-      },
-      {
-        "question": "Which formats does JPG to TIFF support?",
-        "answer": "Accepted input formats are JPG, JPG. The output format is TIFF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the jpg-to-tiff tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported JPG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished TIFF file."
-    ],
-    "related_tools": [
-      "tiff-to-jpg",
-      "tiff-to-png",
-      "image-to-text",
-      "jpg-to-avif",
-      "jpg-to-bmp",
-      "jpg-to-heic"
     ]
   },
   {
@@ -1691,36 +1093,10 @@
       "jpg to webp",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use JPG to WebP?",
-        "answer": "Upload a supported JPG file, choose any available settings, start the tool, and download the resulting WebP file."
-      },
-      {
-        "question": "Which formats does JPG to WebP support?",
-        "answer": "Accepted input formats are JPG, JPG. The output format is WEBP."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the jpg-to-webp tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported JPG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished WebP file."
-    ],
-    "related_tools": [
-      "webp-to-avif",
-      "webp-to-jpg",
-      "webp-to-png",
-      "image-to-text",
-      "jpg-to-avif",
-      "jpg-to-bmp"
     ]
   },
   {
@@ -1764,36 +1140,10 @@
       "markdown to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use Markdown to PDF?",
-        "answer": "Upload a supported Markdown file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does Markdown to PDF support?",
-        "answer": "Accepted input formats are MARKDOWN, MD. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the markdown-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Markdown file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -1837,36 +1187,10 @@
       "markdown to word",
       "documents"
     ],
-    "faq": [
-      {
-        "question": "How do I use Markdown to Word?",
-        "answer": "Upload a supported Markdown file, choose any available settings, start the tool, and download the resulting Word file."
-      },
-      {
-        "question": "Which formats does Markdown to Word support?",
-        "answer": "Accepted input formats are MARKDOWN, MD. The output format is DOCX."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the markdown-to-word tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Markdown file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Word file."
-    ],
-    "related_tools": [
-      "word-to-html",
-      "word-to-text",
-      "word-to-pdf",
-      "html-to-word",
-      "text-to-word",
-      "markdown-to-pdf"
     ]
   },
   {
@@ -1906,36 +1230,10 @@
       "pdf to excel",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use PDF to Excel?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting Excel file."
-      },
-      {
-        "question": "Which formats does PDF to Excel support?",
-        "answer": "Accepted input formats are PDF. The output format is XLSX."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the pdf-to-excel tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Excel file."
-    ],
-    "related_tools": [
-      "excel-to-pdf",
-      "compress-pdf",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -1975,36 +1273,10 @@
       "pdf to html",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use PDF to HTML?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting HTML file."
-      },
-      {
-        "question": "Which formats does PDF to HTML support?",
-        "answer": "Accepted input formats are PDF. The output format is HTML."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the pdf-to-html tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished HTML file."
-    ],
-    "related_tools": [
-      "html-to-pdf",
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -2044,36 +1316,10 @@
       "pdf to jpg",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use PDF to JPG?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting JPG file."
-      },
-      {
-        "question": "Which formats does PDF to JPG support?",
-        "answer": "Accepted input formats are PDF. The output format is ZIP."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the pdf-to-jpg tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished JPG file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-png",
-      "pdf-to-powerpoint",
-      "pdf-to-word"
     ]
   },
   {
@@ -2113,36 +1359,10 @@
       "pdf to png",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use PDF to PNG?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting PNG file."
-      },
-      {
-        "question": "Which formats does PDF to PNG support?",
-        "answer": "Accepted input formats are PDF. The output format is ZIP."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the pdf-to-png tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PNG file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-powerpoint",
-      "pdf-to-word"
     ]
   },
   {
@@ -2182,36 +1402,10 @@
       "pdf to powerpoint",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use PDF to PowerPoint?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting PowerPoint file."
-      },
-      {
-        "question": "Which formats does PDF to PowerPoint support?",
-        "answer": "Accepted input formats are PDF. The output format is PPTX."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the pdf-to-powerpoint tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PowerPoint file."
-    ],
-    "related_tools": [
-      "powerpoint-to-pdf",
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png"
     ]
   },
   {
@@ -2251,36 +1445,10 @@
       "pdf to text",
       "ocr"
     ],
-    "faq": [
-      {
-        "question": "How do I use PDF to Text?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting Text file."
-      },
-      {
-        "question": "Which formats does PDF to Text support?",
-        "answer": "Accepted input formats are PDF. The output format is TXT."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the pdf-to-text tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Text file."
-    ],
-    "related_tools": [
-      "text-to-pdf",
-      "text-to-word",
-      "image-to-text",
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html"
     ]
   },
   {
@@ -2339,36 +1507,10 @@
       "pdf to word",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use PDF to Word?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting Word file."
-      },
-      {
-        "question": "Which formats does PDF to Word support?",
-        "answer": "Accepted input formats are PDF. The output format is DOCX."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the pdf-to-word tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Word file."
-    ],
-    "related_tools": [
-      "word-to-pdf",
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png"
     ]
   },
   {
@@ -2408,36 +1550,10 @@
       "png to avif",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use PNG to AVIF?",
-        "answer": "Upload a supported PNG file, choose any available settings, start the tool, and download the resulting AVIF file."
-      },
-      {
-        "question": "Which formats does PNG to AVIF support?",
-        "answer": "Accepted input formats are PNG. The output format is AVIF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the png-to-avif tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PNG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished AVIF file."
-    ],
-    "related_tools": [
-      "avif-to-jpg",
-      "avif-to-png",
-      "avif-to-webp",
-      "png-to-bmp",
-      "png-to-heic",
-      "png-to-jpg"
     ]
   },
   {
@@ -2477,36 +1593,10 @@
       "png to bmp",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use PNG to BMP?",
-        "answer": "Upload a supported PNG file, choose any available settings, start the tool, and download the resulting BMP file."
-      },
-      {
-        "question": "Which formats does PNG to BMP support?",
-        "answer": "Accepted input formats are PNG. The output format is BMP."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the png-to-bmp tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PNG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished BMP file."
-    ],
-    "related_tools": [
-      "bmp-to-jpg",
-      "bmp-to-png",
-      "image-to-text",
-      "png-to-avif",
-      "png-to-heic",
-      "png-to-jpg"
     ]
   },
   {
@@ -2546,36 +1636,10 @@
       "png to heic",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use PNG to HEIC?",
-        "answer": "Upload a supported PNG file, choose any available settings, start the tool, and download the resulting HEIC file."
-      },
-      {
-        "question": "Which formats does PNG to HEIC support?",
-        "answer": "Accepted input formats are PNG. The output format is HEIC."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the png-to-heic tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PNG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished HEIC file."
-    ],
-    "related_tools": [
-      "heic-to-jpg",
-      "heic-to-png",
-      "heic-to-webp",
-      "image-to-text",
-      "png-to-avif",
-      "png-to-bmp"
     ]
   },
   {
@@ -2615,36 +1679,10 @@
       "png to jpg",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use PNG to JPG?",
-        "answer": "Upload a supported PNG file, choose any available settings, start the tool, and download the resulting JPG file."
-      },
-      {
-        "question": "Which formats does PNG to JPG support?",
-        "answer": "Accepted input formats are PNG. The output format is JPG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the png-to-jpg tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PNG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished JPG file."
-    ],
-    "related_tools": [
-      "jpg-to-avif",
-      "jpg-to-bmp",
-      "jpg-to-heic",
-      "jpg-to-png",
-      "jpg-to-tiff",
-      "jpg-to-webp"
     ]
   },
   {
@@ -2684,36 +1722,10 @@
       "png to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use PNG to PDF?",
-        "answer": "Upload a supported PNG file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does PNG to PDF support?",
-        "answer": "Accepted input formats are PNG. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the png-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PNG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -2753,36 +1765,10 @@
       "png to tiff",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use PNG to TIFF?",
-        "answer": "Upload a supported PNG file, choose any available settings, start the tool, and download the resulting TIFF file."
-      },
-      {
-        "question": "Which formats does PNG to TIFF support?",
-        "answer": "Accepted input formats are PNG. The output format is TIFF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the png-to-tiff tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PNG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished TIFF file."
-    ],
-    "related_tools": [
-      "tiff-to-jpg",
-      "tiff-to-png",
-      "image-to-text",
-      "png-to-avif",
-      "png-to-bmp",
-      "png-to-heic"
     ]
   },
   {
@@ -2822,36 +1808,10 @@
       "png to webp",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use PNG to WebP?",
-        "answer": "Upload a supported PNG file, choose any available settings, start the tool, and download the resulting WebP file."
-      },
-      {
-        "question": "Which formats does PNG to WebP support?",
-        "answer": "Accepted input formats are PNG. The output format is WEBP."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the png-to-webp tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PNG file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished WebP file."
-    ],
-    "related_tools": [
-      "webp-to-avif",
-      "webp-to-jpg",
-      "webp-to-png",
-      "image-to-text",
-      "png-to-avif",
-      "png-to-bmp"
     ]
   },
   {
@@ -2894,36 +1854,10 @@
       "powerpoint to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use PowerPoint to PDF?",
-        "answer": "Upload a supported PowerPoint file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does PowerPoint to PDF support?",
-        "answer": "Accepted input formats are PPT, PPTX. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the powerpoint-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PowerPoint file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -2982,36 +1916,10 @@
       "pdf to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use Protect PDF?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does Protect PDF support?",
-        "answer": "Accepted input formats are PDF. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the protect-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -3078,36 +1986,10 @@
       "pdf to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use Rotate PDF?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does Rotate PDF support?",
-        "answer": "Accepted input formats are PDF. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the rotate-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -3147,36 +2029,10 @@
       "text to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use Text to PDF?",
-        "answer": "Upload a supported Text file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does Text to PDF support?",
-        "answer": "Accepted input formats are TXT. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the text-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Text file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -3216,36 +2072,10 @@
       "text to word",
       "documents"
     ],
-    "faq": [
-      {
-        "question": "How do I use Text to Word?",
-        "answer": "Upload a supported Text file, choose any available settings, start the tool, and download the resulting Word file."
-      },
-      {
-        "question": "Which formats does Text to Word support?",
-        "answer": "Accepted input formats are TXT. The output format is DOCX."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the text-to-word tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Text file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Word file."
-    ],
-    "related_tools": [
-      "word-to-html",
-      "word-to-text",
-      "word-to-pdf",
-      "html-to-word",
-      "markdown-to-word",
-      "text-to-pdf"
     ]
   },
   {
@@ -3287,36 +2117,10 @@
       "tiff to jpg",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use TIFF to JPG?",
-        "answer": "Upload a supported TIFF file, choose any available settings, start the tool, and download the resulting JPG file."
-      },
-      {
-        "question": "Which formats does TIFF to JPG support?",
-        "answer": "Accepted input formats are TIF, TIFF. The output format is JPG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the tiff-to-jpg tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported TIFF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished JPG file."
-    ],
-    "related_tools": [
-      "jpg-to-avif",
-      "jpg-to-bmp",
-      "jpg-to-heic",
-      "jpg-to-png",
-      "jpg-to-tiff",
-      "jpg-to-webp"
     ]
   },
   {
@@ -3358,36 +2162,10 @@
       "tiff to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use TIFF to PDF?",
-        "answer": "Upload a supported TIFF file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does TIFF to PDF support?",
-        "answer": "Accepted input formats are TIF, TIFF. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the tiff-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported TIFF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -3429,36 +2207,10 @@
       "tiff to png",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use TIFF to PNG?",
-        "answer": "Upload a supported TIFF file, choose any available settings, start the tool, and download the resulting PNG file."
-      },
-      {
-        "question": "Which formats does TIFF to PNG support?",
-        "answer": "Accepted input formats are TIF, TIFF. The output format is PNG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the tiff-to-png tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported TIFF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PNG file."
-    ],
-    "related_tools": [
-      "png-to-avif",
-      "png-to-bmp",
-      "png-to-heic",
-      "png-to-jpg",
-      "png-to-tiff",
-      "png-to-webp"
     ]
   },
   {
@@ -3508,36 +2260,10 @@
       "pdf to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use Unlock PDF?",
-        "answer": "Upload a supported PDF file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does Unlock PDF support?",
-        "answer": "Accepted input formats are PDF. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the unlock-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported PDF file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -3577,36 +2303,10 @@
       "webp to avif",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use WebP to AVIF?",
-        "answer": "Upload a supported WebP file, choose any available settings, start the tool, and download the resulting AVIF file."
-      },
-      {
-        "question": "Which formats does WebP to AVIF support?",
-        "answer": "Accepted input formats are WEBP. The output format is AVIF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the webp-to-avif tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported WebP file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished AVIF file."
-    ],
-    "related_tools": [
-      "avif-to-jpg",
-      "avif-to-png",
-      "avif-to-webp",
-      "webp-to-jpg",
-      "webp-to-png",
-      "bmp-to-jpg"
     ]
   },
   {
@@ -3646,36 +2346,10 @@
       "webp to jpg",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use WebP to JPG?",
-        "answer": "Upload a supported WebP file, choose any available settings, start the tool, and download the resulting JPG file."
-      },
-      {
-        "question": "Which formats does WebP to JPG support?",
-        "answer": "Accepted input formats are WEBP. The output format is JPG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the webp-to-jpg tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported WebP file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished JPG file."
-    ],
-    "related_tools": [
-      "jpg-to-avif",
-      "jpg-to-bmp",
-      "jpg-to-heic",
-      "jpg-to-png",
-      "jpg-to-tiff",
-      "jpg-to-webp"
     ]
   },
   {
@@ -3715,36 +2389,10 @@
       "webp to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use WebP to PDF?",
-        "answer": "Upload a supported WebP file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does WebP to PDF support?",
-        "answer": "Accepted input formats are WEBP. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the webp-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported WebP file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -3784,36 +2432,10 @@
       "webp to png",
       "images"
     ],
-    "faq": [
-      {
-        "question": "How do I use WebP to PNG?",
-        "answer": "Upload a supported WebP file, choose any available settings, start the tool, and download the resulting PNG file."
-      },
-      {
-        "question": "Which formats does WebP to PNG support?",
-        "answer": "Accepted input formats are WEBP. The output format is PNG."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the webp-to-png tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported WebP file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PNG file."
-    ],
-    "related_tools": [
-      "png-to-avif",
-      "png-to-bmp",
-      "png-to-heic",
-      "png-to-jpg",
-      "png-to-tiff",
-      "png-to-webp"
     ]
   },
   {
@@ -3856,36 +2478,10 @@
       "word to html",
       "documents"
     ],
-    "faq": [
-      {
-        "question": "How do I use Word to HTML?",
-        "answer": "Upload a supported Word file, choose any available settings, start the tool, and download the resulting HTML file."
-      },
-      {
-        "question": "Which formats does Word to HTML support?",
-        "answer": "Accepted input formats are DOC, DOCX. The output format is HTML."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the word-to-html tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Word file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished HTML file."
-    ],
-    "related_tools": [
-      "html-to-word",
-      "word-to-text",
-      "html-to-pdf",
-      "markdown-to-word",
-      "text-to-word",
-      "word-to-pdf"
     ]
   },
   {
@@ -3928,36 +2524,10 @@
       "word to pdf",
       "pdf"
     ],
-    "faq": [
-      {
-        "question": "How do I use Word to PDF?",
-        "answer": "Upload a supported Word file, choose any available settings, start the tool, and download the resulting PDF file."
-      },
-      {
-        "question": "Which formats does Word to PDF support?",
-        "answer": "Accepted input formats are DOC, DOCX. The output format is PDF."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the word-to-pdf tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Word file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished PDF file."
-    ],
-    "related_tools": [
-      "compress-pdf",
-      "pdf-to-excel",
-      "pdf-to-html",
-      "pdf-to-jpg",
-      "pdf-to-png",
-      "pdf-to-powerpoint"
     ]
   },
   {
@@ -3997,36 +2567,10 @@
       "word to text",
       "documents"
     ],
-    "faq": [
-      {
-        "question": "How do I use Word to Text?",
-        "answer": "Upload a supported Word file, choose any available settings, start the tool, and download the resulting Text file."
-      },
-      {
-        "question": "Which formats does Word to Text support?",
-        "answer": "Accepted input formats are DOCX. The output format is TXT."
-      },
-      {
-        "question": "Is my original file changed?",
-        "answer": "No. The original file remains on your device and the tool creates a separate output file."
-      },
-      {
-        "question": "Can I use this tool through the API?",
-        "answer": "Yes. Create a job with the word-to-text tool slug, then poll and download it with the API or an SDK."
-      }
-    ],
     "how_it_works": [
       "Choose a supported Word file from your device.",
       "Review the available settings and start the job.",
       "Follow progress and download the finished Text file."
-    ],
-    "related_tools": [
-      "text-to-word",
-      "word-to-html",
-      "text-to-pdf",
-      "html-to-word",
-      "markdown-to-word",
-      "word-to-pdf"
     ]
   }
 ]

@@ -3,7 +3,7 @@ from typing import Any
 
 from psycopg.types.json import Jsonb
 
-from packages.database import database_connection
+from infrastructure.database import database_connection
 from packages.jobs.models import Job
 
 
@@ -16,7 +16,7 @@ def create_job(
     input_filename: str,
     input_media_type: str | None,
     options: dict[str, object],
-    user_id: str,
+    user_id: str | None,
     client_ip: str | None,
     user_agent: str | None,
     idempotency_key: str | None,
@@ -57,21 +57,21 @@ def get_job(job_id: str) -> Job | None:
     return _to_job(row) if row else None
 
 
-def get_job_for_user(job_id: str, user_id: str) -> Job | None:
+def get_job_for_user(job_id: str, user_id: str | None) -> Job | None:
     with database_connection() as connection:
         row = connection.execute(
-            "SELECT * FROM tool_jobs WHERE id = %s AND user_id = %s",
+            "SELECT * FROM tool_jobs WHERE id = %s AND user_id IS NOT DISTINCT FROM %s",
             (job_id, user_id),
         ).fetchone()
     return _to_job(row) if row else None
 
 
-def get_job_by_idempotency_key(user_id: str, key: str) -> Job | None:
+def get_job_by_idempotency_key(user_id: str | None, key: str) -> Job | None:
     with database_connection() as connection:
         row = connection.execute(
             """
             SELECT * FROM tool_jobs
-            WHERE user_id = %s AND idempotency_key = %s
+            WHERE user_id IS NOT DISTINCT FROM %s AND idempotency_key = %s
             """,
             (user_id, key),
         ).fetchone()

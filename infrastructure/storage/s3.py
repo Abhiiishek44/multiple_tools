@@ -16,7 +16,7 @@ from packages.storage.base import StoredObject
 logger = logging.getLogger(__name__)
 
 
-class MinioStorage:
+class S3ArtifactStorage:
     def __init__(
         self,
         *,

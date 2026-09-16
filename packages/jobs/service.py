@@ -9,7 +9,7 @@ from packages.core.errors import ConflictError, NotFoundError, ValidationError
 from packages.jobs import repository as job_repository
 from packages.jobs.models import Job
 from packages.storage import get_storage
-from packages.task_queue import celery_app
+from infrastructure.queue import celery_app
 from plugins.registry import get_plugin
 
 
@@ -22,16 +22,17 @@ def submit_job(
     filename: str | None,
     media_type: str | None,
     stream: BinaryIO,
-    actor: AuthenticatedActor,
+    actor: AuthenticatedActor | None,
     options: Mapping[str, object] | None = None,
     client_ip: str | None = None,
     user_agent: str | None = None,
     idempotency_key: str | None = None,
 ) -> Job:
     normalized_options = dict(options or {})
+    owner_id = actor.user_id if actor else None
     if idempotency_key:
         existing = job_repository.get_job_by_idempotency_key(
-            actor.user_id, idempotency_key
+            owner_id, idempotency_key
         )
         if existing:
             if existing.tool_name != tool_name:
@@ -75,7 +76,7 @@ def submit_job(
             input_filename=Path(filename or f"input{suffix}").name,
             input_media_type=normalized_media_type,
             options=normalized_options,
-            user_id=actor.user_id,
+            user_id=owner_id,
             client_ip=client_ip,
             user_agent=user_agent[:2000] if user_agent else None,
             idempotency_key=idempotency_key,
@@ -91,7 +92,7 @@ def submit_job(
             "Queued job id=%s tool=%s auth_method=%s",
             job.id,
             job.tool_name,
-            actor.authentication_method,
+            actor.authentication_method if actor else "guest",
         )
         return job
     except Exception as error:
@@ -104,15 +105,15 @@ def submit_job(
         raise
 
 
-def find_job(job_id: str, actor: AuthenticatedActor) -> Job:
-    job = job_repository.get_job_for_user(job_id, actor.user_id)
+def find_job(job_id: str, actor: AuthenticatedActor | None) -> Job:
+    job = job_repository.get_job_for_user(job_id, actor.user_id if actor else None)
     if job is None:
         raise NotFoundError(f"Job not found: {job_id}")
     return job
 
 
 def output_reader(
-    job_id: str, actor: AuthenticatedActor
+    job_id: str, actor: AuthenticatedActor | None
 ) -> tuple[BinaryIO, str, str]:
     job = find_job(job_id, actor)
     if job.status != "SUCCESS" or not job.output_artifact_key:
