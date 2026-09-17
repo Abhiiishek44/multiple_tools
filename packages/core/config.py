@@ -8,6 +8,8 @@ class Settings:
     # Database and task queue
     database_url: str
     celery_broker_url: str
+    favorites_redis_url: str
+    favorites_cache_ttl_seconds: int
 
     # Object storage
     storage_backend: str
@@ -63,6 +65,8 @@ class Settings:
         return cls(
             database_url=os.getenv("DATABASE_URL", "postgresql://app:app@localhost:5433/app"),
             celery_broker_url=os.getenv("CELERY_BROKER_URL", "redis://localhost:6380/0"),
+            favorites_redis_url=os.getenv("FAVORITES_REDIS_URL", "redis://localhost:6380/1"),
+            favorites_cache_ttl_seconds=_positive_integer("FAVORITES_CACHE_TTL_SECONDS", "3600"),
             storage_backend=os.getenv("STORAGE_BACKEND", "minio").lower(),
             max_upload_bytes=int(os.getenv("MAX_UPLOAD_BYTES", str(50 * 1024 * 1024))),
             minio_bucket=os.getenv("MINIO_BUCKET", "multiple-tools"),

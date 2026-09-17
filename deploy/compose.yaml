@@ -18,6 +18,7 @@ services:
       - ./postgres/migrations/004_add_google_auth.sql:/docker-entrypoint-initdb.d/23-add-google-auth.sql:ro
       - ./postgres/migrations/005_add_job_request_metadata.sql:/docker-entrypoint-initdb.d/24-add-job-request-metadata.sql:ro
       - ./postgres/migrations/006_add_api_keys.sql:/docker-entrypoint-initdb.d/25-add-api-keys.sql:ro
+      - ./postgres/migrations/007_create_user_favorites.sql:/docker-entrypoint-initdb.d/26-create-user-favorites.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s

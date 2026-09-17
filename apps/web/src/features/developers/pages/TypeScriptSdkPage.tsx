@@ -10,7 +10,7 @@ type Props = { onHome: () => void; onTools: () => void; onApiDocs: () => void }
 export function TypeScriptSdkPage({ onHome, onTools, onApiDocs }: Props) {
   return (
     <main className={ds.page}>
-      <Seo title="TypeScript SDK | Multiple Tools" description="Use the Multiple Tools Node.js SDK to run file conversions and manage jobs." path="/developers/typescript" keywords={['Multiple Tools TypeScript SDK', 'Node.js file conversion API', 'TypeScript PDF conversion']} />
+      <Seo title="TypeScript SDK | LoveMyDocument" description="Use the LoveMyDocument Node.js SDK to run file conversions and manage jobs." path="/developers/typescript" keywords={['LoveMyDocument TypeScript SDK', 'Node.js file conversion API', 'TypeScript PDF conversion']} />
       <section className={ds.hero}>
         <div className={ds.heroCopy}>
           <h1>TypeScript SDK</h1>

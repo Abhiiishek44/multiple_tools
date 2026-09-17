@@ -3,6 +3,7 @@ import { Alert } from '../../../shared/components/ui/Alert'
 import type { ConversionTool, ToolOption } from '../../tools/types'
 import type { ToolOptions } from '../types'
 import { eyebrow, primaryAction } from '../../../shared/styles'
+import { ConversionCounter } from '../../stats/components/ConversionCounter'
 
 type Props = { tool: ConversionTool; hasFile: boolean; isSubmitting: boolean; error: string | null; onConvert: (options: ToolOptions) => void }
 
@@ -34,5 +35,6 @@ export function ToolOptionsForm({ tool, hasFile, isSubmitting, error, onConvert 
     </label>)}</div>}
     {error && <Alert>{error}</Alert>}
     <button className={primaryAction} type="button" onClick={submit} disabled={!hasFile || isSubmitting || requiredMissing}>{isSubmitting ? 'Uploading file…' : error && hasFile ? 'Retry conversion' : `Convert to ${tool.to}`}<svg className={isSubmitting ? 'animate-spin' : ''} viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5" /></svg></button>
+    <ConversionCounter />
   </div>
 }
