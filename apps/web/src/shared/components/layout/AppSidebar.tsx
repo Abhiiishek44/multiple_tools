@@ -19,7 +19,7 @@ type Props = {
 }
 
 export function AppSidebar({ mobileOpen, collapsed, tools, active, onClose, onCollapse, onHome, onApiDocs, onPythonSdk, onTypeScriptSdk }: Props) {
-  const { status, signOut } = useAuth()
+  const { user, status, signOut } = useAuth()
   const [signingOut, setSigningOut] = useState(false)
   const navButton = (selected: boolean) => cn(
     'grid min-h-[43px] cursor-pointer grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-2.5 rounded-lg border border-transparent bg-transparent px-3 text-left text-sm text-[var(--muted)] transition-colors hover:border-[var(--border)] hover:bg-[var(--surface-soft)] hover:text-[var(--text)] [&>svg]:size-[18px] [&>small]:text-[11px] [&>small]:text-[var(--faint)]',
@@ -57,8 +57,13 @@ export function AppSidebar({ mobileOpen, collapsed, tools, active, onClose, onCo
         <button className={navButton(active === 'typescript-sdk')} type="button" title={collapsed ? 'TypeScript SDK' : undefined} onClick={() => { onTypeScriptSdk(); onClose() }}><CodeIcon /><span className={cn(collapsed && 'hidden max-[860px]:inline')}>TypeScript SDK</span></button>
       </nav>
       <div className="mt-auto flex flex-col gap-2 pt-4">
-        <a className={cn('px-3 text-[9px] font-semibold text-[var(--faint)] underline-offset-2 hover:text-[var(--muted)] hover:underline', collapsed && 'px-0 text-center max-[860px]:px-3 max-[860px]:text-left')} href="https://icons8.com" target="_blank" rel="noreferrer" title="File icons by Icons8"><span className={cn(collapsed && 'hidden max-[860px]:inline')}>File icons by </span>Icons8</a>
-        {status === 'authenticated' && <button className={cn('flex min-h-[43px] w-full cursor-pointer items-center gap-2.5 rounded-[13px] border border-[var(--border)] bg-[var(--surface-soft)] px-3 text-left text-sm font-[650] text-[var(--muted)] transition hover:border-[color-mix(in_srgb,var(--danger)_32%,var(--border))] hover:bg-[color-mix(in_srgb,var(--danger)_7%,var(--surface))] hover:text-[var(--danger)] disabled:cursor-wait disabled:opacity-55 [&_svg]:size-[18px] [&_svg]:shrink-0', collapsed && 'justify-center px-0 max-[860px]:justify-start max-[860px]:px-3')} type="button" disabled={signingOut} title={collapsed ? 'Log out' : undefined} aria-label="Log out" onClick={() => void logout()}><LogoutIcon /><span className={cn(collapsed && 'hidden max-[860px]:inline')}>{signingOut ? 'Logging out…' : 'Log out'}</span></button>}
+        {status === 'authenticated' && user && <div className={cn('overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-soft)]', collapsed && 'border-0 bg-transparent max-[860px]:border max-[860px]:bg-[var(--surface-soft)]')}>
+          <div className={cn('flex items-center gap-2.5 p-2.5', collapsed && 'justify-center p-0 max-[860px]:justify-start max-[860px]:p-2.5')}>
+            {user.picture_url ? <img className="size-8 shrink-0 rounded-lg object-cover" src={user.picture_url} alt="" referrerPolicy="no-referrer" /> : <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-[var(--accent)] text-xs font-bold text-white">{user.name.slice(0, 1).toUpperCase()}</span>}
+            <span className={cn('min-w-0 flex-1', collapsed && 'hidden max-[860px]:block')}><strong className="block overflow-hidden text-ellipsis whitespace-nowrap text-xs font-semibold text-[var(--text)]">{user.name}</strong><small className="mt-0.5 block overflow-hidden text-ellipsis whitespace-nowrap text-[9px] text-[var(--muted)]">{user.email}</small></span>
+          </div>
+          <button className={cn('flex min-h-9 w-full cursor-pointer items-center gap-2 border-0 border-t border-[var(--border)] bg-transparent px-2.5 text-left text-[11px] font-semibold text-[var(--danger)] transition-colors hover:bg-[color-mix(in_srgb,var(--danger)_7%,var(--surface))] disabled:cursor-wait disabled:opacity-55 [&_svg]:size-3.5 [&_svg]:shrink-0', collapsed && 'hidden max-[860px]:flex')} type="button" disabled={signingOut} aria-label="Log out" onClick={() => void logout()}><LogoutIcon /><span>{signingOut ? 'Logging out…' : 'Log out'}</span></button>
+        </div>}
       </div>
     </aside>
   </>

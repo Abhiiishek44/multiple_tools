@@ -803,6 +803,7 @@ dependencies = [
     { name = "python-multipart" },
     { name = "python-pptx" },
     { name = "requests" },
+    { name = "redis" },
     { name = "uvicorn", extra = ["standard"] },
 ]
 
@@ -826,6 +827,7 @@ requires-dist = [
     { name = "python-multipart", specifier = "==0.0.20" },
     { name = "python-pptx", specifier = "==1.0.2" },
     { name = "requests", specifier = "==2.34.2" },
+    { name = "redis", specifier = "==5.2.1" },
     { name = "uvicorn", extras = ["standard"], specifier = "==0.35.0" },
 ]
 

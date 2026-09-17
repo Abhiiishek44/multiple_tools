@@ -1,0 +1,1 @@
+"""User favorites domain package."""

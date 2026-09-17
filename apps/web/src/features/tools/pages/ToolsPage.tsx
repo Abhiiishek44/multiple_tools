@@ -7,8 +7,8 @@ type Props = { tools: ConversionTool[]; isLoading: boolean; error: string | null
 
 export function ToolsPage(props: Props) {
   const path = '/tools'
-  const description = 'Search every Multiple Tools file converter, grouped by category.'
-  const title = 'File Conversion Tools | Multiple Tools'
+  const description = 'Search every LoveMyDocument file converter, grouped by category.'
+  const title = 'File Conversion Tools | LoveMyDocument'
   return (
     <main>
       <Seo title={title} description={description} path={path} jsonLd={{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description, url: path, mainEntity: { '@type': 'ItemList', itemListElement: props.tools.map((tool, index) => ({ '@type': 'ListItem', position: index + 1, name: tool.name, url: `/${tool.slug}` })) } }} />
