@@ -5,7 +5,6 @@ function toConversionTool(tool: ApiTool): ConversionTool {
   return {
     id: tool.name,
     slug: tool.slug,
-    version: tool.version,
     name: tool.display_name,
     title: tool.title,
     from: tool.input_formats.join(', '),

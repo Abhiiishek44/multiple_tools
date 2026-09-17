@@ -78,7 +78,6 @@ def image_conversion(
     target = IMAGE_FORMATS[target_name]
     return PluginManifest(
         name=f"{source_name}-to-{target_name}",
-        version="1.0.0",
         description=description or f"Convert {source.label} image to {target.label}",
         input_suffixes=source.suffixes,
         input_media_types=source.media_types,
@@ -91,7 +90,6 @@ def image_to_pdf(source_name: str) -> PluginManifest:
     source = IMAGE_FORMATS[source_name]
     return PluginManifest(
         name=f"{source_name}-to-pdf",
-        version="1.0.0",
         description=f"Convert a {source.label} image to PDF",
         input_suffixes=source.suffixes,
         input_media_types=source.media_types,

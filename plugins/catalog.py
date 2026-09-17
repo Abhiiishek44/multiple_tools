@@ -47,7 +47,6 @@ def _base_metadata(manifest: PluginManifest) -> dict[str, object]:
     return {
         "name": manifest.name,
         "slug": manifest.name,
-        "version": manifest.version,
         "display_name": name,
         "title": f"{name} Online",
         "description": description,

@@ -9,7 +9,7 @@ from packages.core.errors import ConflictError, NotFoundError, ValidationError
 from packages.jobs import repository as job_repository
 from packages.jobs.models import Job
 from packages.storage import get_storage
-from infrastructure.queue import celery_app
+from infrastructure.queue import celery_app, queue_for_workload, task_for_workload
 from plugins.registry import get_plugin
 
 
@@ -71,7 +71,6 @@ def submit_job(
         job = job_repository.create_job(
             job_id=job_id,
             tool_name=plugin.manifest.name,
-            tool_version=plugin.manifest.version,
             input_artifact_key=artifact_key,
             input_filename=Path(filename or f"input{suffix}").name,
             input_media_type=normalized_media_type,
@@ -83,15 +82,17 @@ def submit_job(
         )
         # Keep the queue payload small and preserve the existing worker contract.
         celery_app.send_task(
-            "tools.execute",
+            task_for_workload(plugin.manifest.workload),
             args=[job.id],
             task_id=job.id,
+            queue=queue_for_workload(plugin.manifest.workload),
             ignore_result=True,
         )
         logger.info(
-            "Queued job id=%s tool=%s auth_method=%s",
+            "Queued job id=%s tool=%s workload=%s auth_method=%s",
             job.id,
             job.tool_name,
+            plugin.manifest.workload,
             actor.authentication_method if actor else "guest",
         )
         return job

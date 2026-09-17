@@ -13,7 +13,7 @@ WEB_IMAGE := $(IMAGE_REGISTRY)/multiple-tools-web
 
 .DEFAULT_GOAL := help
 
-.PHONY: help setup env install generate dev api worker beat web \
+.PHONY: help setup env install generate dev api worker worker-ai beat web \
 	infra-up infra-down infra-logs db-migrate check build clean \
 	sdk-build sdk-build-python sdk-publish-python \
 	sdk-build-typescript sdk-publish-typescript \
@@ -29,9 +29,10 @@ help: ## Show available commands
 		'  setup            Create env files, install dependencies, start infrastructure, and migrate' \
 		'  install          Install Python and frontend dependencies' \
 		'  generate         Generate frontend and SDK tool catalogs' \
-		'  dev              Run API, worker, scheduler, and frontend' \
+		'  dev              Run API, both workers, scheduler, and frontend' \
 		'  api              Start FastAPI' \
-		'  worker           Start Celery worker' \
+		'  worker           Start the general Celery worker' \
+		'  worker-ai        Start the dedicated AI/OCR Celery worker' \
 		'  beat             Start Celery scheduler' \
 		'  web              Start frontend' \
 		'  infra-up         Start PostgreSQL, Redis, and MinIO' \
@@ -91,16 +92,20 @@ install: ## Install Python and frontend dependencies
 generate: ## Generate frontend and SDK tool catalogs
 	uv run python scripts/generate_tool_catalog.py
 
-dev: require-backend-env require-web-env ## Run API, worker, scheduler, and frontend
-	@$(MAKE) --no-print-directory -j4 api worker beat web
+dev: require-backend-env require-web-env ## Run API, both workers, scheduler, and frontend
+	@$(MAKE) --no-print-directory -j5 api worker worker-ai beat web
 
 api: require-backend-env ## Start FastAPI
 	@set -a; source "$(BACKEND_ENV)"; set +a; \
 		exec  uv run uvicorn apps.api.main:app --host 0.0.0.0  --reload
 
-worker: require-backend-env ## Start Celery worker
+worker: require-backend-env ## Start the general Celery worker
 	@set -a; source "$(BACKEND_ENV)"; set +a; \
-		exec uv run celery --app=apps.worker.celery_app:celery_app worker --loglevel=INFO
+		exec uv run celery --app=apps.worker.celery_app:celery_app worker --queues=general --hostname=general@%h --loglevel=INFO
+
+worker-ai: require-backend-env ## Start the dedicated AI/OCR Celery worker
+	@set -a; source "$(BACKEND_ENV)"; set +a; \
+		exec uv run celery --app=apps.worker.celery_app:celery_app worker --queues=ai_ocr --hostname=ai-ocr@%h --loglevel=INFO
 
 beat: require-backend-env ## Start Celery scheduler
 	@set -a; source "$(BACKEND_ENV)"; set +a; \

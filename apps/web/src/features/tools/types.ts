@@ -14,7 +14,6 @@ export type ToolOption = {
 export type ConversionTool = {
   id: string
   slug: string
-  version: string
   name: string
   title: string
   from: string
@@ -38,7 +37,6 @@ export type ConversionTool = {
 export type ApiTool = {
   name: string
   slug: string
-  version: string
   display_name: string
   title: string
   description: string

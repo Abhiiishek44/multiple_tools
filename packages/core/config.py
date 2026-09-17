@@ -30,6 +30,7 @@ class Settings:
     openrouter_api_key: str | None
     openrouter_base_url: str
     openrouter_ocr_model: str | None
+    openrouter_chat_model: str | None
     openrouter_timeout_seconds: int
     ocr_max_pixels: int
     ocr_max_payload_bytes: int
@@ -85,6 +86,7 @@ class Settings:
             openrouter_api_key=os.getenv("OPENROUTER_API_KEY") or None,
             openrouter_base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1").rstrip("/"),
             openrouter_ocr_model=os.getenv("OPENROUTER_OCR_MODEL") or None,
+            openrouter_chat_model=os.getenv("OPENROUTER_CHAT_MODEL") or None,
             openrouter_timeout_seconds=_positive_integer("OPENROUTER_TIMEOUT_SECONDS", "120"),
             ocr_max_pixels=_positive_integer("OCR_MAX_PIXELS", "40000000"),
             ocr_max_payload_bytes=_positive_integer("OCR_MAX_PAYLOAD_BYTES", str(20 * 1024 * 1024)),

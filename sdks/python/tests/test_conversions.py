@@ -71,7 +71,6 @@ def test_shortcut_uses_the_tool_scoped_jobs_endpoint(tmp_path: Path) -> None:
             json={
                 "id": "job-123",
                 "tool_name": "pdf-to-word",
-                "tool_version": "1.0.0",
                 "status": "QUEUED",
                 "progress": 0,
                 "input_filename": "document.pdf",

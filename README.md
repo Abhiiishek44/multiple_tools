@@ -6,8 +6,11 @@ PostgreSQL, and MinIO object storage.
 ## Architecture
 
 ```text
-client -> API -> storage + PostgreSQL job -> Redis queue -> worker -> plugin
-                                                      -> storage + job result
+client -> API -> storage + PostgreSQL job -> Redis
+                                            |-- general queue -> general worker
+                                            `-- ai_ocr queue  -> AI/OCR worker
+                                                                    |
+                                                        storage + job result
 ```
 
 PostgreSQL is the source of truth for job state. Redis transports job IDs only;
@@ -16,7 +19,7 @@ uploaded files and generated results are stored through the storage adapter.
 ```text
 apps/
   api/                 FastAPI routes, schemas, and orchestration services
-  worker/              Generic Celery task
+  worker/              Workload-isolated Celery task entry points
 packages/
   core/                Environment configuration, errors, and logging
   auth/                User model, repository, and JWT utilities
@@ -71,6 +74,7 @@ Start an individual process when needed:
 ```bash
 make api
 make worker
+make worker-ai
 make beat
 make web
 ```
@@ -112,7 +116,20 @@ with a version derived from Git. Override the Docker Hub namespace when needed:
 make docker-release IMAGE_REGISTRY=docker.io/your-dockerhub-username
 ```
 
-The worker uses Celery's default queue and can execute every registered plugin.
+Run the worker image as two independent services. The general worker consumes
+only the `general` queue and handles normal document conversions plus background
+tasks. The AI/OCR worker consumes only the `ai_ocr` queue:
+
+```bash
+celery --app=apps.worker.celery_app:celery_app worker --queues=general --hostname=general@%h --loglevel=INFO
+celery --app=apps.worker.celery_app:celery_app worker --queues=ai_ocr --hostname=ai-ocr@%h --loglevel=INFO
+celery --app=apps.worker.celery_app:celery_app beat --loglevel=INFO
+```
+
+Deploy these as three separately scalable processes. Only the AI/OCR worker
+needs the OpenRouter credentials below. Queue isolation prevents slow provider
+requests from consuming general conversion-worker capacity.
+
 Install LibreOffice on Debian or Ubuntu for the Office conversion plugins:
 
 ```bash
@@ -126,6 +143,7 @@ there is no local Tesseract dependency. Configure the worker environment with:
 ```bash
 OPENROUTER_API_KEY=your-secret-api-key
 OPENROUTER_OCR_MODEL=your-vision-capable-model
+OPENROUTER_CHAT_MODEL=your-chat-capable-model
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
 OPENROUTER_TIMEOUT_SECONDS=120
 ```
@@ -134,6 +152,28 @@ The API key is a backend secret and must never be exposed to frontend code.
 `pdf-to-text` extracts embedded text locally and calls OpenRouter only for pages
 whose native text is empty or unusable. Native and OCR text pass through the same
 deterministic Unicode and whitespace normalizer before the TXT file is written.
+
+## Document chat
+
+Authenticated users can create a persistent conversation, upload source
+documents, and ask grounded questions. TXT, Markdown, DOCX, and PDF uploads are
+stored in MinIO and dispatched to `chat.ingest_document` on the isolated
+`ai_ocr` queue. The ingestion task extracts text (including OCR fallback for
+scanned PDF pages), normalizes it, and stores searchable chunks in PostgreSQL.
+
+```text
+POST /v1/chats
+POST /v1/chats/{conversation_id}/documents
+GET  /v1/chats/{conversation_id}
+POST /v1/chats/{conversation_id}/messages
+POST /v1/chats/{conversation_id}/messages/stream
+```
+
+The standard message endpoint returns JSON. The streaming endpoint returns
+server-sent events named `citations`, `token`, `done`, and `error`. Model prompts
+contain retrieved document excerpts and recent conversation history; the system
+prompt requires grounded answers and treats document text as untrusted input.
+Apply migration `012_create_document_chat.sql` before enabling these routes.
 
 ## Available tools
 
@@ -320,9 +360,10 @@ the safety limits. The registry discovers nested plugins automatically.
 Shared plugin contracts and discovery live in `plugins/base.py` and
 `plugins/registry.py`.
 
-All plugins use the same Celery queue. Adding a plugin does not require API,
-queue, or worker-task changes: add its package and ensure the worker has the
-external programs that plugin needs.
+Plugins default to the `general` workload. Set `workload="ai_ocr"` in a plugin
+manifest when it performs AI or OCR processing; job submission will route it to
+the dedicated queue. Ensure the corresponding worker has any external programs
+and provider credentials that plugin needs.
 
 ## Object storage
 

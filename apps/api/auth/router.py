@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
 from apps.api.auth.schema import (
     AuthResponse,
@@ -9,6 +9,7 @@ from apps.api.auth.schema import (
     UserResponse,
 )
 from apps.api.dependencies import require_authenticated_user
+from apps.api.love.device import existing_device_id
 from apps.api.services.auth_service import authenticate_google
 from packages.auth.models import User
 from packages.core.config import get_settings
@@ -16,6 +17,7 @@ from packages.core.errors import (
     AuthenticationError,
     AuthenticationUnavailableError,
 )
+from packages.love import service as love_service
 
 
 router = APIRouter(prefix="/v1/auth", tags=["auth"])
@@ -41,6 +43,7 @@ def google_authentication(request: GoogleAuthRequest) -> AuthResponse:
 @router.post("/google/callback", status_code=204)
 def google_redirect_callback(
     request: GoogleCredentialRequest,
+    http_request: Request,
 ) -> Response:
     try:
         authentication = authenticate_google(request.credential)
@@ -48,6 +51,13 @@ def google_redirect_callback(
         raise HTTPException(status_code=401, detail=str(error)) from error
     except AuthenticationUnavailableError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
+
+    device_id = existing_device_id(http_request)
+    if device_id:
+        love_service.merge_anonymous_love(
+            user_id=authentication.user.id,
+            device_id=device_id,
+        )
 
     settings = get_settings()
     response = Response(status_code=204)

@@ -8,7 +8,6 @@ from multipletools.exceptions import ResponseValidationError
 @dataclass(frozen=True, slots=True)
 class Tool:
     name: str
-    version: str
     description: str
     input_suffixes: tuple[str, ...]
     input_media_types: tuple[str, ...]
@@ -20,7 +19,6 @@ class Tool:
         try:
             return cls(
                 name=str(data["name"]),
-                version=str(data["version"]),
                 description=str(data["description"]),
                 input_suffixes=tuple(str(v) for v in data["input_suffixes"]),
                 input_media_types=tuple(str(v) for v in data["input_media_types"]),

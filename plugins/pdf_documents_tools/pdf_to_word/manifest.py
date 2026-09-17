@@ -2,7 +2,6 @@ from plugins.base import PluginManifest, PluginOption, PluginOptionChoice
 
 MANIFEST = PluginManifest(
     name="pdf-to-word",
-    version="1.2.0",
     description="Convert a PDF document to an editable Word document",
     input_suffixes=frozenset({".pdf"}),
     input_media_types=frozenset({"application/pdf"}),

@@ -13,7 +13,6 @@ TERMINAL_JOB_STATUSES = frozenset({"SUCCESS", "FAILED"})
 class Job:
     id: str
     tool_name: str
-    tool_version: str
     status: JobStatus
     progress: int
     input_filename: str
@@ -40,7 +39,6 @@ class Job:
             return cls(
                 id=str(data["id"]),
                 tool_name=str(data["tool_name"]),
-                tool_version=str(data["tool_version"]),
                 status=cast(JobStatus, status),
                 progress=progress,
                 input_filename=str(data["input_filename"]),

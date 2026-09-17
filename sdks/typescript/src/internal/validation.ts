@@ -48,7 +48,6 @@ export function parseTools(value: unknown): readonly Tool[] {
     const data = object(entry, 'tool')
     return Object.freeze({
       name: string(data.name, 'name'),
-      version: string(data.version, 'version'),
       description: string(data.description, 'description'),
       inputSuffixes: stringArray(data.input_suffixes, 'input_suffixes'),
       inputMediaTypes: stringArray(data.input_media_types, 'input_media_types'),
@@ -71,7 +70,6 @@ export function parseJob(value: unknown): Job {
   return Object.freeze({
     id: string(data.id, 'id'),
     toolName: string(data.tool_name, 'tool_name'),
-    toolVersion: string(data.tool_version, 'tool_version'),
     status,
     progress: data.progress,
     inputFilename: string(data.input_filename, 'input_filename'),
@@ -84,4 +82,3 @@ export function parseJob(value: unknown): Job {
     isTerminal: status === 'SUCCESS' || status === 'FAILED',
   })
 }
-

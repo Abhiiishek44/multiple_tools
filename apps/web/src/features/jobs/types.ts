@@ -3,7 +3,6 @@ export type ToolOptions = Record<string, string | number>
 export type ConversionJob = {
   id: string
   tool_name: string
-  tool_version: string
   status: 'QUEUED' | 'RUNNING' | 'SUCCESS' | 'FAILED'
   progress: number
   input_filename: string

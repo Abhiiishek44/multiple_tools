@@ -23,7 +23,21 @@ export function ToolCatalog({ tools, isLoading, error, onRetry, onSelect }: Prop
   return (
     <>
       <section className="mx-auto min-h-[70vh] w-[min(1400px,calc(100%_-_48px))] pb-[72px] pt-12 max-[700px]:w-[calc(100%_-_32px)] max-[700px]:pt-7" id="conversion-tools" aria-labelledby="tools-title">
-          <div className="flex items-end justify-between gap-[18px] max-[700px]:items-start"><div><h1 className="m-0 text-[clamp(36px,4.2vw,52px)] font-[800] leading-[1.05] tracking-[-.05em] text-[var(--text)] max-[700px]:text-4xl" id="tools-title">Find the right file tool</h1><p className="mb-0 mt-4 text-base leading-[1.6] text-[var(--muted)]">Search all converters, grouped by category.</p></div><span className="text-xs text-[var(--faint)] max-[700px]:hidden">{filteredTools.length} tools</span></div>
+          <div className="flex items-end justify-between gap-[18px] max-[700px]:items-start">
+            <div>
+              <h1 className="m-0 tracking-[-.055em]" id="tools-title">
+                <span className="block text-[clamp(42px,5vw,64px)] font-[850] leading-[.98] text-[var(--text)] max-[700px]:text-[42px]">
+                  Love your <span className="text-[var(--accent)]">documents.</span>
+                </span>
+                <span className="mt-3 flex items-center gap-3 text-[clamp(24px,2.7vw,36px)] font-[650] leading-tight tracking-[-.035em] text-[var(--muted)] max-[700px]:mt-2 max-[700px]:text-[25px]">
+                  We’ll handle the rest.
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full border border-[color-mix(in_srgb,var(--accent)_22%,var(--border))] bg-[color-mix(in_srgb,var(--accent)_8%,var(--surface))] text-base shadow-[inset_0_1px_0_rgba(255,255,255,.55)] max-[700px]:size-8 max-[700px]:text-sm" aria-hidden="true">❤️</span>
+                </span>
+              </h1>
+              <p className="mb-0 mt-5 text-sm font-medium leading-[1.6] text-[var(--faint)]">Search all converters, grouped by category.</p>
+            </div>
+            <span className="text-xs text-[var(--faint)] max-[700px]:hidden">{filteredTools.length} tools</span>
+          </div>
           <ToolSearch query={query} count={filteredTools.length} isLoading={isLoading} layout={layout} onChange={setQuery} onLayoutChange={setLayout} />
           <ToolCategories tools={tools} active={activeCategory} onSelect={setActiveCategory} />
           {error && <Alert className="mt-5 flex items-center justify-between gap-4"><span>{error}</span><button className="shrink-0 rounded-lg bg-red-600 px-3 py-2 font-bold text-white hover:bg-red-700" type="button" onClick={onRetry}>Retry API</button></Alert>}

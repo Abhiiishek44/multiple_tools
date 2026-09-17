@@ -2,7 +2,6 @@ from plugins.base import PluginManifest
 
 MANIFEST = PluginManifest(
     name="powerpoint-to-pdf",
-    version="1.0.0",
     description="Convert a PowerPoint presentation to PDF",
     input_suffixes=frozenset({".ppt", ".pptx"}),
     input_media_types=frozenset({

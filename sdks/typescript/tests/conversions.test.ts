@@ -6,7 +6,6 @@ import { Client } from '../src/index.js'
 const jobResponse = {
   id: 'job_123',
   tool_name: 'pdf-to-word',
-  tool_version: '1.0.0',
   status: 'QUEUED',
   progress: 0,
   input_filename: 'document.pdf',

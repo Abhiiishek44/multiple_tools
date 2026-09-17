@@ -8,7 +8,6 @@ from packages.jobs.models import Job
 class JobResponse(BaseModel):
     id: str
     tool_name: str
-    tool_version: str
     status: str
     progress: int
     input_filename: str
@@ -24,7 +23,6 @@ class JobResponse(BaseModel):
         return cls(
             id=job.id,
             tool_name=job.tool_name,
-            tool_version=job.tool_version,
             status=job.status,
             progress=job.progress,
             input_filename=job.input_filename,

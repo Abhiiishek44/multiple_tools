@@ -2,6 +2,7 @@ import logging
 import tempfile
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import Literal
 
 from celery import shared_task
 
@@ -15,20 +16,43 @@ from plugins.registry import get_plugin
 logger = logging.getLogger(__name__)
 
 
-@shared_task(name="tools.execute", acks_late=True)
-def execute_tool(job_id: str) -> None:
+@shared_task(name="chat.ingest_document", acks_late=True)
+def ingest_chat_document(document_id: str) -> None:
+    from packages.chat.service import ingest_document
+
+    ingest_document(document_id)
+
+
+@shared_task(name="tools.execute.general", acks_late=True)
+def execute_general_tool(job_id: str) -> None:
+    _execute_tool(job_id, expected_workload="general")
+
+
+@shared_task(name="tools.execute.ai_ocr", acks_late=True)
+def execute_ai_ocr_tool(job_id: str) -> None:
+    _execute_tool(job_id, expected_workload="ai_ocr")
+
+
+def _execute_tool(
+    job_id: str, *, expected_workload: Literal["general", "ai_ocr"]
+) -> None:
     logger.info("Received job id=%s", job_id)
     job = job_repository.get_job(job_id)
     if job is None:
         logger.error("Cannot execute missing job id=%s", job_id)
         raise ValueError(f"Job not found: {job_id}")
+    plugin = get_plugin(job.tool_name)
+    if plugin.manifest.workload != expected_workload:
+        raise ValueError(
+            f"Job {job.id} workload {plugin.manifest.workload!r} cannot run in "
+            f"the {expected_workload!r} worker"
+        )
     if job_repository.mark_running(job.id) is None:
         logger.info("Skipping unclaimable job id=%s status=%s", job.id, job.status)
         return
 
     output_key: str | None = None
     try:
-        plugin = get_plugin(job.tool_name, job.tool_version)
         logger.info("Executing job id=%s tool=%s", job.id, job.tool_name)
         storage = get_storage()
         output_key = (

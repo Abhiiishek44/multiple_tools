@@ -3,7 +3,6 @@ from plugins.base import PluginManifest
 
 MANIFEST = PluginManifest(
     name="word-to-text",
-    version="1.0.0",
     description="Extract text from a DOCX document",
     input_suffixes=frozenset({".docx"}),
     input_media_types=frozenset({
