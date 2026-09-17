@@ -35,5 +35,5 @@ export async function downloadConversionOutput(job: ConversionJob) {
   document.body.appendChild(anchor)
   anchor.click()
   anchor.remove()
-  window.setTimeout(() => URL.revokeObjectURL(url), 1_000)
+  URL.revokeObjectURL(url)
 }

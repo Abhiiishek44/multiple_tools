@@ -45,7 +45,7 @@ jobs:
         run: uv build sdks/python
 
       - name: Compile deployment scripts
-        run: uv run python -m compileall -q apps packages plugins infrastructure scripts sdks/python/src/multipletools
+        run: uv run python -m compileall -q apps packages plugins scripts sdks/python/multipletools
 
   frontend:
     name: Frontend checks
@@ -105,7 +105,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: deploy/docker/Dockerfile.api
+          file: docker/Dockerfile.api
           push: ${{ github.event_name == 'push' }}
           tags: |
             ghcr.io/abhiiishek44/multiple-tools-api:latest
@@ -117,7 +117,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: deploy/docker/Dockerfile.worker
+          file: docker/Dockerfile.worker
           push: ${{ github.event_name == 'push' }}
           tags: |
             ghcr.io/abhiiishek44/multiple-tools-worker:latest
@@ -129,7 +129,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: deploy/docker/Dockerfile.web
+          file: docker/Dockerfile.web
           push: ${{ github.event_name == 'push' }}
           tags: |
             ghcr.io/abhiiishek44/multiple-tools-web:latest

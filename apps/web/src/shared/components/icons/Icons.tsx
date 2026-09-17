@@ -24,20 +24,12 @@ export function MenuIcon({ className }: IconProps) {
   return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
 }
 
-export function SidebarToggleIcon({ className, expanded }: IconProps & { expanded: boolean }) {
-  return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M9 4v16" />{expanded ? <path d="m15 9-3 3 3 3" /> : <path d="m13 9 3 3-3 3" />}</svg>
-}
-
 export function HomeIcon({ className }: IconProps) {
   return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8M5.5 9.5V21h13V9.5M9.5 21v-6h5v6" /></svg>
 }
 
 export function GridIcon({ className }: IconProps) {
   return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1" /><rect x="14" y="4" width="6" height="6" rx="1" /><rect x="4" y="14" width="6" height="6" rx="1" /><rect x="14" y="14" width="6" height="6" rx="1" /></svg>
-}
-
-export function ListIcon({ className }: IconProps) {
-  return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" /></svg>
 }
 
 export function ChevronIcon({ className }: IconProps) {
@@ -82,7 +74,7 @@ export function TerminalIcon({ className }: IconProps) {
 }
 
 export function CopyIcon({ className }: IconProps) {
-  return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="12" height="12" rx="2" /><rect x="8" y="8" width="12" height="12" rx="2" /></svg>
+  return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" /></svg>
 }
 
 export function ExternalLinkIcon({ className }: IconProps) {

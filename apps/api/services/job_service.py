@@ -23,8 +23,8 @@ def submit_job(
     options_json: str | None = None,
     idempotency_key: str | None = None,
 ) -> Job:
-    authenticated_actor = actor or (
-        AuthenticatedActor.for_user(user_id) if user_id else None
+    authenticated_actor = actor or AuthenticatedActor.for_user(
+        _required_user_id(user_id)
     )
     parsed_options = dict(options) if options is not None else parse_options(options_json)
     return job_service.submit_job(
@@ -62,8 +62,8 @@ def find_job(
     user_id: str | None = None,
     actor: AuthenticatedActor | None = None,
 ) -> Job:
-    authenticated_actor = actor or (
-        AuthenticatedActor.for_user(user_id) if user_id else None
+    authenticated_actor = actor or AuthenticatedActor.for_user(
+        _required_user_id(user_id)
     )
     return job_service.find_job(job_id, authenticated_actor)
 
@@ -73,7 +73,13 @@ def output_reader(
     user_id: str | None = None,
     actor: AuthenticatedActor | None = None,
 ) -> tuple[BinaryIO, str, str]:
-    authenticated_actor = actor or (
-        AuthenticatedActor.for_user(user_id) if user_id else None
+    authenticated_actor = actor or AuthenticatedActor.for_user(
+        _required_user_id(user_id)
     )
     return job_service.output_reader(job_id, authenticated_actor)
+
+
+def _required_user_id(user_id: str | None) -> str:
+    if not user_id:
+        raise TypeError("actor or user_id is required")
+    return user_id

@@ -3,5 +3,5 @@ import { AuthProvider } from './providers/AuthProvider'
 import { UiProvider } from './providers/UiProvider'
 
 export default function App() {
-  return <AuthProvider><UiProvider><AppRouter /></UiProvider></AuthProvider>
+  return <UiProvider><AuthProvider><AppRouter /></AuthProvider></UiProvider>
 }
