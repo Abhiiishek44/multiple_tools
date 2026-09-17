@@ -19,7 +19,6 @@ class ToolOptionResponse(BaseModel):
 class ToolResponse(BaseModel):
     name: str
     slug: str
-    version: str
     display_name: str
     title: str
     description: str

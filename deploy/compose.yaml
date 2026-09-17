@@ -19,6 +19,9 @@ services:
       - ./postgres/migrations/005_add_job_request_metadata.sql:/docker-entrypoint-initdb.d/24-add-job-request-metadata.sql:ro
       - ./postgres/migrations/006_add_api_keys.sql:/docker-entrypoint-initdb.d/25-add-api-keys.sql:ro
       - ./postgres/migrations/007_create_user_favorites.sql:/docker-entrypoint-initdb.d/26-create-user-favorites.sql:ro
+      - ./postgres/migrations/008_create_site_loves.sql:/docker-entrypoint-initdb.d/27-create-site-loves.sql:ro
+      - ./postgres/migrations/011_remove_plugin_versions.sql:/docker-entrypoint-initdb.d/30-remove-plugin-versions.sql:ro
+      - ./postgres/migrations/012_create_document_chat.sql:/docker-entrypoint-initdb.d/31-create-document-chat.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s

@@ -6,7 +6,6 @@ export const CURL_QUICKSTART = `curl -X POST "$MULTIPLETOOLS_BASE_URL/v1/tools/p
 export const JOB_RESPONSE = `{
   "id": "job_01H...",
   "tool_name": "pdf-to-word",
-  "tool_version": "1.0.0",
   "status": "PENDING",
   "progress": 0,
   "input_filename": "document.pdf",

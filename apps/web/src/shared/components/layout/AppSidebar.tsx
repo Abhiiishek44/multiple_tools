@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../../../features/auth/context/useAuth'
 import type { ConversionTool } from '../../../features/tools/types'
-import { CodeIcon, GridIcon, KeyIcon, LogoutIcon, SidebarToggleIcon, TerminalIcon } from '../icons/Icons'
+import { CodeIcon, GridIcon, KeyIcon, LogoutIcon, SidebarToggleIcon, SparklesIcon, TerminalIcon } from '../icons/Icons'
 import { BrandLogo } from '../brand/BrandLogo'
 import { cn } from '../../styles'
 
@@ -13,12 +13,13 @@ type Props = {
   onClose: () => void
   onCollapse: () => void
   onHome: () => void
+  onAiSummarizer: () => void
   onApiDocs: () => void
   onPythonSdk: () => void
   onTypeScriptSdk: () => void
 }
 
-export function AppSidebar({ mobileOpen, collapsed, tools, active, onClose, onCollapse, onHome, onApiDocs, onPythonSdk, onTypeScriptSdk }: Props) {
+export function AppSidebar({ mobileOpen, collapsed, tools, active, onClose, onCollapse, onHome, onAiSummarizer, onApiDocs, onPythonSdk, onTypeScriptSdk }: Props) {
   const { user, status, signOut } = useAuth()
   const [signingOut, setSigningOut] = useState(false)
   const navButton = (selected: boolean) => cn(
@@ -47,6 +48,7 @@ export function AppSidebar({ mobileOpen, collapsed, tools, active, onClose, onCo
       </div>
       <nav className="mt-[26px] flex flex-col gap-[5px]" aria-label="Primary navigation">
         <button className={navButton(active === 'tools' || active === 'home')} type="button" title={collapsed ? 'Tools' : undefined} onClick={() => { onHome(); onClose() }}><GridIcon /><span className={cn(collapsed && 'hidden max-[860px]:inline')}>Tools</span><small className={cn(collapsed && 'hidden max-[860px]:inline')}>{tools.length}</small></button>
+        <button className={navButton(active === 'ai-summarizer')} type="button" title={collapsed ? 'AI Summarizer' : undefined} onClick={() => { onAiSummarizer(); onClose() }}><SparklesIcon /><span className={cn(collapsed && 'hidden max-[860px]:inline')}>AI Summarizer</span></button>
         <p className={cn('mx-2.5 mb-[7px] mt-[22px] text-[10px] font-extrabold uppercase tracking-[.12em] text-[var(--faint)]', collapsed && 'hidden max-[860px]:block')}>Integrations</p>
         <div className={cn('min-h-2', collapsed && 'hidden max-[860px]:block')} aria-label="Integrations" />
         <p className={cn('mx-2.5 mb-[7px] mt-[18px] text-[10px] font-extrabold uppercase tracking-[.12em] text-[var(--faint)]', collapsed && 'hidden max-[860px]:block')}>Automations</p>

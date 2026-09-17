@@ -4,7 +4,6 @@ export interface Health {
 
 export interface Tool {
   name: string
-  version: string
   description: string
   inputSuffixes: readonly string[]
   inputMediaTypes: readonly string[]
@@ -17,7 +16,6 @@ export type JobStatus = 'QUEUED' | 'RUNNING' | 'SUCCESS' | 'FAILED'
 export interface Job {
   id: string
   toolName: string
-  toolVersion: string
   status: JobStatus
   progress: number
   inputFilename: string
@@ -29,4 +27,3 @@ export interface Job {
   completedAt: Date | null
   isTerminal: boolean
 }
-

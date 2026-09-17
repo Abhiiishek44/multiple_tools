@@ -5,6 +5,7 @@ export type AppRoute =
   | { name: 'python-sdk' }
   | { name: 'typescript-sdk' }
   | { name: 'login' }
+  | { name: 'ai-summarizer' }
   | { name: 'tool'; toolName: string }
   | { name: 'job'; jobId: string }
 
@@ -18,6 +19,7 @@ export function routeFromLocation(pathname = window.location.pathname): AppRoute
   if (parts.length === 2 && parts[0] === 'categories') return { name: 'catalog', category: decodeSegment(parts[1]) }
   if (parts.length === 3 && parts[0] === 'tools' && parts[1] === 'category') return { name: 'catalog', category: decodeSegment(parts[2]).toLowerCase() }
   if (parts.length === 1 && parts[0] === 'login') return { name: 'login' }
+  if (parts.length === 1 && parts[0] === 'ai-summarizer') return { name: 'ai-summarizer' }
   if (parts.length === 2 && parts[0] === 'tools') return { name: 'tool', toolName: decodeSegment(parts[1]) }
   if (parts.length === 2 && parts[0] === 'jobs') return { name: 'job', jobId: decodeSegment(parts[1]) }
   if (parts.length === 1) return { name: 'tool', toolName: decodeSegment(parts[0]) }
@@ -26,6 +28,7 @@ export function routeFromLocation(pathname = window.location.pathname): AppRoute
 
 export function routePath(route: AppRoute) {
   if (route.name === 'login') return '/login'
+  if (route.name === 'ai-summarizer') return '/ai-summarizer'
   if (route.name === 'catalog') return route.category ? `/categories/${encodeURIComponent(route.category)}` : '/tools'
   if (route.name === 'api-docs') return '/developers/api'
   if (route.name === 'python-sdk') return '/developers/python'

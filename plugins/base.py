@@ -27,19 +27,19 @@ class PluginOption:
 @dataclass(frozen=True, slots=True)
 class PluginManifest:
     name: str
-    version: str
     description: str
     input_suffixes: frozenset[str]
     input_media_types: frozenset[str]
     output_suffix: str
     output_media_type: str
     options: tuple[PluginOption, ...] = ()
+    workload: Literal["general", "ai_ocr"] = "general"
 
     def validate(self) -> None:
         if not _NAME_PATTERN.fullmatch(self.name):
             raise ValueError(f"Invalid plugin name: {self.name}")
-        if not self.version or not self.input_suffixes or not self.input_media_types:
-            raise ValueError(f"Plugin {self.name} requires a version and input types")
+        if not self.input_suffixes or not self.input_media_types:
+            raise ValueError(f"Plugin {self.name} requires input types")
         if any(not suffix.startswith(".") for suffix in self.input_suffixes):
             raise ValueError(f"Plugin {self.name} has an invalid input suffix")
         if not self.output_suffix.startswith("."):
@@ -50,6 +50,8 @@ class PluginManifest:
         for option in self.options:
             if not option.name or (option.type == "select" and not option.choices):
                 raise ValueError(f"Plugin {self.name} has an invalid option")
+        if self.workload not in {"general", "ai_ocr"}:
+            raise ValueError(f"Plugin {self.name} has an invalid workload")
 
 
 @dataclass(frozen=True, slots=True)

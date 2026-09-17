@@ -11,7 +11,6 @@ def create_job(
     *,
     job_id: str,
     tool_name: str,
-    tool_version: str,
     input_artifact_key: str,
     input_filename: str,
     input_media_type: str | None,
@@ -25,17 +24,16 @@ def create_job(
         row = connection.execute(
             """
             INSERT INTO tool_jobs (
-                id, tool_name, tool_version, input_artifact_key,
+                id, tool_name, input_artifact_key,
                 input_filename, input_media_type, options, user_id,
                 client_ip, user_agent, idempotency_key
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING *
             """,
             (
                 job_id,
                 tool_name,
-                tool_version,
                 input_artifact_key,
                 input_filename,
                 input_media_type,

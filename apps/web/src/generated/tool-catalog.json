@@ -2,7 +2,6 @@
   {
     "name": "avif-to-jpg",
     "slug": "avif-to-jpg",
-    "version": "1.0.0",
     "display_name": "AVIF to JPG",
     "title": "AVIF to JPG Online",
     "description": "Convert AVIF image to JPEG.",
@@ -46,7 +45,6 @@
   {
     "name": "avif-to-png",
     "slug": "avif-to-png",
-    "version": "1.0.0",
     "display_name": "AVIF to PNG",
     "title": "AVIF to PNG Online",
     "description": "Convert AVIF image to PNG.",
@@ -90,7 +88,6 @@
   {
     "name": "avif-to-webp",
     "slug": "avif-to-webp",
-    "version": "1.0.0",
     "display_name": "AVIF to WebP",
     "title": "AVIF to WebP Online",
     "description": "Convert AVIF image to WEBP.",
@@ -134,7 +131,6 @@
   {
     "name": "bmp-to-jpg",
     "slug": "bmp-to-jpg",
-    "version": "1.0.0",
     "display_name": "BMP to JPG",
     "title": "BMP to JPG Online",
     "description": "Convert BMP image to JPEG.",
@@ -178,7 +174,6 @@
   {
     "name": "bmp-to-pdf",
     "slug": "bmp-to-pdf",
-    "version": "1.0.0",
     "display_name": "BMP to PDF",
     "title": "BMP to PDF Online",
     "description": "Convert a BMP image to PDF.",
@@ -222,7 +217,6 @@
   {
     "name": "bmp-to-png",
     "slug": "bmp-to-png",
-    "version": "1.0.0",
     "display_name": "BMP to PNG",
     "title": "BMP to PNG Online",
     "description": "Convert BMP image to PNG.",
@@ -266,7 +260,6 @@
   {
     "name": "compress-pdf",
     "slug": "compress-pdf",
-    "version": "1.0.0",
     "display_name": "Compress PDF",
     "title": "Compress PDF Online",
     "description": "Optimize and compress a PDF.",
@@ -309,7 +302,6 @@
   {
     "name": "csv-to-excel",
     "slug": "csv-to-excel",
-    "version": "1.0.0",
     "display_name": "CSV to Excel",
     "title": "CSV to Excel Online",
     "description": "Convert CSV data to XLSX.",
@@ -353,7 +345,6 @@
   {
     "name": "csv-to-pdf",
     "slug": "csv-to-pdf",
-    "version": "1.0.0",
     "display_name": "CSV to PDF",
     "title": "CSV to PDF Online",
     "description": "Convert CSV data to PDF.",
@@ -397,7 +388,6 @@
   {
     "name": "excel-to-csv",
     "slug": "excel-to-csv",
-    "version": "1.0.0",
     "display_name": "Excel to CSV",
     "title": "Excel to CSV Online",
     "description": "Convert the active XLSX worksheet to CSV.",
@@ -440,7 +430,6 @@
   {
     "name": "excel-to-pdf",
     "slug": "excel-to-pdf",
-    "version": "1.0.0",
     "display_name": "Excel to PDF",
     "title": "Excel to PDF Online",
     "description": "Convert an Excel workbook to PDF.",
@@ -486,7 +475,6 @@
   {
     "name": "heic-to-jpg",
     "slug": "heic-to-jpg",
-    "version": "1.0.0",
     "display_name": "HEIC to JPG",
     "title": "HEIC to JPG Online",
     "description": "Convert a HEIC or HEIF image to JPEG.",
@@ -534,7 +522,6 @@
   {
     "name": "heic-to-png",
     "slug": "heic-to-png",
-    "version": "1.0.0",
     "display_name": "HEIC to PNG",
     "title": "HEIC to PNG Online",
     "description": "Convert HEIC/HEIF image to PNG.",
@@ -582,7 +569,6 @@
   {
     "name": "heic-to-webp",
     "slug": "heic-to-webp",
-    "version": "1.0.0",
     "display_name": "HEIC to WebP",
     "title": "HEIC to WebP Online",
     "description": "Convert HEIC/HEIF image to WEBP.",
@@ -630,7 +616,6 @@
   {
     "name": "html-to-pdf",
     "slug": "html-to-pdf",
-    "version": "1.0.0",
     "display_name": "HTML to PDF",
     "title": "HTML to PDF Online",
     "description": "Convert an HTML document to PDF.",
@@ -676,7 +661,6 @@
   {
     "name": "html-to-word",
     "slug": "html-to-word",
-    "version": "1.0.0",
     "display_name": "HTML to Word",
     "title": "HTML to Word Online",
     "description": "Convert an HTML document to DOCX.",
@@ -722,7 +706,6 @@
   {
     "name": "image-to-text",
     "slug": "image-to-text",
-    "version": "2.0.0",
     "display_name": "Image to Text",
     "title": "Image to Text Online",
     "description": "Extract text from an image using OpenRouter OCR.",
@@ -787,7 +770,6 @@
   {
     "name": "jpg-to-avif",
     "slug": "jpg-to-avif",
-    "version": "1.0.0",
     "display_name": "JPG to AVIF",
     "title": "JPG to AVIF Online",
     "description": "Convert JPEG image to AVIF.",
@@ -832,7 +814,6 @@
   {
     "name": "jpg-to-bmp",
     "slug": "jpg-to-bmp",
-    "version": "1.0.0",
     "display_name": "JPG to BMP",
     "title": "JPG to BMP Online",
     "description": "Convert JPEG image to BMP.",
@@ -877,7 +858,6 @@
   {
     "name": "jpg-to-heic",
     "slug": "jpg-to-heic",
-    "version": "1.0.0",
     "display_name": "JPG to HEIC",
     "title": "JPG to HEIC Online",
     "description": "Convert JPEG image to HEIC/HEIF.",
@@ -922,7 +902,6 @@
   {
     "name": "jpg-to-pdf",
     "slug": "jpg-to-pdf",
-    "version": "1.0.0",
     "display_name": "JPG to PDF",
     "title": "JPG to PDF Online",
     "description": "Convert a JPEG image to PDF.",
@@ -967,7 +946,6 @@
   {
     "name": "jpg-to-png",
     "slug": "jpg-to-png",
-    "version": "1.0.0",
     "display_name": "JPG to PNG",
     "title": "JPG to PNG Online",
     "description": "Convert a JPEG image to PNG.",
@@ -1012,7 +990,6 @@
   {
     "name": "jpg-to-tiff",
     "slug": "jpg-to-tiff",
-    "version": "1.0.0",
     "display_name": "JPG to TIFF",
     "title": "JPG to TIFF Online",
     "description": "Convert JPEG image to TIFF.",
@@ -1057,7 +1034,6 @@
   {
     "name": "jpg-to-webp",
     "slug": "jpg-to-webp",
-    "version": "1.0.0",
     "display_name": "JPG to WebP",
     "title": "JPG to WebP Online",
     "description": "Convert JPEG image to WEBP.",
@@ -1102,7 +1078,6 @@
   {
     "name": "markdown-to-pdf",
     "slug": "markdown-to-pdf",
-    "version": "1.0.0",
     "display_name": "Markdown to PDF",
     "title": "Markdown to PDF Online",
     "description": "Convert Markdown to PDF.",
@@ -1149,7 +1124,6 @@
   {
     "name": "markdown-to-word",
     "slug": "markdown-to-word",
-    "version": "1.0.0",
     "display_name": "Markdown to Word",
     "title": "Markdown to Word Online",
     "description": "Convert Markdown to DOCX.",
@@ -1196,7 +1170,6 @@
   {
     "name": "pdf-to-excel",
     "slug": "pdf-to-excel",
-    "version": "1.0.0",
     "display_name": "PDF to Excel",
     "title": "PDF to Excel Online",
     "description": "Extract PDF tables and text into XLSX.",
@@ -1239,7 +1212,6 @@
   {
     "name": "pdf-to-html",
     "slug": "pdf-to-html",
-    "version": "1.0.0",
     "display_name": "PDF to HTML",
     "title": "PDF to HTML Online",
     "description": "Convert PDF pages to HTML.",
@@ -1282,7 +1254,6 @@
   {
     "name": "pdf-to-jpg",
     "slug": "pdf-to-jpg",
-    "version": "1.0.0",
     "display_name": "PDF to JPG",
     "title": "PDF to JPG Online",
     "description": "Convert PDF pages to a ZIP of JPEG images.",
@@ -1325,7 +1296,6 @@
   {
     "name": "pdf-to-png",
     "slug": "pdf-to-png",
-    "version": "1.0.0",
     "display_name": "PDF to PNG",
     "title": "PDF to PNG Online",
     "description": "Convert PDF pages to a ZIP of PNG images.",
@@ -1368,7 +1338,6 @@
   {
     "name": "pdf-to-powerpoint",
     "slug": "pdf-to-powerpoint",
-    "version": "1.0.0",
     "display_name": "PDF to PowerPoint",
     "title": "PDF to PowerPoint Online",
     "description": "Convert PDF pages into PowerPoint slides.",
@@ -1411,7 +1380,6 @@
   {
     "name": "pdf-to-text",
     "slug": "pdf-to-text",
-    "version": "2.0.0",
     "display_name": "PDF to Text",
     "title": "PDF to Text Online",
     "description": "Extract text from a PDF with OCR fallback for scanned pages.",
@@ -1454,7 +1422,6 @@
   {
     "name": "pdf-to-word",
     "slug": "pdf-to-word",
-    "version": "1.2.0",
     "display_name": "PDF to Word",
     "title": "PDF to Word Online",
     "description": "Convert a PDF document to an editable Word document.",
@@ -1516,7 +1483,6 @@
   {
     "name": "png-to-avif",
     "slug": "png-to-avif",
-    "version": "1.0.0",
     "display_name": "PNG to AVIF",
     "title": "PNG to AVIF Online",
     "description": "Convert PNG image to AVIF.",
@@ -1559,7 +1525,6 @@
   {
     "name": "png-to-bmp",
     "slug": "png-to-bmp",
-    "version": "1.0.0",
     "display_name": "PNG to BMP",
     "title": "PNG to BMP Online",
     "description": "Convert PNG image to BMP.",
@@ -1602,7 +1567,6 @@
   {
     "name": "png-to-heic",
     "slug": "png-to-heic",
-    "version": "1.0.0",
     "display_name": "PNG to HEIC",
     "title": "PNG to HEIC Online",
     "description": "Convert PNG image to HEIC/HEIF.",
@@ -1645,7 +1609,6 @@
   {
     "name": "png-to-jpg",
     "slug": "png-to-jpg",
-    "version": "1.0.0",
     "display_name": "PNG to JPG",
     "title": "PNG to JPG Online",
     "description": "Convert a PNG image to JPEG.",
@@ -1688,7 +1651,6 @@
   {
     "name": "png-to-pdf",
     "slug": "png-to-pdf",
-    "version": "1.0.0",
     "display_name": "PNG to PDF",
     "title": "PNG to PDF Online",
     "description": "Convert a PNG image to PDF.",
@@ -1731,7 +1693,6 @@
   {
     "name": "png-to-tiff",
     "slug": "png-to-tiff",
-    "version": "1.0.0",
     "display_name": "PNG to TIFF",
     "title": "PNG to TIFF Online",
     "description": "Convert PNG image to TIFF.",
@@ -1774,7 +1735,6 @@
   {
     "name": "png-to-webp",
     "slug": "png-to-webp",
-    "version": "1.0.0",
     "display_name": "PNG to WebP",
     "title": "PNG to WebP Online",
     "description": "Convert PNG image to WEBP.",
@@ -1817,7 +1777,6 @@
   {
     "name": "powerpoint-to-pdf",
     "slug": "powerpoint-to-pdf",
-    "version": "1.0.0",
     "display_name": "PowerPoint to PDF",
     "title": "PowerPoint to PDF Online",
     "description": "Convert a PowerPoint presentation to PDF.",
@@ -1863,7 +1822,6 @@
   {
     "name": "protect-pdf",
     "slug": "protect-pdf",
-    "version": "1.0.0",
     "display_name": "Protect PDF",
     "title": "Protect PDF Online",
     "description": "Protect a PDF with a password.",
@@ -1925,7 +1883,6 @@
   {
     "name": "rotate-pdf",
     "slug": "rotate-pdf",
-    "version": "1.0.0",
     "display_name": "Rotate PDF",
     "title": "Rotate PDF Online",
     "description": "Rotate every page in a PDF.",
@@ -1995,7 +1952,6 @@
   {
     "name": "text-to-pdf",
     "slug": "text-to-pdf",
-    "version": "1.0.0",
     "display_name": "Text to PDF",
     "title": "Text to PDF Online",
     "description": "Convert a plain-text document to PDF.",
@@ -2038,7 +1994,6 @@
   {
     "name": "text-to-word",
     "slug": "text-to-word",
-    "version": "1.0.0",
     "display_name": "Text to Word",
     "title": "Text to Word Online",
     "description": "Convert plain text to DOCX.",
@@ -2081,7 +2036,6 @@
   {
     "name": "tiff-to-jpg",
     "slug": "tiff-to-jpg",
-    "version": "1.0.0",
     "display_name": "TIFF to JPG",
     "title": "TIFF to JPG Online",
     "description": "Convert TIFF image to JPEG.",
@@ -2126,7 +2080,6 @@
   {
     "name": "tiff-to-pdf",
     "slug": "tiff-to-pdf",
-    "version": "1.0.0",
     "display_name": "TIFF to PDF",
     "title": "TIFF to PDF Online",
     "description": "Convert a TIFF image to PDF.",
@@ -2171,7 +2124,6 @@
   {
     "name": "tiff-to-png",
     "slug": "tiff-to-png",
-    "version": "1.0.0",
     "display_name": "TIFF to PNG",
     "title": "TIFF to PNG Online",
     "description": "Convert TIFF image to PNG.",
@@ -2216,7 +2168,6 @@
   {
     "name": "unlock-pdf",
     "slug": "unlock-pdf",
-    "version": "1.0.0",
     "display_name": "Unlock PDF",
     "title": "Unlock PDF Online",
     "description": "Remove password protection from a PDF.",
@@ -2269,7 +2220,6 @@
   {
     "name": "webp-to-avif",
     "slug": "webp-to-avif",
-    "version": "1.0.0",
     "display_name": "WebP to AVIF",
     "title": "WebP to AVIF Online",
     "description": "Convert WEBP image to AVIF.",
@@ -2312,7 +2262,6 @@
   {
     "name": "webp-to-jpg",
     "slug": "webp-to-jpg",
-    "version": "1.0.0",
     "display_name": "WebP to JPG",
     "title": "WebP to JPG Online",
     "description": "Convert WEBP image to JPEG.",
@@ -2355,7 +2304,6 @@
   {
     "name": "webp-to-pdf",
     "slug": "webp-to-pdf",
-    "version": "1.0.0",
     "display_name": "WebP to PDF",
     "title": "WebP to PDF Online",
     "description": "Convert a WEBP image to PDF.",
@@ -2398,7 +2346,6 @@
   {
     "name": "webp-to-png",
     "slug": "webp-to-png",
-    "version": "1.0.0",
     "display_name": "WebP to PNG",
     "title": "WebP to PNG Online",
     "description": "Convert WEBP image to PNG.",
@@ -2441,7 +2388,6 @@
   {
     "name": "word-to-html",
     "slug": "word-to-html",
-    "version": "1.0.0",
     "display_name": "Word to HTML",
     "title": "Word to HTML Online",
     "description": "Convert a Word document to HTML.",
@@ -2487,7 +2433,6 @@
   {
     "name": "word-to-pdf",
     "slug": "word-to-pdf",
-    "version": "1.0.0",
     "display_name": "Word to PDF",
     "title": "Word to PDF Online",
     "description": "Convert a DOC or DOCX document to PDF.",
@@ -2533,7 +2478,6 @@
   {
     "name": "word-to-text",
     "slug": "word-to-text",
-    "version": "1.0.0",
     "display_name": "Word to Text",
     "title": "Word to Text Online",
     "description": "Extract text from a DOCX document.",

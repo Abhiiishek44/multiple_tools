@@ -37,4 +37,4 @@ WORKDIR /app
 
 USER app
 
-CMD ["celery", "--app=apps.worker.celery_app:celery_app", "worker", "--beat", "--loglevel=INFO", "--schedule=/tmp/celerybeat-schedule"]
+CMD ["celery", "--app=apps.worker.celery_app:celery_app", "worker", "--queues=general", "--hostname=general@%h", "--loglevel=INFO"]

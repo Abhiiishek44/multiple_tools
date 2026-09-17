@@ -90,7 +90,14 @@ const typescriptBody = `<main class="static-seo-page"><h1>Multiple Tools TypeScr
 const typescriptJsonLd = { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'Multiple Tools TypeScript SDK', applicationCategory: 'DeveloperApplication', operatingSystem: 'Node.js 20+', description: typescriptDescription, url: absolute(typescriptPath) }
 await writeRoute(typescriptPath, pageHTML(typescriptTitle, typescriptDescription, typescriptPath, typescriptBody, typescriptJsonLd))
 
-const paths = ['/tools', typescriptPath, ...categories.map((category) => `/categories/${category.slug}`), ...catalog.map((tool) => `/${tool.slug}`)]
+const summarizerPath = '/ai-summarizer'
+const summarizerTitle = 'AI Document Summarizer | Multiple Tools'
+const summarizerDescription = 'Summarize TXT, Markdown, Word, and PDF documents with grounded AI answers and source passages.'
+const summarizerBody = `<main class="static-seo-page"><h1>AI Document Summarizer</h1><p>${summarizerDescription}</p><section><h2>Upload a document</h2><p>Sign in and upload a supported document up to 50 MB. Scanned PDF pages use OCR automatically.</p></section><section><h2>Grounded summaries</h2><p>The assistant extracts and indexes source text before creating a concise, detailed, or comprehensive summary with references.</p></section></main>`
+const summarizerJsonLd = { '@context': 'https://schema.org', '@type': 'WebApplication', name: summarizerTitle, applicationCategory: 'UtilitiesApplication', operatingSystem: 'Any', description: summarizerDescription, url: absolute(summarizerPath) }
+await writeRoute(summarizerPath, pageHTML(summarizerTitle, summarizerDescription, summarizerPath, summarizerBody, summarizerJsonLd))
+
+const paths = ['/tools', summarizerPath, typescriptPath, ...categories.map((category) => `/categories/${category.slug}`), ...catalog.map((tool) => `/${tool.slug}`)]
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${paths.map((path) => `  <url><loc>${absolute(path)}</loc></url>`).join('\n')}\n</urlset>\n`
 await writeFile(join(dist, 'sitemap.xml'), sitemap)
 await writeFile(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${absolute('/sitemap.xml')}\n`)

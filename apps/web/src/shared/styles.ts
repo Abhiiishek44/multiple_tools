@@ -1,6 +1,6 @@
 export const themeTokens = [
-  '[--canvas:#e8eae8] [--surface:#fff] [--surface-soft:#f3f4f2] [--surface-strong:#e6e9e5]',
-  '[--text:#0b0b0b] [--muted:#626661] [--faint:#878c86] [--border:#dde1dc]',
+  '[--canvas:#ebe7dd] [--surface:#F7F4ED] [--surface-soft:#f1ede4] [--surface-strong:#e8e2d7]',
+  '[--text:#0b0b0b] [--muted:#62645f] [--faint:#858781] [--border:#ded7cb]',
   '[--accent:#e5322d] [--accent-strong:#c92520] [--accent-text:#fff] [--danger:#dc4444]',
   '[--panel-shadow:0_18px_55px_rgba(25,31,25,.09)] [color-scheme:light]',
   'in-data-[theme=dark]:[--canvas:#101210] in-data-[theme=dark]:[--surface:#191c19]',

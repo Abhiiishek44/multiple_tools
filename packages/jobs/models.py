@@ -6,7 +6,6 @@ from datetime import datetime
 class Job:
     id: str
     tool_name: str
-    tool_version: str
     status: str
     progress: int
     input_artifact_key: str

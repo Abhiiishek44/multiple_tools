@@ -3,7 +3,6 @@ from plugins.base import PluginManifest
 
 MANIFEST = PluginManifest(
     name="excel-to-csv",
-    version="1.0.0",
     description="Convert the active XLSX worksheet to CSV",
     input_suffixes=frozenset({".xlsx"}),
     input_media_types=frozenset({

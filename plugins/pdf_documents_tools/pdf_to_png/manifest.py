@@ -2,7 +2,6 @@ from plugins.base import PluginManifest
 
 MANIFEST = PluginManifest(
     name="pdf-to-png",
-    version="1.0.0",
     description="Convert PDF pages to a ZIP of PNG images",
     input_suffixes=frozenset({".pdf"}),
     input_media_types=frozenset({"application/pdf"}),
