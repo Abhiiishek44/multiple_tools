@@ -175,6 +175,10 @@ contain retrieved document excerpts and recent conversation history; the system
 prompt requires grounded answers and treats document text as untrusted input.
 Apply migration `012_create_document_chat.sql` before enabling these routes.
 
+The web application exposes this pipeline at `/ai-summarizer`. Authenticated
+users can upload a document, follow ingestion progress, choose a summary length,
+and read the streamed result with expandable source passages.
+
 ## Available tools
 
 ```text

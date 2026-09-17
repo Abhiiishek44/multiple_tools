@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { AuthControl } from '../features/auth/components/AuthControl'
 import { useAuth } from '../features/auth/context/useAuth'
 import { LoginPage } from '../features/auth/pages/LoginPage'
+import { AiSummarizerPage } from '../features/ai-summarizer/pages/AiSummarizerPage'
 import { ApiDocsPage } from '../features/developers/pages/ApiDocsPage'
 import { PythonSdkPage } from '../features/developers/pages/PythonSdkPage'
 import { TypeScriptSdkPage } from '../features/developers/pages/TypeScriptSdkPage'
@@ -86,6 +87,7 @@ export function AppRouter() {
   const showHome = () => { resetWorkflow(); navigate({ name: 'dashboard' }) }
   const showCatalog = () => { resetWorkflow(); navigate({ name: 'dashboard' }) }
   const showApiDocs = () => { resetWorkflow(); navigate({ name: 'api-docs' }) }
+  const showAiSummarizer = () => { resetWorkflow(); navigate({ name: 'ai-summarizer' }) }
   const showPythonSdk = () => { resetWorkflow(); navigate({ name: 'python-sdk' }) }
   const showTypeScriptSdk = () => { resetWorkflow(); navigate({ name: 'typescript-sdk' }) }
   const showCategory = (_category: ToolCategory) => { resetWorkflow(); navigate({ name: 'dashboard' }) }
@@ -130,8 +132,8 @@ export function AppRouter() {
   const restoringJob = route.name === 'job' && (job?.id !== route.jobId || isLoadingTools)
   const unknownTool = route.name === 'tool' && !isLoadingTools && !selectedTool
   const catalogCategory: ToolCategory = route.name === 'catalog' && route.category ? tools.find((tool) => tool.categorySlug === route.category)?.category || ALL_TOOLS : ALL_TOOLS
-  const shellTitle = selectedTool?.name || (route.name === 'catalog' ? catalogCategory : route.name === 'login' ? 'Log in' : route.name === 'api-docs' ? 'API Key' : route.name === 'python-sdk' ? 'Python SDK' : route.name === 'typescript-sdk' ? 'TypeScript SDK' : 'Home')
-  const shellActive = selectedTool?.category || (route.name === 'catalog' ? catalogCategory === 'All tools' ? 'tools' : catalogCategory : route.name === 'api-docs' ? 'api' : route.name === 'python-sdk' ? 'python-sdk' : route.name === 'typescript-sdk' ? 'typescript-sdk' : 'home')
+  const shellTitle = selectedTool?.name || (route.name === 'catalog' ? catalogCategory : route.name === 'login' ? 'Log in' : route.name === 'ai-summarizer' ? 'AI Summarizer' : route.name === 'api-docs' ? 'API Key' : route.name === 'python-sdk' ? 'Python SDK' : route.name === 'typescript-sdk' ? 'TypeScript SDK' : 'Home')
+  const shellActive = selectedTool?.category || (route.name === 'catalog' ? catalogCategory === 'All tools' ? 'tools' : catalogCategory : route.name === 'ai-summarizer' ? 'ai-summarizer' : route.name === 'api-docs' ? 'api' : route.name === 'python-sdk' ? 'python-sdk' : route.name === 'typescript-sdk' ? 'typescript-sdk' : 'home')
   const homeBreadcrumb = { label: 'Home', onClick: showHome }
   const toolsBreadcrumb = { label: 'Tools', onClick: showCatalog }
   const shellBreadcrumbs: { label: string; onClick?: () => void }[] = (() => {
@@ -146,6 +148,7 @@ export function AppRouter() {
         : [homeBreadcrumb, toolsBreadcrumb, categoryBreadcrumb, { label: selectedTool.name }]
     }
     if (route.name === 'api-docs') return [homeBreadcrumb, { label: 'Developers' }, { label: 'API Key' }]
+    if (route.name === 'ai-summarizer') return [homeBreadcrumb, { label: 'AI Summarizer' }]
     if (route.name === 'python-sdk') return [homeBreadcrumb, { label: 'Developers' }, { label: 'Python SDK' }]
     if (route.name === 'typescript-sdk') return [homeBreadcrumb, { label: 'Developers' }, { label: 'TypeScript SDK' }]
     if (route.name === 'login') return [homeBreadcrumb, { label: 'Log in' }]
@@ -153,8 +156,8 @@ export function AppRouter() {
   })()
 
   return (
-    <AppShell title={shellTitle} breadcrumbs={shellBreadcrumbs} active={shellActive} tools={tools} onHome={showHome} onApiDocs={showApiDocs} onPythonSdk={showPythonSdk} onTypeScriptSdk={showTypeScriptSdk} onSelect={selectTool} authControl={<AuthControl onLogin={() => navigate({ name: 'login' })} onSignedOut={showHome} />}>
-      {route.name === 'login' ? <LoginPage onBack={showHome} /> : route.name === 'api-docs' ? <ApiDocsPage onLogin={() => navigate({ name: 'login' })} /> : route.name === 'python-sdk' ? <PythonSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : route.name === 'typescript-sdk' ? <TypeScriptSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : restoringJob ? (
+    <AppShell title={shellTitle} breadcrumbs={shellBreadcrumbs} active={shellActive} tools={tools} onHome={showHome} onAiSummarizer={showAiSummarizer} onApiDocs={showApiDocs} onPythonSdk={showPythonSdk} onTypeScriptSdk={showTypeScriptSdk} onSelect={selectTool} authControl={<AuthControl onLogin={() => navigate({ name: 'login' })} onSignedOut={showHome} />}>
+      {route.name === 'login' ? <LoginPage onBack={showHome} /> : route.name === 'ai-summarizer' ? <AiSummarizerPage onLogin={() => navigate({ name: 'login' })} /> : route.name === 'api-docs' ? <ApiDocsPage onLogin={() => navigate({ name: 'login' })} /> : route.name === 'python-sdk' ? <PythonSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : route.name === 'typescript-sdk' ? <TypeScriptSdkPage onHome={showHome} onTools={showCatalog} onApiDocs={showApiDocs} /> : restoringJob ? (
         <main className="grid min-h-[calc(100vh-62px)] place-items-center p-[30px]"><section className="w-[min(430px,100%)] rounded-3xl border border-[var(--border)] bg-[var(--surface-soft)] p-[38px] text-center shadow-[var(--panel-shadow)]"><p className="mb-2 text-[10px] font-[850] uppercase tracking-[.14em] text-[var(--accent-strong)]">Restoring job</p><h1 className="m-0 text-3xl tracking-[-.045em]">Loading your conversion</h1><p className="text-xs leading-[1.65] text-[var(--muted)]">{workflowError || 'Loading the latest status from the backend.'}</p></section></main>
       ) : selectedTool ? (
         <ToolPage tool={selectedTool} onHome={showHome} onTools={showCatalog}><div key={`${route.name}-${view}`}>{view === 'create' && <CreateJobPage file={file} tool={selectedTool} error={workflowError} isSubmitting={isSubmitting} onFileSelect={selectFile} onRemove={() => { setFile(null); setWorkflowError(null) }} onConvert={(options) => void convert(options)} />}{view === 'progress' && job && <JobProgressPage file={file} job={job} />}{view === 'result' && job && <JobResultPage file={file} tool={selectedTool} job={job} error={workflowError} onDownload={() => void download()} onRestart={restart} />}</div></ToolPage>
